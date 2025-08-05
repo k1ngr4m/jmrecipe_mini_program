@@ -24,6 +24,19 @@ page {
   padding: 20rpx;
 }
 
+/* Loading indicator */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
 .order-list {
   display: flex;
   flex-direction: column;

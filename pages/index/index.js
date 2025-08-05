@@ -208,46 +208,50 @@ Page({
       return
     }
     
-    // In a real app, you would send the order to your server here
-    console.log('Order submitted:', this.data.cart)
+    // Prepare order data
+    const dishIds = this.data.cart.map(item => item.id)
+    const totalPrice = this.data.totalPrice
     
-    // Simulate API call to submit order
-    wx.request({
-      url: 'http://localhost:5001/api/orders',
-      method: 'POST',
-      data: {
-        items: this.data.cart.map(item => ({
-          dish_id: item.id,
-          quantity: item.quantity,
-          price: item.price
-        })),
-        total_amount: this.data.totalPrice
-      },
-      header: {
-        'Content-Type': 'application/json'
-      },
-      success: (res) => {
-        wx.showModal({
-          title: '下单成功',
-          content: `总计: ¥${this.data.totalPrice}`,
-          showCancel: false,
-          confirmText: '确定',
-          success: () => {
-            this.clearCart()
-            this.setData({
-              cartVisible: false
-            })
-          }
-        })
-      },
-      fail: (err) => {
+    // Show loading
+    wx.showLoading({
+      title: '提交中...'
+    })
+    
+    // Submit order to API
+    const { createOrder } = require('../../utils/api.js')
+    createOrder({
+      dish_ids: dishIds,
+      total_price: totalPrice
+    })
+      .then(res => {
+        console.log('Order submission response:', res)
+        if (res.code === 201) {
+          wx.showModal({
+            title: '下单成功',
+            content: `订单号: ${res.data.id}\n总计: ¥${totalPrice}`,
+            showCancel: false,
+            confirmText: '确定',
+            success: () => {
+              this.clearCart()
+              this.setData({
+                cartVisible: false
+              })
+            }
+          })
+        } else {
+          throw new Error(res.message || '下单失败')
+        }
+      })
+      .catch(err => {
         console.error('Failed to submit order:', err)
         wx.showToast({
           title: '下单失败，请重试',
           icon: 'none'
         })
-      }
-    })
+      })
+      .finally(() => {
+        wx.hideLoading()
+      })
   },
 
   bindViewTap() {

@@ -5,7 +5,13 @@
   </view>
   
   <view class="content">
-    <view class="order-list">
+    <!-- Loading indicator -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <!-- Order list -->
+    <view wx:else class="order-list">
       <view wx:if="{{orders.length === 0}}" class="empty-orders">
         <text class="empty-text">暂无订单</text>
       </view>
@@ -21,7 +27,7 @@
           </view>
           <view class="order-content">
             <view class="order-items">
-              <text wx:for="{{item.items}}" wx:key="index">{{item.name}} x {{item.quantity}}</text>
+              <text wx:for="{{item.dishIds}}" wx:key="index">菜品ID: {{item}}</text>
             </view>
             <text class="order-date">{{item.date}}</text>
             <text class="order-amount">¥{{item.amount}}</text>

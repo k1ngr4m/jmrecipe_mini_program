@@ -66,10 +66,55 @@ function deleteDish(dishId) {
   })
 }
 
+// Get all orders
+function getOrders() {
+  return request({
+    url: '/orders/list'
+  })
+}
+
+// Get order by ID
+function getOrderById(orderId) {
+  return request({
+    url: `/orders/${orderId}`
+  })
+}
+
+// Create a new order
+function createOrder(orderData) {
+  return request({
+    url: '/orders',
+    method: 'POST',
+    data: orderData
+  })
+}
+
+// Update an order
+function updateOrder(orderId, orderData) {
+  return request({
+    url: `/orders/${orderId}`,
+    method: 'PUT',
+    data: orderData
+  })
+}
+
+// Delete an order
+function deleteOrder(orderId) {
+  return request({
+    url: `/orders/${orderId}`,
+    method: 'DELETE'
+  })
+}
+
 module.exports = {
   getDishes,
   getDishById,
   createDish,
   updateDish,
-  deleteDish
+  deleteDish,
+  getOrders,
+  getOrderById,
+  createOrder,
+  updateOrder,
+  deleteOrder
 }
