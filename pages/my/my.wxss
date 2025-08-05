@@ -1,0 +1,171 @@
+/**my.wxss**/
+page {
+  background-color: #f5f5f5;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background: linear-gradient(135deg, #ff6600, #ff9933);
+  padding: 60rpx 40rpx 40rpx;
+  color: white;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  margin-right: 30rpx;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.user-id {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.content {
+  flex: 1;
+  padding: 20rpx;
+}
+
+.section {
+  background-color: white;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.more-link {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.order-list {
+  padding: 0 30rpx;
+}
+
+.empty-orders {
+  padding: 60rpx 0;
+  text-align: center;
+}
+
+.empty-text {
+  color: #999;
+  font-size: 28rpx;
+}
+
+.order-item {
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15rpx;
+}
+
+.order-id {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.order-status {
+  font-size: 24rpx;
+  padding: 5rpx 15rpx;
+  border-radius: 20rpx;
+}
+
+.order-status.completed {
+  background-color: #e8f5e9;
+  color: #4caf50;
+}
+
+.order-status.pending {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
+
+.order-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.order-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #ff6600;
+}
+
+.settings-list {
+  padding: 0 30rpx;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.arrow {
+  width: 30rpx;
+  height: 30rpx;
+  opacity: 0.5;
+}

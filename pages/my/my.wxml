@@ -1,0 +1,85 @@
+<!--my.wxml-->
+<view class="container">
+  <view class="header" bindtap="updateUserInfo">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <text class="nickname">{{userInfo.nickName || '点击登录'}}</text>
+        <text class="user-id" wx:if="{{userInfo.userId}}">ID: {{userInfo.userId}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="content">
+    <!-- Order History -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">我的订单</text>
+        <navigator class="more-link" url="../orders/orders">查看更多</navigator>
+      </view>
+      <view class="order-list">
+        <view wx:if="{{orders.length === 0}}" class="empty-orders">
+          <text class="empty-text">暂无订单</text>
+        </view>
+        <view wx:else>
+          <view 
+            wx:for="{{orders}}" 
+            wx:key="id"
+            class="order-item"
+          >
+            <view class="order-header">
+              <text class="order-id">订单号: {{item.id}}</text>
+              <text class="order-status {{item.status}}">{{item.statusText}}</text>
+            </view>
+            <view class="order-content">
+              <text class="order-date">{{item.date}}</text>
+              <text class="order-amount">¥{{item.amount}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Account Settings -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">账户设置</text>
+      </view>
+      <view class="settings-list">
+        <view class="setting-item">
+          <text class="setting-label">个人信息</text>
+          <text class="arrow">></text>
+        </view>
+        <view class="setting-item">
+          <text class="setting-label">收货地址</text>
+          <text class="arrow">></text>
+        </view>
+        <view class="setting-item">
+          <text class="setting-label">优惠券</text>
+          <text class="arrow">></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Support -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">帮助与支持</text>
+      </view>
+      <view class="settings-list">
+        <view class="setting-item">
+          <text class="setting-label">联系客服</text>
+          <text class="arrow">></text>
+        </view>
+        <view class="setting-item">
+          <text class="setting-label">意见反馈</text>
+          <text class="arrow">></text>
+        </view>
+        <view class="setting-item">
+          <text class="setting-label">关于我们</text>
+          <text class="arrow">></text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
