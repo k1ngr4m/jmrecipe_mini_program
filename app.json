@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/clothing/clothing",
+    "pages/clothing-detail/clothing-detail",
     "pages/food/food",
     "pages/living/living",
     "pages/travel/travel",

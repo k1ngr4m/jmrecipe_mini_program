@@ -1,0 +1,55 @@
+<view class="container" wx:if="{{!isLoading}}">
+  <view class="clothing-detail" wx:if="{{clothing}}">
+    <!-- 图片展示 -->
+    <view class="image-section">
+      <image wx:if="{{clothing.image_url}}" src="{{clothing.image_url}}" class="clothing-image" mode="aspectFit" />
+      <view wx:else class="no-image">暂无图片</view>
+    </view>
+    
+    <!-- 基本信息 -->
+    <view class="info-section">
+      <view class="info-item">
+        <text class="label">名称：</text>
+        <text class="value">{{clothing.name}}</text>
+      </view>
+      
+      <view class="info-item">
+        <text class="label">分类：</text>
+        <text class="value">{{clothing.category}}</text>
+      </view>
+      
+      <view class="info-item" wx:if="{{clothing.color}}">
+        <text class="label">颜色：</text>
+        <text class="value">{{clothing.color}}</text>
+      </view>
+      
+      <view class="info-item" wx:if="{{clothing.brand}}">
+        <text class="label">品牌：</text>
+        <text class="value">{{clothing.brand}}</text>
+      </view>
+      
+      <view class="info-item" wx:if="{{clothing.purchase_date}}">
+        <text class="label">购买日期：</text>
+        <text class="value">{{clothing.purchase_date}}</text>
+      </view>
+      
+      <view class="info-item" wx:if="{{clothing.price}}">
+        <text class="label">价格：</text>
+        <text class="value">¥{{clothing.price}}</text>
+      </view>
+      
+      <!-- 标签 -->
+      <view class="info-item" wx:if="{{clothing.tags && clothing.tags.length > 0}}">
+        <text class="label">标签：</text>
+        <view class="tags-container">
+          <text class="tag" wx:for="{{clothing.tags}}" wx:key="index">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading}}">
+    <text>加载中...</text>
+  </view>
+</view>

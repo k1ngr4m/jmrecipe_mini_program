@@ -14,19 +14,19 @@
       <form class="add-form" bindsubmit="addClothing">
         <view class="form-item">
           <text class="label">名称 *</text>
-          <input class="input" name="name" placeholder="请输入衣物名称" required />
+          <input class="input" name="name" value="{{name}}" bindinput="onNameInput" placeholder="请输入衣物名称" required />
         </view>
         <view class="form-item">
           <text class="label">分类 *</text>
-          <input class="input" name="category" placeholder="请输入衣物分类" required />
+          <input class="input" name="category" value="{{category}}" bindinput="onCategoryInput" placeholder="请输入衣物分类" required />
         </view>
         <view class="form-item">
           <text class="label">颜色</text>
-          <input class="input" name="color" placeholder="请输入颜色" />
+          <input class="input" name="color" value="{{color}}" bindinput="onColorInput" placeholder="请输入颜色" />
         </view>
         <view class="form-item">
           <text class="label">品牌</text>
-          <input class="input" name="brand" placeholder="请输入品牌" />
+          <input class="input" name="brand" value="{{brand}}" bindinput="onBrandInput" placeholder="请输入品牌" />
         </view>
         <view class="form-item">
           <text class="label">购买日期</text>
@@ -39,23 +39,23 @@
         </view>
         <view class="form-item">
           <text class="label">价格</text>
-          <input class="input" name="price" type="digit" placeholder="请输入价格" />
+          <input class="input" name="price" value="{{price}}" bindinput="onPriceInput" type="digit" placeholder="请输入价格" />
         </view>
         <view class="form-item">
           <text class="label">图片</text>
-          <view class="upload-area" bindtap="chooseImage">
+          <view class="upload-area" bindtap="chooseAndUploadImage">
             <text wx:if="{{!imageUrl}}">点击上传图片</text>
             <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image" />
           </view>
         </view>
-        <button class="submit-btn" type="submit">确定</button>
+        <button class="submit-btn" bindtap="handleSubmit">确定</button>
       </form>
     </view>
   </view>
   
   <!-- 服装列表 -->
   <view class="clothing-list">
-    <view class="list-item" wx:for="{{clothingList}}" wx:key="id">
+    <view class="list-item" wx:for="{{clothingList}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
       <image wx:if="{{item.image_url}}" src="{{item.image_url}}" class="item-image" />
       <view class="item-info">
         <text class="item-name">{{item.name}}</text>
