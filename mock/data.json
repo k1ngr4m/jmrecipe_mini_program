@@ -1,0 +1,72 @@
+{
+  "clothing": {
+    "title": "智能衣橱",
+    "items": [
+      {
+        "id": 1,
+        "name": "夏季连衣裙",
+        "category": "女装",
+        "color": "红色",
+        "season": "夏季"
+      },
+      {
+        "id": 2,
+        "name": "男士T恤",
+        "category": "男装",
+        "color": "白色",
+        "season": "春季"
+      }
+    ]
+  },
+  "food": {
+    "title": "美食星球",
+    "recipes": [
+      {
+        "id": 1,
+        "name": "宫保鸡丁",
+        "ingredients": ["鸡胸肉", "花生米", "干辣椒"],
+        "difficulty": "中等"
+      },
+      {
+        "id": 2,
+        "name": "番茄炒蛋",
+        "ingredients": ["番茄", "鸡蛋", "葱花"],
+        "difficulty": "简单"
+      }
+    ]
+  },
+  "living": {
+    "title": "安居社区",
+    "houses": [
+      {
+        "id": 1,
+        "address": "北京市朝阳区",
+        "price": "5000元/月",
+        "area": "80平米"
+      },
+      {
+        "id": 2,
+        "address": "上海市浦东新区",
+        "price": "6000元/月",
+        "area": "90平米"
+      }
+    ]
+  },
+  "travel": {
+    "title": "旅行管家",
+    "destinations": [
+      {
+        "id": 1,
+        "name": "北京",
+        "attractions": ["故宫", "天坛", "颐和园"],
+        "climate": "温带大陆性气候"
+      },
+      {
+        "id": 2,
+        "name": "上海",
+        "attractions": ["外滩", "东方明珠", "迪士尼"],
+        "climate": "亚热带季风气候"
+      }
+    ]
+  }
+}

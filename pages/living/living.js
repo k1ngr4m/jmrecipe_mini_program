@@ -1,6 +1,6 @@
 Page({
   data: {
-    title: '我的'
+    title: '安居社区'
   },
   onLoad() {
     // 页面加载时执行

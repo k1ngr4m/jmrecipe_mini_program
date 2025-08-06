@@ -1,14 +1,16 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs",
-    "pages/my/my",
-    "pages/orders/orders",
+    "pages/clothing/clothing",
+    "pages/food/food",
+    "pages/living/living",
+    "pages/travel/travel",
+    "pages/login/login",
     "pages/profile/profile"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "点菜下单",
+    "navigationBarTitleText": "生活全场景管理",
     "navigationBarBackgroundColor": "#ffffff"
   },
   "tabBar": {
@@ -19,10 +21,10 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "点菜"
+        "text": "首页"
       },
       {
-        "pagePath": "pages/my/my",
+        "pagePath": "pages/food/food",
         "text": "我的"
       }
     ]

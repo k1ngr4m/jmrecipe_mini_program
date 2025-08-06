@@ -1,0 +1,73 @@
+<view class="container">
+  <view class="header">
+    <text class="title">{{title}}</text>
+    <button class="add-btn" bindtap="showAddModal">新增</button>
+  </view>
+  
+  <!-- 新增服装表单弹窗 -->
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">新增服装</text>
+        <button class="close-btn" bindtap="hideAddModal">✕</button>
+      </view>
+      <form class="add-form" bindsubmit="addClothing">
+        <view class="form-item">
+          <text class="label">名称 *</text>
+          <input class="input" name="name" placeholder="请输入衣物名称" required />
+        </view>
+        <view class="form-item">
+          <text class="label">分类 *</text>
+          <input class="input" name="category" placeholder="请输入衣物分类" required />
+        </view>
+        <view class="form-item">
+          <text class="label">颜色</text>
+          <input class="input" name="color" placeholder="请输入颜色" />
+        </view>
+        <view class="form-item">
+          <text class="label">品牌</text>
+          <input class="input" name="brand" placeholder="请输入品牌" />
+        </view>
+        <view class="form-item">
+          <text class="label">购买日期</text>
+          <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
+            <view class="date-picker">
+              <text wx:if="{{purchaseDate}}">{{purchaseDate}}</text>
+              <text wx:else>请选择购买日期</text>
+            </view>
+          </picker>
+        </view>
+        <view class="form-item">
+          <text class="label">价格</text>
+          <input class="input" name="price" type="digit" placeholder="请输入价格" />
+        </view>
+        <view class="form-item">
+          <text class="label">图片</text>
+          <view class="upload-area" bindtap="chooseImage">
+            <text wx:if="{{!imageUrl}}">点击上传图片</text>
+            <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image" />
+          </view>
+        </view>
+        <button class="submit-btn" type="submit">确定</button>
+      </form>
+    </view>
+  </view>
+  
+  <!-- 服装列表 -->
+  <view class="clothing-list">
+    <view class="list-item" wx:for="{{clothingList}}" wx:key="id">
+      <image wx:if="{{item.image_url}}" src="{{item.image_url}}" class="item-image" />
+      <view class="item-info">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-category">{{item.category}}</text>
+        <text class="item-detail">颜色: {{item.color || '未填写'}}</text>
+        <text class="item-detail">品牌: {{item.brand || '未填写'}}</text>
+        <text class="item-date">购买日期: {{item.purchase_date || '未填写'}}</text>
+        <text class="item-price">¥{{item.price || '未填写'}}</text>
+        <view class="item-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+          <text class="item-tag" wx:for="{{item.tags}}" wx:key="index">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
