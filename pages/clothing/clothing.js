@@ -277,33 +277,17 @@ Page({
               });
             } else {
               console.log('上传成功', data);
-              // 使用getObjectUrl方法获取带签名的URL
-              cos.getObjectUrl({
-                Bucket: credentials.bucket,
-                Region: credentials.region,
-                Key: key,
-                Sign: true
-              }, function(urlErr, urlData) {
-                if (urlErr) {
-                  console.error('获取签名URL失败:', urlErr);
-                  wx.showToast({
-                    title: '获取图片URL失败',
-                    icon: 'none'
-                  });
-                } else {
-                  const cosUrl = urlData.Url;
-                  that.setData({
-                    cosImageUrl: cosUrl
-                  });
-                  wx.showToast({
-                    title: '图片上传成功',
-                    icon: 'success'
-                  });
-                  if (callback && typeof callback === 'function') {
-                    callback(cosUrl);
-                  }
-                }
+              const cosUrl = `https://${data.Location}`;
+              that.setData({
+                cosImageUrl: cosUrl
               });
+              wx.showToast({
+                title: '图片上传成功',
+                icon: 'success'
+              });
+              if (callback && typeof callback === 'function') {
+                callback(cosUrl);
+              }
             }
           });
         } else {
@@ -437,8 +421,42 @@ Page({
       method: 'GET',
       success: (res) => {
         if (res.statusCode === 200) {
-          this.setData({
-            clothingList: res.data
+          const clothingList = res.data;
+          
+          // 为列表中的每个服装项获取带签名的图片URL
+          let processedCount = 0;
+          const totalItems = clothingList.length;
+          
+          if (totalItems === 0) {
+            this.setData({
+              clothingList: clothingList
+            });
+            return;
+          }
+          
+          clothingList.forEach((clothing, index) => {
+            if (clothing.image_url) {
+              this.getSignedCosUrl(clothing.image_url, (signedUrl) => {
+                clothingList[index].image_url = signedUrl;
+                processedCount++;
+                
+                // 当所有项都处理完后更新数据
+                if (processedCount === totalItems) {
+                  this.setData({
+                    clothingList: clothingList
+                  });
+                }
+              });
+            } else {
+              processedCount++;
+              
+              // 当所有项都处理完后更新数据
+              if (processedCount === totalItems) {
+                this.setData({
+                  clothingList: clothingList
+                });
+              }
+            }
           });
         } else {
           wx.showToast({
@@ -456,6 +474,78 @@ Page({
     });
   },
 
+  // 获取带签名的COS图片URL
+  getSignedCosUrl: function(cosUrl, callback) {
+    // 如果URL已经包含签名信息，则直接返回
+    if (cosUrl && cosUrl.includes('q-sign-algorithm')) {
+      callback(cosUrl);
+      return;
+    }
+    
+    // 从URL中提取Bucket、Region和Key信息
+    // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/clothing/1754496891594_6800.png
+    const urlPattern = /^https:\/\/([^\/]+)\.cos\.([^\/]+)\.myqcloud\.com\/(.+)$/;
+    const match = cosUrl.match(urlPattern);
+    
+    if (!match) {
+      console.error('无效的COS URL格式:', cosUrl);
+      callback(cosUrl);
+      return;
+    }
+    
+    const bucketWithAppId = match[1]; // jmrecipe-1309147067
+    const region = match[2]; // ap-shanghai
+    const key = match[3]; // clothing/1754496891594_6800.png
+    const bucket = bucketWithAppId; // COS SDK可以处理带APPID的bucket名称
+    
+    // 获取临时密钥
+    wx.request({
+      url: 'http://localhost:8000/api/cos/credentials',
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200 && res.data.tmp_secret_id) {
+          const credentials = res.data;
+          
+          // 初始化COS实例
+          const cos = new COS({
+            getAuthorization: function (options, callback) {
+              callback({
+                TmpSecretId: credentials.tmp_secret_id,
+                TmpSecretKey: credentials.tmp_secret_key,
+                SecurityToken: credentials.token,
+                StartTime: credentials.start_time,
+                ExpiredTime: credentials.expired_time
+              });
+            },
+            SimpleUploadMethod: 'putObject'
+          });
+          
+          // 获取带签名的URL
+          cos.getObjectUrl({
+            Bucket: bucket,
+            Region: region,
+            Key: key,
+            Sign: true
+          }, function(err, data) {
+            if (err) {
+              console.error('获取签名URL失败:', err);
+              callback(cosUrl); // 如果获取失败，返回原始URL
+            } else {
+              callback(data.Url);
+            }
+          });
+        } else {
+          console.error('获取临时密钥失败:', res);
+          callback(cosUrl); // 如果获取失败，返回原始URL
+        }
+      },
+      fail: (err) => {
+        console.error('获取临时密钥失败:', err);
+        callback(cosUrl); // 如果获取失败，返回原始URL
+      }
+    });
+  },
+  
   // 跳转到详情页
   goToDetail: function(e) {
     const clothingId = e.currentTarget.dataset.id;
