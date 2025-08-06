@@ -277,17 +277,33 @@ Page({
               });
             } else {
               console.log('上传成功', data);
-              const cosUrl = `https://${data.Location}`;
-              that.setData({
-                cosImageUrl: cosUrl
+              // 使用getObjectUrl方法获取带签名的URL
+              cos.getObjectUrl({
+                Bucket: credentials.bucket,
+                Region: credentials.region,
+                Key: key,
+                Sign: true
+              }, function(urlErr, urlData) {
+                if (urlErr) {
+                  console.error('获取签名URL失败:', urlErr);
+                  wx.showToast({
+                    title: '获取图片URL失败',
+                    icon: 'none'
+                  });
+                } else {
+                  const cosUrl = urlData.Url;
+                  that.setData({
+                    cosImageUrl: cosUrl
+                  });
+                  wx.showToast({
+                    title: '图片上传成功',
+                    icon: 'success'
+                  });
+                  if (callback && typeof callback === 'function') {
+                    callback(cosUrl);
+                  }
+                }
               });
-              wx.showToast({
-                title: '图片上传成功',
-                icon: 'success'
-              });
-              if (callback && typeof callback === 'function') {
-                callback(cosUrl);
-              }
             }
           });
         } else {
