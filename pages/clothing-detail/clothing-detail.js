@@ -1,3 +1,5 @@
+const config = require('../../config/api.js');
+
 Page({
   data: {
     clothing: null,
@@ -48,7 +50,7 @@ Page({
     
     // 获取临时密钥
     wx.request({
-      url: 'http://localhost:8000/api/cos/credentials',
+      url: config.getFullURL('cosCredentials'),
       method: 'GET',
       success: (res) => {
         if (res.statusCode === 200 && res.data.tmp_secret_id) {
@@ -97,7 +99,7 @@ Page({
   // 获取服装详情
   getClothingDetail: function (clothingId) {
     wx.request({
-      url: `http://0.0.0.0:8000/api/wardrobe/clothing/${clothingId}`,
+      url: config.getFullURL('clothing') + `/${clothingId}`,
       method: 'GET',
       success: (res) => {
         if (res.statusCode === 200) {

@@ -1,4 +1,5 @@
 const COS = require('../../utils/cos-wx-sdk-v5.js');
+const config = require('../../config/api.js');
 
 Page({
   data: {
@@ -29,6 +30,8 @@ Page({
       // 返回上一页
       wx.navigateBack()
     }
+    this.getClothingList();
+
   },
   
   // 工具函数：格式化请求数据
@@ -68,11 +71,6 @@ Page({
     }
     
     return requestData;
-  },
-  
-  onLoad() {
-    // 页面加载时执行
-    this.getClothingList();
   },
   
   showAddModal() {
@@ -248,7 +246,7 @@ Page({
     const that = this;
     
     wx.request({
-      url: 'http://localhost:8000/api/cos/credentials',
+      url: config.getFullURL('cosCredentials'),
       method: 'GET',
       success: (res) => {
         if (res.statusCode === 200 && res.data.tmp_secret_id) {
@@ -376,7 +374,7 @@ Page({
     delete requestData.user_id;
     
     wx.request({
-      url: 'http://0.0.0.0:8000/api/wardrobe/clothing?user_id=' + user_id,
+      url: config.getFullURL('clothing') + '?user_id=' + user_id,
       method: 'POST',
       data: requestData,
       header: {
@@ -433,8 +431,11 @@ Page({
   
   getClothingList() {
     wx.request({
-      url: 'http://0.0.0.0:8000/api/wardrobe/clothing?user_id=1',
-      method: 'GET',
+      url: config.getFullURL('clothing') + '/list',
+      method: 'POST',
+      data: {
+        user_id: 1
+      },
       success: (res) => {
         if (res.statusCode === 200) {
           const clothingList = res.data;
@@ -516,7 +517,7 @@ Page({
     
     // 获取临时密钥
     wx.request({
-      url: 'http://localhost:8000/api/cos/credentials',
+      url: config.getFullURL('cosCredentials'),
       method: 'GET',
       success: (res) => {
         if (res.statusCode === 200 && res.data.tmp_secret_id) {
