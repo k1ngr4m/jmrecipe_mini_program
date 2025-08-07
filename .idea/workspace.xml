@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

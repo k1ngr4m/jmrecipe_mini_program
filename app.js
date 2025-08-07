@@ -8,14 +8,12 @@ App({
 
     // 检查是否已经登录
     const hasLoggedIn = wx.getStorageSync('hasLoggedIn') || false
-    if (!hasLoggedIn) {
-      // 首次打开小程序，设置需要登录的标志
-      this.globalData.needLogin = true
-    } else {
+    if (hasLoggedIn) {
       // 已登录，获取用户信息
-      const userInfo = wx.getStorageSync('userInfo')
-      if (userInfo) {
-        this.globalData.userInfo = userInfo
+      this.globalData.hasLoggedIn = true
+      const openid = wx.getStorageSync('openid')
+      if (openid) {
+        this.globalData.openid = openid
       }
     }
   },
@@ -77,6 +75,15 @@ App({
 
   globalData: {
     userInfo: null,
-    needLogin: false
+    needLogin: false,
+    hasLoggedIn: false,
+    openid: null,
+    session_key: null,
+    unionid: null,
+    // 构建完整URL的辅助方法
+    getFullURL: (endpoint) => {
+      const apiConfig = require('/config/api.js')
+      return apiConfig.getFullURL(endpoint)
+    }
   }
 })

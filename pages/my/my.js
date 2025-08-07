@@ -11,15 +11,17 @@ Page({
 
   // 从本地存储加载用户信息
   loadStoredUserInfo() {
-    const userInfo = wx.getStorageSync('userInfo')
     const hasLoggedIn = wx.getStorageSync('hasLoggedIn')
 
-    if (userInfo && hasLoggedIn) {
+    if (hasLoggedIn) {
+      // 已登录，更新全局状态
+      const app = getApp()
+      app.globalData.hasLoggedIn = true
       this.setData({
-        userInfo: userInfo
+        userInfo: {
+          nickName: '用户' // 显示默认用户名称
+        }
       })
-      getApp().globalData.userInfo = userInfo
-      getApp().globalData.needLogin = false
     }
   },
 

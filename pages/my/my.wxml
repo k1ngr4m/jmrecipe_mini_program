@@ -2,7 +2,7 @@
 <view class="my-container">
   <view class="header">
     <view wx:if="{{userInfo}}" class="user-info" bindtap="goToProfile">
-      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
       <view class="user-text">
         <text class="nickname">{{userInfo.nickName}}</text>
         <text class="view-profile">查看个人资料</text>
@@ -11,7 +11,7 @@
     
     <view wx:else class="login-prompt">
       <text>未登录</text>
-      <button class="login-btn" bindtap="onLoginTap">点击登录</button>
+      <navigator url="/pages/login/login" class="login-btn">点击登录</navigator>
     </view>
   </view>
   

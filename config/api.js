@@ -5,7 +5,8 @@ const config = {
     baseURL: 'http://localhost:8088',
     api: {
       clothing: '/api/wardrobe/clothing',
-      cosCredentials: '/api/cos/credentials'
+      cosCredentials: '/api/cos/credentials',
+      login: '/api/wechat/getopenid' // 微信登录接口
     }
   },
   
@@ -14,7 +15,8 @@ const config = {
     baseURL: 'https://www.jmrecipe.com', // 请替换为实际的生产环境域名
     api: {
       clothing: '/api/wardrobe/clothing',
-      cosCredentials: '/api/cos/credentials'
+      cosCredentials: '/api/cos/credentials',
+      login: '/api/wechat/getopenid' // 微信登录接口
     }
   }
 }
