@@ -32,7 +32,7 @@ npm start
 确保在微信公众平台配置以下域名：
 
 - request合法域名: `http://localhost:3001` (开发环境)
-- uploadFile合法域名: `https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com`
+- uploadFile合法域名: `https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/jmrecipe`
 
 ## 5. 使用说明
 

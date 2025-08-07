@@ -1,2 +1,32 @@
 <!--pages/profile/profile.wxml-->
-<text>pages/profile/profile.wxml</text>
+<view class="profile-container">
+  <view wx:if="{{userInfo}}" class="user-info">
+    <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <text class="nickname">{{userInfo.nickName}}</text>
+    
+    <view class="user-details">
+      <view class="detail-item">
+        <text class="label">城市:</text>
+        <text class="value">{{userInfo.city}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="label">省份:</text>
+        <text class="value">{{userInfo.province}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="label">国家:</text>
+        <text class="value">{{userInfo.country}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="label">性别:</text>
+        <text class="value">{{userInfo.gender == 1 ? '男' : userInfo.gender == 2 ? '女' : '未知'}}</text>
+      </view>
+    </view>
+    
+    <button class="logout-btn" bindtap="logout">退出登录</button>
+  </view>
+  
+  <view wx:else class="not-logged-in">
+    <text>未登录</text>
+  </view>
+</view>

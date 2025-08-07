@@ -32,7 +32,7 @@ Page({
     }
     
     // 从URL中提取Bucket、Region和Key信息
-    // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/clothing/1754496891594_6800.png
+    // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/jmrecipe/clothing/1754496891594_6800.png
     const urlPattern = /^https:\/\/([^\/]+)\.cos\.([^\/]+)\.myqcloud\.com\/(.+)$/;
     const match = cosUrl.match(urlPattern);
     

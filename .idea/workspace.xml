@@ -5,13 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/images/index/Image_1.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cos-setup.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cos-setup.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index/index.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index/index.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.wxss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/profile/profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/profile/profile.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/profile/profile.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/project.config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.private.config.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +84,9 @@
       <workItem from="1754385641737" duration="1701000" />
       <workItem from="1754394829396" duration="3770000" />
       <workItem from="1754451131327" duration="17852000" />
-      <workItem from="1754489909549" duration="6141000" />
+      <workItem from="1754489909549" duration="6360000" />
+      <workItem from="1754496973466" duration="954000" />
+      <workItem from="1754533336507" duration="6458000" />
     </task>
     <servers />
   </component>

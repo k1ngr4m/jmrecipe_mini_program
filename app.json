@@ -6,8 +6,8 @@
     "pages/food/food",
     "pages/living/living",
     "pages/travel/travel",
-    "pages/login/login",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/my/my"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -25,7 +25,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/food/food",
+        "pagePath": "pages/my/my",
         "text": "我的"
       }
     ]

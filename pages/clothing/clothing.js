@@ -15,6 +15,22 @@ Page({
     price: ''
   },
   
+  onLoad() {
+    // 页面加载时检查用户登录状态
+    const app = getApp()
+    if (!app.globalData.userInfo) {
+      // 如果用户未登录，显示登录提示
+      wx.showModal({
+        title: '提示',
+        content: '请先登录以使用衣橱功能',
+        showCancel: false,
+        confirmText: '确定'
+      })
+      // 返回上一页
+      wx.navigateBack()
+    }
+  },
+  
   // 工具函数：格式化请求数据
   formatRequestData: function(formData) {
     const requestData = {
@@ -257,7 +273,7 @@ Page({
           const timestamp = Date.now();
           const random = Math.floor(Math.random() * 10000);
           const ext = fileName.split('.').pop();
-          const key = `clothing/${timestamp}_${random}.${ext}`;
+          const key = `jmrecipe/clothing/${timestamp}_${random}.${ext}`;
           
           // 使用SDK上传
           cos.uploadFile({
@@ -483,7 +499,7 @@ Page({
     }
     
     // 从URL中提取Bucket、Region和Key信息
-    // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/clothing/1754496891594_6800.png
+    // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/jmrecipe/clothing/1754496891594_6800.png
     const urlPattern = /^https:\/\/([^\/]+)\.cos\.([^\/]+)\.myqcloud\.com\/(.+)$/;
     const match = cosUrl.match(urlPattern);
     

@@ -74,6 +74,24 @@
   color: #999;
 }
 
+/* 登录提示 */
+.login-prompt {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fffbe6;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.login-btn {
+  background-color: #007aff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
 /* 中间功能区 */
 .main-content {
   padding: 15px;

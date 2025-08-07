@@ -1,66 +1,53 @@
 // pages/profile/profile.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    userInfo: null
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onLoad() {
+    this.getUserInfo()
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow() {
-
+    this.getUserInfo()
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  getUserInfo() {
+    const app = getApp()
+    app.getUserInfo((userInfo) => {
+      if (userInfo) {
+        this.setData({
+          userInfo: userInfo
+        })
+      } else {
+        // 用户未登录，跳转到"我的"页面
+        wx.redirectTo({
+          url: '/pages/my/my'
+        })
+      }
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  logout() {
+    wx.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          // 清除登录状态
+          wx.removeStorageSync('hasLoggedIn')
+          wx.removeStorageSync('userInfo')
+          
+          const app = getApp()
+          app.globalData.userInfo = null
+          app.globalData.needLogin = true
+          
+          // 跳转到"我的"页面
+          wx.redirectTo({
+            url: '/pages/my/my'
+          })
+        }
+      }
+    })
   }
 })
