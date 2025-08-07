@@ -1,7 +1,7 @@
 // config/api.js
 const config = {
   // 开发环境配置
-  development: {
+  dev: {
     baseURL: 'http://localhost:8088',
     api: {
       clothing: '/api/wardrobe/clothing',
@@ -11,8 +11,8 @@ const config = {
   },
   
   // 生产环境配置
-  production: {
-    baseURL: 'https://www.jmrecipe.com', // 请替换为实际的生产环境域名
+  prod: {
+    baseURL: 'https://www.jmrecipe.top', // 请替换为实际的生产环境域名
     api: {
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
@@ -23,7 +23,7 @@ const config = {
 
 // 微信小程序中没有process.env，使用默认开发环境配置
 // 可以通过修改defaultEnv来切换环境
-const defaultEnv = 'development' // 或 'production'
+const defaultEnv = 'prod' // dev 或 prod
 const currentConfig = config[defaultEnv] || config.development
 
 module.exports = {

@@ -53,15 +53,12 @@
       </view>
       <scroll-view class="recommend-content" scroll-x>
         <view class="recommend-card">
-          <image class="card-image" src="/images/index/Image_1.png" mode="aspectFill"></image>
           <text class="card-title">夏日穿搭指南</text>
         </view>
         <view class="recommend-card">
-          <image class="card-image" src="/images/recommend2.jpg" mode="aspectFill"></image>
           <text class="card-title">健康饮食计划</text>
         </view>
         <view class="recommend-card">
-          <image class="card-image" src="/images/recommend3.jpg" mode="aspectFill"></image>
           <text class="card-title">家居布置灵感</text>
         </view>
       </scroll-view>

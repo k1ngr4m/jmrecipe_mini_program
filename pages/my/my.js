@@ -17,11 +17,15 @@ Page({
       // 已登录，更新全局状态
       const app = getApp()
       app.globalData.hasLoggedIn = true
-      this.setData({
-        userInfo: {
-          nickName: '用户' // 显示默认用户名称
-        }
-      })
+      
+      // 从全局数据中获取用户信息
+      const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
+      
+      if (userInfo) {
+        this.setData({
+          userInfo: userInfo
+        })
+      }
     }
   },
 

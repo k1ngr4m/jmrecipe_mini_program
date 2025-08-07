@@ -42,12 +42,6 @@ Page({
       }
     })
   },
-  // getUserInfo(e) {
-  //   this.setData({
-  //     userInfo: e.detail.userInfo,
-  //     hasUserInfo: true
-  //   })
-  // },
 
   /**
    * 实际登录函数

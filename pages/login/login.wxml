@@ -1,25 +1,11 @@
 <view class="container">
   <view class="login-header">
-    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
     <text class="title">欢迎使用JM食谱</text>
   </view>
-  
   <view class="login-content">
-    <button class="login-btn" bindtap="login">
-      微信一键登录
-    </button>
-  </view>
-  <view class="container">
-    <view class="login-content">
-      <block wx:if="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" class="login-btn" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <button wx:else open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
-    </view>
+    <block wx:if="{{!hasUserInfo}}">
+      <button class="login-btn" bindtap="getUserProfile"> 登录 </button>
+    </block>
   </view>
   <view class="login-footer">
     <text class="agreement">登录即表示同意《用户协议》和《隐私政策》</text>
