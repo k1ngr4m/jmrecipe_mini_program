@@ -6,16 +6,8 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
-    // 检查是否已经登录
-    const hasLoggedIn = wx.getStorageSync('hasLoggedIn') || false
-    if (hasLoggedIn) {
-      // 已登录，获取用户信息
-      this.globalData.hasLoggedIn = true
-      const openid = wx.getStorageSync('openid')
-      if (openid) {
-        this.globalData.openid = openid
-      }
-    }
+    // 不在启动时检查登录状态，只在需要时检查
+    // 移除自动登录检查逻辑
   },
 
   // 显示登录提示，需要用户主动触发
