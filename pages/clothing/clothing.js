@@ -18,20 +18,24 @@ Page({
   
   onLoad() {
     // 页面加载时检查用户登录状态
+    const hasLoggedIn = wx.getStorageSync('hasLoggedIn')
     const app = getApp()
-    if (!app.globalData.userInfo) {
+    if (!hasLoggedIn) {
       // 如果用户未登录，显示登录提示
       wx.showModal({
         title: '提示',
         content: '请先登录以使用衣橱功能',
         showCancel: false,
-        confirmText: '确定'
+        confirmText: '确定',
+        success: () => {
+          // 点击确定后返回上一页
+          wx.navigateBack()
+        }
       })
-      // 返回上一页
-      wx.navigateBack()
+    } else {
+      // 如果用户已登录，加载衣物列表
+      this.getClothingList();
     }
-    this.getClothingList();
-
   },
   
   // 工具函数：格式化请求数据

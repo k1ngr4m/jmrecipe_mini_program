@@ -9,12 +9,6 @@ Page({
   onLoad() {
     // 页面加载时，从本地存储获取用户信息
     this.loadStoredUserInfo()
-    
-    // 如果没有登录，则触发登录
-    const hasLoggedIn = wx.getStorageSync('hasLoggedIn') || false
-    // if (!hasLoggedIn) {
-    //   this.onLoginTap()
-    // }
   },
 
   // 从本地存储加载用户信息
