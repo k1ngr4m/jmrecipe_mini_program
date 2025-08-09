@@ -1,5 +1,5 @@
 .container {
-  padding: 20px;
+  padding: 10px;
   background-color: #f5f5f5;
   min-height: 100vh;
   width: 100%;
@@ -7,10 +7,14 @@
 }
 
 .header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 0 20px;
+  height: 60px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .title {
@@ -18,13 +22,181 @@
   font-weight: bold;
 }
 
-.add-btn {
-  background-color: #ff6600;
-  color: white;
-  border: none;
+
+/* 功能按钮区 */
+.function-buttons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: white;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.function-btn {
+  width: 44px;
+  height: 44px;
+  background-color: #f0f0f0;
   border-radius: 6px;
-  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.function-btn .icon {
+  font-size: 20px;
+  color: #333;
+}
+
+.random-btn {
+  width: 64px;
+  background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+}
+
+.random-btn .icon {
+  color: white;
+  margin-bottom: 2px;
+}
+
+.random-btn .btn-text {
   font-size: 14px;
+  color: white;
+}
+
+/* 主内容区 */
+.main-content {
+  width: 100%;
+  display: flex;
+  height: calc(100vh - 120px);
+}
+
+/* 分类列表区（左侧导航） */
+.category-list {
+  width: 22%;
+  background-color: #f2f2f2;
+  padding-top: 10px;
+}
+
+.category-item {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  position: relative;
+}
+
+.category-item.active {
+  background-color: white;
+}
+
+.category-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #000;
+}
+
+.category-text {
+  font-size: 15px;
+  color: #999;
+}
+
+.category-item.active .category-text {
+  color: #000;
+  font-weight: bold;
+}
+
+/* 内容展示区（右侧列表） */
+.content-area {
+  width: 78%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 内容区域头部 */
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.category-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.header-buttons {
+  display: flex;
+}
+
+.header-btn {
+  width: 36px;
+  height: 36px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.header-btn .icon {
+  font-size: 18px;
+  color: #333;
+}
+
+/* 内容卡片 */
+.content-cards {
+  flex: 1;
+  padding: 15px;
+}
+
+.card-item {
+  width: 100%;
+  height: 140px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: white;
 }
 
 /* 弹窗样式 */
@@ -151,97 +323,4 @@
   padding: 12px;
   font-size: 16px;
   margin-top: 10px;
-}
-
-/* 服装列表样式 */
-.clothing-list {
-  margin-top: 20px;
-  width: 100%;
-}
-
-.list-item {
-  background-color: white;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-  display: flex;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  width: 100%;
-  box-sizing: border-box;
-  transition: all 0.2s ease;
-}
-
-.list-item:active {
-  transform: scale(0.98);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.item-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  margin-right: 15px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.item-info {
-  flex: 1;
-  min-width: 0; /* 防止文本溢出 */
-}
-
-.item-name {
-  font-size: 16px;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.item-category {
-  font-size: 14px;
-  color: #ff6600;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.item-detail {
-  font-size: 12px;
-  color: #666;
-  display: block;
-  margin-bottom: 3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.item-price {
-  font-size: 14px;
-  font-weight: bold;
-  color: #ff6600;
-  margin-top: 5px;
-}
-
-.item-date {
-  font-size: 12px;
-  color: #999;
-  margin-top: 3px;
-}
-
-.item-tags {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-
-.item-tag {
-  background-color: #f0f0f0;
-  color: #666;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-right: 5px;
-  margin-bottom: 5px;
 }

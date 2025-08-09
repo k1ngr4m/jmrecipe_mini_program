@@ -1,7 +1,108 @@
 <view class="container">
   <view class="header">
     <text class="title">{{title}}</text>
-    <button class="add-btn" bindtap="showAddModal">新增</button>
+  </view>
+  
+  <!-- 功能按钮区 -->
+  <view class="function-buttons">
+    <view class="function-btn">
+      <text class="icon">↔</text>
+    </view>
+    <view class="function-btn">
+      <text class="icon">⚙</text>
+    </view>
+    <view class="function-btn">
+      <text class="icon">⋮</text>
+    </view>
+    <view class="function-btn" bindtap="showAddModal">
+      <text class="icon">+</text>
+    </view>
+    <view class="function-btn random-btn" bindtap="goToRandomMatch">
+      <text class="icon">👗</text>
+      <text class="btn-text">随意搭</text>
+    </view>
+  </view>
+  
+  <!-- 主内容区 -->
+  <view class="main-content">
+    <!-- 分类列表区（左侧导航） -->
+    <scroll-view class="category-list" scroll-y="true">
+      <view 
+        class="category-item {{currentCategory === 'all' ? 'active' : ''}}" 
+        data-category="all" 
+        bindtap="switchCategory">
+        <text class="category-text">全部</text>
+      </view>
+      <view 
+        class="category-item {{currentCategory === '外套' ? 'active' : ''}}" 
+        data-category="外套" 
+        bindtap="switchCategory">
+        <text class="category-text">外套</text>
+      </view>
+      <view 
+        class="category-item {{currentCategory === '内搭' ? 'active' : ''}}" 
+        data-category="内搭" 
+        bindtap="switchCategory">
+        <text class="category-text">内搭</text>
+      </view>
+      <view 
+        class="category-item {{currentCategory === '下装' ? 'active' : ''}}" 
+        data-category="下装" 
+        bindtap="switchCategory">
+        <text class="category-text">下装</text>
+      </view>
+      <view 
+        class="category-item {{currentCategory === '鞋子' ? 'active' : ''}}" 
+        data-category="鞋子" 
+        bindtap="switchCategory">
+        <text class="category-text">鞋子</text>
+      </view>
+      <view 
+        class="category-item {{currentCategory === '包包' ? 'active' : ''}}" 
+        data-category="包包" 
+        bindtap="switchCategory">
+        <text class="category-text">包包</text>
+      </view>
+      <view 
+        class="category-item {{currentCategory === '配饰' ? 'active' : ''}}" 
+        data-category="配饰" 
+        bindtap="switchCategory">
+        <text class="category-text">配饰</text>
+      </view>
+      <view 
+        class="category-item {{currentCategory === '彩妆' ? 'active' : ''}}" 
+        data-category="彩妆" 
+        bindtap="switchCategory">
+        <text class="category-text">彩妆</text>
+      </view>
+    </scroll-view>
+    
+    <!-- 内容展示区（右侧列表） -->
+    <view class="content-area">
+      <!-- 顶部功能按钮 -->
+      <view class="content-header">
+        <text class="category-title">{{currentCategory === 'all' ? '全部' : currentCategory}}</text>
+        <view class="header-buttons">
+          <view class="header-btn">
+            <text class="icon">⋯</text>
+          </view>
+          <view class="header-btn">
+            <text class="icon">📷</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 分类内容卡片 -->
+      <scroll-view class="content-cards" scroll-y="true">
+        <view class="card-item" wx:for="{{categoryItems}}" wx:key="id">
+          <image class="card-image" src="{{item.image_url || '/images/default-clothing.png'}}" mode="aspectFill"></image>
+          <view class="card-overlay">
+            <text class="card-title">{{item.name}}</text>
+            <text class="card-subtitle">{{item.category}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
   </view>
   
   <!-- 新增服装表单弹窗 -->
@@ -50,24 +151,6 @@
         </view>
         <button class="submit-btn" bindtap="handleSubmit">确定</button>
       </form>
-    </view>
-  </view>
-  
-  <!-- 服装列表 -->
-  <view class="clothing-list">
-    <view class="list-item" wx:for="{{clothingList}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
-      <image wx:if="{{item.image_url}}" src="{{item.image_url}}" class="item-image" />
-      <view class="item-info">
-        <text class="item-name">{{item.name}}</text>
-        <text class="item-category">{{item.category}}</text>
-        <text class="item-detail">颜色: {{item.color || '未填写'}}</text>
-        <text class="item-detail">品牌: {{item.brand || '未填写'}}</text>
-        <text class="item-date">购买日期: {{item.purchase_date || '未填写'}}</text>
-        <text class="item-price">¥{{item.price || '未填写'}}</text>
-        <view class="item-tags" wx:if="{{item.tags && item.tags.length > 0}}">
-          <text class="item-tag" wx:for="{{item.tags}}" wx:key="index">{{item}}</text>
-        </view>
-      </view>
     </view>
   </view>
 </view>

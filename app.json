@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/clothing/clothing",
     "pages/clothing-detail/clothing-detail",
+    "pages/random-match/random-match",
     "pages/food/food",
     "pages/living/living",
     "pages/travel/travel",

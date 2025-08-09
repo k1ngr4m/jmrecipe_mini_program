@@ -8,18 +8,30 @@ Page({
     imageUrl: '',
     cosImageUrl: '',  // COS图片URL
     clothingList: [],
+    categoryItems: [],
     purchaseDate: '',
     name: '',
     category: '',
     color: '',
     brand: '',
-    price: ''
+    price: '',
+    searchKeyword: '',
+    currentCategory: 'all', // 当前选中的分类
+    categories: [
+      { id: 'all', name: '全部' },
+      { id: '外套', name: '外套' },
+      { id: '内搭', name: '内搭' },
+      { id: '下装', name: '下装' },
+      { id: '鞋子', name: '鞋子' },
+      { id: '包包', name: '包包' },
+      { id: '配饰', name: '配饰' },
+      { id: '彩妆', name: '彩妆' }
+    ]
   },
   
   onLoad() {
     // 页面加载时检查用户登录状态
     const hasLoggedIn = wx.getStorageSync('hasLoggedIn')
-    const app = getApp()
     if (!hasLoggedIn) {
       // 如果用户未登录，显示登录提示
       wx.showModal({
@@ -433,6 +445,99 @@ Page({
     });
   },
   
+  // 处理衣物列表数据（排序和图片URL处理）
+  processClothingList: function(clothingList) {
+    // 确保列表从上方开始显示最新添加的项目
+    // 如果后端返回的顺序是从旧到新，我们需要反转列表
+    if (clothingList.length > 0) {
+      // 先尝试按照id降序排列
+      if (clothingList[0].id !== undefined) {
+        clothingList.sort((a, b) => b.id - a.id);
+      } else {
+        // 如果没有id字段，反转列表顺序
+        clothingList.reverse();
+      }
+    }
+    
+    console.log('处理后的衣物列表:', clothingList);
+    
+    // 为列表中的每个服装项获取带签名的图片URL
+    let processedCount = 0;
+    const totalItems = clothingList.length;
+    
+    if (totalItems === 0) {
+      this.setData({
+        clothingList: clothingList,
+        categoryItems: clothingList // 同时更新分类项目
+      });
+      return;
+    }
+    
+    clothingList.forEach((clothing, index) => {
+      if (clothing.image_url) {
+        this.getSignedCosUrl(clothing.image_url, (signedUrl) => {
+          clothingList[index].image_url = signedUrl;
+          processedCount++;
+          
+          // 当所有项都处理完后更新数据
+          if (processedCount === totalItems) {
+            this.setData({
+              clothingList: clothingList,
+              categoryItems: clothingList // 同时更新分类项目
+            });
+          }
+        });
+      } else {
+        processedCount++;
+        
+        // 当所有项都处理完后更新数据
+        if (processedCount === totalItems) {
+          this.setData({
+            clothingList: clothingList,
+            categoryItems: clothingList // 同时更新分类项目
+          });
+        }
+      }
+    });
+  },
+  
+  // 搜索衣物
+  searchClothing(keyword) {
+    if (!keyword) {
+      // 如果搜索关键词为空，显示完整列表
+      this.getClothingList();
+      return;
+    }
+    
+    wx.request({
+      url: config.getFullURL('clothing') + '/search',
+      method: 'POST',
+      data: {
+        user_id: 1,
+        keyword: keyword
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          let clothingList = res.data;
+          console.log('搜索到的衣物列表:', clothingList);
+          this.processClothingList(clothingList);
+        } else {
+          wx.showToast({
+            title: '搜索失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
+    });
+  },
+  
+  // 获取衣物列表
   getClothingList() {
     wx.request({
       url: config.getFullURL('clothing') + '/list',
@@ -442,43 +547,15 @@ Page({
       },
       success: (res) => {
         if (res.statusCode === 200) {
-          const clothingList = res.data;
+          let clothingList = res.data;
+          console.log('获取到的衣物列表:', clothingList);
           
-          // 为列表中的每个服装项获取带签名的图片URL
-          let processedCount = 0;
-          const totalItems = clothingList.length;
-          
-          if (totalItems === 0) {
-            this.setData({
-              clothingList: clothingList
-            });
-            return;
+          // 检查数据结构以便正确排序
+          if (clothingList.length > 0) {
+            console.log('第一条数据结构:', clothingList[0]);
           }
           
-          clothingList.forEach((clothing, index) => {
-            if (clothing.image_url) {
-              this.getSignedCosUrl(clothing.image_url, (signedUrl) => {
-                clothingList[index].image_url = signedUrl;
-                processedCount++;
-                
-                // 当所有项都处理完后更新数据
-                if (processedCount === totalItems) {
-                  this.setData({
-                    clothingList: clothingList
-                  });
-                }
-              });
-            } else {
-              processedCount++;
-              
-              // 当所有项都处理完后更新数据
-              if (processedCount === totalItems) {
-                this.setData({
-                  clothingList: clothingList
-                });
-              }
-            }
-          });
+          this.processClothingList(clothingList);
         } else {
           wx.showToast({
             title: '获取列表失败',
@@ -564,6 +641,71 @@ Page({
         console.error('获取临时密钥失败:', err);
         callback(cosUrl); // 如果获取失败，返回原始URL
       }
+    });
+  },
+  
+  // 搜索输入事件
+  onSearchInput: function(e) {
+    this.setData({
+      searchKeyword: e.detail.value
+    });
+  },
+  
+  // 搜索确认事件（回车搜索）
+  onSearchConfirm: function(e) {
+    const keyword = e.detail.value;
+    this.setData({
+      searchKeyword: keyword
+    });
+    this.searchClothing(keyword);
+  },
+  
+  // 搜索按钮点击事件
+  onSearch: function() {
+    this.searchClothing(this.data.searchKeyword);
+  },
+  
+  // 清除搜索
+  clearSearch: function() {
+    this.setData({
+      searchKeyword: ''
+    });
+    // 重新加载完整列表
+    this.getClothingList();
+  },
+  
+  // 切换分类
+  switchCategory: function(e) {
+    const category = e.currentTarget.dataset.category;
+    this.setData({
+      currentCategory: category
+    });
+    
+    // 根据分类筛选衣物
+    this.filterClothingByCategory(category);
+  },
+  
+  // 根据分类筛选衣物
+  filterClothingByCategory: function(category) {
+    let filteredItems = [];
+    
+    if (category === 'all') {
+      // 显示所有衣物
+      filteredItems = this.data.clothingList;
+    } else {
+      // 根据分类筛选
+      filteredItems = this.data.clothingList.filter(item => item.category === category);
+    }
+    
+    this.setData({
+      categoryItems: filteredItems
+    });
+  },
+  
+  // 跳转到随意搭页面
+  goToRandomMatch: function() {
+    wx.navigateTo({
+      url: '/pages/random-match/random-match'
     });
   },
   
