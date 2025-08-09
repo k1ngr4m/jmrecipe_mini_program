@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/login/login",
     "pages/index/index",
     "pages/clothing/clothing",
     "pages/clothing-detail/clothing-detail",
@@ -8,6 +7,7 @@
     "pages/living/living",
     "pages/travel/travel",
     "pages/profile/profile",
+    "pages/login/login",
     "pages/my/my"
   ],
   "window": {

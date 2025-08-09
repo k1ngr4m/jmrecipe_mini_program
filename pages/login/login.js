@@ -14,6 +14,15 @@ Page({
    * 页面加载
    */
   onLoad() {
+    // 检查用户是否已经登录
+    const hasLoggedIn = wx.getStorageSync('hasLoggedIn') || false;
+    const userInfo = wx.getStorageSync('userInfo') || null;
+    
+    this.setData({
+      hasUserInfo: hasLoggedIn && userInfo,
+      userInfo: userInfo
+    });
+    
     if (wx.getUserProfile) {
       this.setData({
         canIUseGetUserProfile: true
@@ -33,11 +42,18 @@ Page({
         app.globalData.userInfo = res.userInfo;
         app.globalData.hasLoggedIn = true; // 设置登录状态
         wx.setStorageSync('hasLoggedIn', true); // 保存登录状态到本地存储
-        wx.setStorageSync('userInfo', res.userInfo); // 保存openid到本地存储
+        wx.setStorageSync('userInfo', res.userInfo); // 保存用户信息到本地存储
         console.log('登录成功，跳转到首页');
         // 跳转到首页
         wx.reLaunch({
           url: '/pages/index/index',
+        });
+      },
+      fail: (err) => {
+        console.error('获取用户信息失败', err);
+        wx.showToast({
+          title: '登录失败，请重试',
+          icon: 'none'
         });
       }
     })
@@ -90,15 +106,17 @@ Page({
       success: (resServer) => {
         console.log('请求成功', resServer);
         // 检查登录是否成功
-        if (resServer.data.errcode === "0") {
+        if (resServer.data && resServer.data.errcode === "0") {
           // 登录成功
           const userData = resServer.data;
           
           // 保存用户信息到全局变量和本地存储
-          app.globalData.openid = userData.openid;
-          app.globalData.session_key = userData.session_key;
-          app.globalData.unionid = userData.unionid;
-          app.globalData.hasLoggedIn = true; // 设置登录状态
+          if (app.globalData) {
+            app.globalData.openid = userData.openid;
+            app.globalData.session_key = userData.session_key;
+            app.globalData.unionid = userData.unionid;
+            app.globalData.hasLoggedIn = true; // 设置登录状态
+          }
           wx.setStorageSync('hasLoggedIn', true); // 保存登录状态到本地存储
           wx.setStorageSync('openid', userData.openid); // 保存openid到本地存储
           
@@ -111,10 +129,10 @@ Page({
         } else {
           // 登录失败
           wx.showToast({
-            title: resServer.data.msg || '登录失败',
+            title: (resServer.data && resServer.data.msg) || '登录失败',
             icon: 'none'
           });
-          console.error("登录失败:", resServer.data.msg);
+          console.error("登录失败:", resServer.data && resServer.data.msg);
         }
       },
       fail: (err) => {

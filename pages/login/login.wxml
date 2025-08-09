@@ -4,7 +4,12 @@
   </view>
   <view class="login-content">
     <block wx:if="{{!hasUserInfo}}">
-      <button class="login-btn" bindtap="getUserProfile"> 登录 </button>
+      <button class="login-btn" bindtap="getUserProfile"> 微信登录 </button>
+    </block>
+    <block wx:else>
+      <view class="logged-in-info">
+        <text>您已登录</text>
+      </view>
     </block>
   </view>
   <view class="login-footer">

@@ -2,72 +2,145 @@
 .my-container {
   background-color: #f5f5f5;
   min-height: 100vh;
+  padding: 20rpx;
 }
 
 .header {
   background-color: white;
-  padding: 20px;
-  margin-bottom: 10px;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  padding: 10px 0;
 }
 
 .avatar {
-  width: 60px;
-  height: 60px;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 30rpx;
 }
 
 .user-text {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .nickname {
-  display: block;
-  font-size: 18px;
+  font-size: 36rpx;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 10rpx;
 }
 
 .view-profile {
+  font-size: 24rpx;
   color: #999;
-  font-size: 14px;
-}
-
-.arrow {
-  width: 20px;
-  height: 20px;
 }
 
 .login-prompt {
   text-align: center;
-  padding: 30px 0;
+  padding: 40rpx 0;
 }
 
 .login-btn {
-  background-color: #007aff;
+  background-color: #07c160;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin-top: 10px;
+  border-radius: 10rpx;
+  padding: 20rpx 40rpx;
+  font-size: 32rpx;
+  margin-top: 20rpx;
+}
+
+/* 引导用户完善资料样式 */
+.profile-guide {
+  width: 100%;
+  background-color: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.guide-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.guide-desc {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  margin-bottom: 40rpx;
+}
+
+.avatar-preview {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+}
+
+.change-avatar-text {
+  font-size: 28rpx;
+  color: #07c160;
+}
+
+.nickname-input-wrapper {
+  margin-bottom: 40rpx;
+}
+
+.input-label {
+  font-size: 32rpx;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.nickname-input {
+  width: 100%;
+  height: 80rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  font-size: 30rpx;
+}
+
+.save-btn {
+  width: 100%;
+  background-color: #07c160;
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 20rpx 0;
+  font-size: 32rpx;
 }
 
 .menu-list {
+  width: 100%;
   background-color: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
 }
 
 .menu-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
+  padding: 30rpx 40rpx;
+  border-bottom: 2rpx solid #f0f0f0;
 }
 
 .menu-item:last-child {
@@ -75,6 +148,23 @@
 }
 
 .menu-text {
-  font-size: 16px;
+  font-size: 32rpx;
   color: #333;
+}
+
+/* 调试信息样式 */
+.debug-info {
+  width: 100%;
+  background-color: #fff3cd;
+  border: 2rpx solid #ffeaa7;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  font-size: 24rpx;
+  color: #856404;
+}
+
+.debug-info text {
+  display: block;
+  margin-bottom: 10rpx;
 }

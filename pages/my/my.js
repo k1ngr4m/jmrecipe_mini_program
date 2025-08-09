@@ -12,9 +12,9 @@ Page({
     
     // 如果没有登录，则触发登录
     const hasLoggedIn = wx.getStorageSync('hasLoggedIn') || false
-    if (!hasLoggedIn) {
-      this.onLoginTap()
-    }
+    // if (!hasLoggedIn) {
+    //   this.onLoginTap()
+    // }
   },
 
   // 从本地存储加载用户信息

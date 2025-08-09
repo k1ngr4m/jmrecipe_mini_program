@@ -28,6 +28,7 @@
 .login-content {
   width: 80%;
   margin-bottom: 100rpx;
+  text-align: center;
 }
 
 .login-btn {
@@ -38,6 +39,15 @@
   font-size: 32rpx;
   border-radius: 10rpx;
   border: none;
+  margin-bottom: 30rpx;
+}
+
+.logged-in-info {
+  font-size: 28rpx;
+  color: #666;
+  padding: 30rpx;
+  background-color: #f0f0f0;
+  border-radius: 10rpx;
 }
 
 .login-btn::after {
