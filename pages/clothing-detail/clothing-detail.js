@@ -48,51 +48,42 @@ Page({
     const region = match[2]; // ap-shanghai
     const key = match[3]; // clothing/1754496891594_6800.png
     
-    // 获取临时密钥
-    wx.request({
-      url: config.getFullURL('cosCredentials'),
-      method: 'GET',
-      success: (res) => {
-        if (res.statusCode === 200 && res.data.tmp_secret_id) {
-          const credentials = res.data;
-          
-          // 初始化COS实例
-          const COS = require('../../utils/cos-wx-sdk-v5.js');
-          const cos = new COS({
-            getAuthorization: function (options, callback) {
-              callback({
-                TmpSecretId: credentials.tmp_secret_id,
-                TmpSecretKey: credentials.tmp_secret_key,
-                SecurityToken: credentials.token,
-                StartTime: credentials.start_time,
-                ExpiredTime: credentials.expired_time
-              });
-            }
+    // 引入COS凭证管理器
+    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
+    const COS = require('../../utils/cos-wx-sdk-v5.js');
+    
+    // 获取有效的凭证
+    cosCredentialsManager.getValidCredentials().then(credentials => {
+      // 初始化COS实例
+      const cos = new COS({
+        getAuthorization: function (options, callback) {
+          callback({
+            TmpSecretId: credentials.tmp_secret_id,
+            TmpSecretKey: credentials.tmp_secret_key,
+            SecurityToken: credentials.token,
+            StartTime: credentials.start_time,
+            ExpiredTime: credentials.expired_time
           });
-          
-          // 获取带签名的URL
-          cos.getObjectUrl({
-            Bucket: bucketWithAppId,
-            Region: region,
-            Key: key,
-            Sign: true
-          }, function(err, data) {
-            if (err) {
-              console.error('获取签名URL失败:', err);
-              callback(cosUrl); // 如果获取失败，返回原始URL
-            } else {
-              callback(data.Url);
-            }
-          });
-        } else {
-          console.error('获取临时密钥失败:', res);
-          callback(cosUrl); // 如果获取失败，返回原始URL
         }
-      },
-      fail: (err) => {
-        console.error('获取临时密钥失败:', err);
-        callback(cosUrl); // 如果获取失败，返回原始URL
-      }
+      });
+      
+      // 获取带签名的URL
+      cos.getObjectUrl({
+        Bucket: bucketWithAppId,
+        Region: region,
+        Key: key,
+        Sign: true
+      }, function(err, data) {
+        if (err) {
+          console.error('获取签名URL失败:', err);
+          callback(cosUrl); // 如果获取失败，返回原始URL
+        } else {
+          callback(data.Url);
+        }
+      });
+    }).catch(error => {
+      console.error('获取COS凭证失败:', error);
+      callback(cosUrl); // 如果获取失败，返回原始URL
     });
   },
 

@@ -14,6 +14,8 @@ Page({
     name: '',
     category: '',
     color: '',
+    colorIndex: 0,
+    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色', '混合色'],
     brand: '',
     price: '',
     searchKeyword: '',
@@ -94,7 +96,9 @@ Page({
   
   showAddModal() {
     this.setData({
-      showModal: true
+      showModal: true,
+      colorIndex: 0,
+      color: ''
     });
   },
   
@@ -103,7 +107,9 @@ Page({
       showModal: false,
       imageUrl: '',
       cosImageUrl: '',  // 清空COS图片URL
-      purchaseDate: ''  // 清空日期选择
+      purchaseDate: '',  // 清空日期选择
+      colorIndex: 0,
+      color: ''
     });
   },
   
@@ -182,9 +188,12 @@ Page({
     });
   },
   
-  onColorInput: function(e) {
+  onColorChange: function(e) {
+    const colorIndex = e.detail.value;
+    const color = this.data.colorOptions[colorIndex];
     this.setData({
-      color: e.detail.value
+      colorIndex: colorIndex,
+      color: color
     });
   },
   
@@ -613,51 +622,42 @@ Page({
     const key = match[3]; // clothing/1754496891594_6800.png
     const bucket = bucketWithAppId; // COS SDK可以处理带APPID的bucket名称
     
-    // 获取临时密钥
-    wx.request({
-      url: config.getFullURL('cosCredentials'),
-      method: 'GET',
-      success: (res) => {
-        if (res.statusCode === 200 && res.data.tmp_secret_id) {
-          const credentials = res.data;
-          
-          // 初始化COS实例
-          const cos = new COS({
-            getAuthorization: function (options, callback) {
-              callback({
-                TmpSecretId: credentials.tmp_secret_id,
-                TmpSecretKey: credentials.tmp_secret_key,
-                SecurityToken: credentials.token,
-                StartTime: credentials.start_time,
-                ExpiredTime: credentials.expired_time
-              });
-            },
-            SimpleUploadMethod: 'putObject'
+    // 引入COS凭证管理器
+    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
+    
+    // 获取有效的凭证
+    cosCredentialsManager.getValidCredentials().then(credentials => {
+      // 初始化COS实例
+      const cos = new COS({
+        getAuthorization: function (options, callback) {
+          callback({
+            TmpSecretId: credentials.tmp_secret_id,
+            TmpSecretKey: credentials.tmp_secret_key,
+            SecurityToken: credentials.token,
+            StartTime: credentials.start_time,
+            ExpiredTime: credentials.expired_time
           });
-          
-          // 获取带签名的URL
-          cos.getObjectUrl({
-            Bucket: bucket,
-            Region: region,
-            Key: key,
-            Sign: true
-          }, function(err, data) {
-            if (err) {
-              console.error('获取签名URL失败:', err);
-              callback(cosUrl); // 如果获取失败，返回原始URL
-            } else {
-              callback(data.Url);
-            }
-          });
-        } else {
-          console.error('获取临时密钥失败:', res);
+        },
+        SimpleUploadMethod: 'putObject'
+      });
+      
+      // 获取带签名的URL
+      cos.getObjectUrl({
+        Bucket: bucket,
+        Region: region,
+        Key: key,
+        Sign: true
+      }, function(err, data) {
+        if (err) {
+          console.error('获取签名URL失败:', err);
           callback(cosUrl); // 如果获取失败，返回原始URL
+        } else {
+          callback(data.Url);
         }
-      },
-      fail: (err) => {
-        console.error('获取临时密钥失败:', err);
-        callback(cosUrl); // 如果获取失败，返回原始URL
-      }
+      });
+    }).catch(error => {
+      console.error('获取COS凭证失败:', error);
+      callback(cosUrl); // 如果获取失败，返回原始URL
     });
   },
   
