@@ -18,6 +18,63 @@ Page({
       wx.navigateBack();
     }
   },
+  
+  // 编辑衣物
+  editClothing: function() {
+    const clothingId = this.data.clothing.id;
+    wx.navigateTo({
+      url: `/pages/clothing-edit/clothing-edit?id=${clothingId}`
+    });
+  },
+  
+  // 删除衣物
+  deleteClothing: function() {
+    const that = this;
+    const clothingId = this.data.clothing.id;
+    
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除这件衣物吗？此操作不可撤销。',
+      confirmColor: '#F44336',
+      success(res) {
+        if (res.confirm) {
+          that.performDelete(clothingId);
+        }
+      }
+    });
+  },
+  
+  // 执行删除操作
+  performDelete: function(clothingId) {
+    wx.request({
+      url: config.getFullURL('clothing') + `/${clothingId}?user_id=1`,
+      method: 'DELETE',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.showToast({
+            title: '删除成功',
+            icon: 'success'
+          });
+          
+          // 返回上一页
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
+        } else {
+          wx.showToast({
+            title: '删除失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
+    });
+  },
 
   // 获取带签名的COS图片URL
   getSignedCosUrl: function(cosUrl, callback) {

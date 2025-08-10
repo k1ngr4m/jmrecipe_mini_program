@@ -84,3 +84,33 @@
   font-size: 16px;
   color: #999;
 }
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.edit-btn, .delete-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+}
+
+.edit-btn {
+  background-color: #8B5A2B;
+  color: white;
+  margin-right: 10px;
+}
+
+.delete-btn {
+  background-color: #F44336;
+  color: white;
+  margin-left: 10px;
+}

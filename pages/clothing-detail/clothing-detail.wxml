@@ -46,6 +46,12 @@
         </view>
       </view>
     </view>
+    
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="edit-btn" bindtap="editClothing">编辑</button>
+      <button class="delete-btn" bindtap="deleteClothing">删除</button>
+    </view>
   </view>
   
   <!-- 加载中 -->
