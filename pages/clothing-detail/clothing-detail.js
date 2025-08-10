@@ -99,8 +99,14 @@ Page({
   // 获取服装详情
   getClothingDetail: function (clothingId) {
     wx.request({
-      url: config.getFullURL('clothing') + `/${clothingId}`,
-      method: 'GET',
+      url: config.getFullURL('clothing') + '/detail?user_id=1',
+      method: 'POST',
+      data: {
+        clothing_id: parseInt(clothingId)
+      },
+      header: {
+        'Content-Type': 'application/json'
+      },
       success: (res) => {
         if (res.statusCode === 200) {
           const clothing = res.data;
