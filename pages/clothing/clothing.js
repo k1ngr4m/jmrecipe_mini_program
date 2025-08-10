@@ -3,12 +3,13 @@ const config = require('../../config/api.js');
 
 Page({
   data: {
-    title: '智能衣橱',
+    title: '衣橱列表页',
     showModal: false,
+    showSearchModal: false,
     imageUrl: '',
     cosImageUrl: '',  // COS图片URL
     clothingList: [],
-    categoryItems: [],
+    filteredClothingList: [],
     purchaseDate: '',
     name: '',
     category: '',
@@ -16,17 +17,17 @@ Page({
     brand: '',
     price: '',
     searchKeyword: '',
+    searchResults: [],
     currentCategory: 'all', // 当前选中的分类
-    categories: [
-      { id: 'all', name: '全部' },
-      { id: '外套', name: '外套' },
-      { id: '内搭', name: '内搭' },
-      { id: '下装', name: '下装' },
-      { id: '鞋子', name: '鞋子' },
-      { id: '包包', name: '包包' },
-      { id: '配饰', name: '配饰' },
-      { id: '彩妆', name: '彩妆' }
-    ]
+    selectedColor: '', // 当前选中的颜色
+    selectedSeason: '', // 当前选中的季节
+    totalCount: 0, // 总件数
+    categoryCounts: {
+      shangyi: 0,
+      kuzhuang: 0,
+      waitao: 0,
+      xielv: 0
+    }
   },
   
   onLoad() {
@@ -104,6 +105,20 @@ Page({
     });
   },
   
+  showSearch() {
+    this.setData({
+      showSearchModal: true
+    });
+  },
+  
+  hideSearch() {
+    this.setData({
+      showSearchModal: false,
+      searchKeyword: '',
+      searchResults: []
+    });
+  },
+  
   chooseImage() {
     wx.chooseImage({
       count: 1,
@@ -146,7 +161,6 @@ Page({
       }
     });
   },
-  
   
   bindDateChange: function(e) {
     this.setData({
@@ -445,99 +459,6 @@ Page({
     });
   },
   
-  // 处理衣物列表数据（排序和图片URL处理）
-  processClothingList: function(clothingList) {
-    // 确保列表从上方开始显示最新添加的项目
-    // 如果后端返回的顺序是从旧到新，我们需要反转列表
-    if (clothingList.length > 0) {
-      // 先尝试按照id降序排列
-      if (clothingList[0].id !== undefined) {
-        clothingList.sort((a, b) => b.id - a.id);
-      } else {
-        // 如果没有id字段，反转列表顺序
-        clothingList.reverse();
-      }
-    }
-    
-    console.log('处理后的衣物列表:', clothingList);
-    
-    // 为列表中的每个服装项获取带签名的图片URL
-    let processedCount = 0;
-    const totalItems = clothingList.length;
-    
-    if (totalItems === 0) {
-      this.setData({
-        clothingList: clothingList,
-        categoryItems: clothingList // 同时更新分类项目
-      });
-      return;
-    }
-    
-    clothingList.forEach((clothing, index) => {
-      if (clothing.image_url) {
-        this.getSignedCosUrl(clothing.image_url, (signedUrl) => {
-          clothingList[index].image_url = signedUrl;
-          processedCount++;
-          
-          // 当所有项都处理完后更新数据
-          if (processedCount === totalItems) {
-            this.setData({
-              clothingList: clothingList,
-              categoryItems: clothingList // 同时更新分类项目
-            });
-          }
-        });
-      } else {
-        processedCount++;
-        
-        // 当所有项都处理完后更新数据
-        if (processedCount === totalItems) {
-          this.setData({
-            clothingList: clothingList,
-            categoryItems: clothingList // 同时更新分类项目
-          });
-        }
-      }
-    });
-  },
-  
-  // 搜索衣物
-  searchClothing(keyword) {
-    if (!keyword) {
-      // 如果搜索关键词为空，显示完整列表
-      this.getClothingList();
-      return;
-    }
-    
-    wx.request({
-      url: config.getFullURL('clothing') + '/search',
-      method: 'POST',
-      data: {
-        user_id: 1,
-        keyword: keyword
-      },
-      success: (res) => {
-        if (res.statusCode === 200) {
-          let clothingList = res.data;
-          console.log('搜索到的衣物列表:', clothingList);
-          this.processClothingList(clothingList);
-        } else {
-          wx.showToast({
-            title: '搜索失败',
-            icon: 'none'
-          });
-        }
-      },
-      fail: () => {
-        wx.showToast({
-          title: '网络错误',
-          icon: 'none'
-        });
-      }
-    });
-  },
-  
-  // 获取衣物列表
   getClothingList() {
     wx.request({
       url: config.getFullURL('clothing') + '/list',
@@ -548,13 +469,6 @@ Page({
       success: (res) => {
         if (res.statusCode === 200) {
           let clothingList = res.data;
-          console.log('获取到的衣物列表:', clothingList);
-          
-          // 检查数据结构以便正确排序
-          if (clothingList.length > 0) {
-            console.log('第一条数据结构:', clothingList[0]);
-          }
-          
           this.processClothingList(clothingList);
         } else {
           wx.showToast({
@@ -571,7 +485,103 @@ Page({
       }
     });
   },
-
+  
+  // 处理衣物列表数据（排序和图片URL处理）
+  processClothingList: function(clothingList) {
+    // 确保列表从上方开始显示最新添加的项目
+    // 如果后端返回的顺序是从旧到新，我们需要反转列表
+    if (clothingList.length > 0) {
+      // 先尝试按照id降序排列
+      if (clothingList[0].id !== undefined) {
+        clothingList.sort((a, b) => b.id - a.id);
+      } else {
+        // 如果没有id字段，反转列表顺序
+        clothingList.reverse();
+      }
+    }
+    
+    console.log('处理后的衣物列表:', clothingList);
+    
+    // 更新总数和分类统计
+    const totalCount = clothingList.length;
+    const categoryCounts = {
+      shangyi: clothingList.filter(item => item.category === '上衣').length,
+      kuzhuang: clothingList.filter(item => item.category === '裤装').length,
+      waitao: clothingList.filter(item => item.category === '外套').length,
+      xielv: clothingList.filter(item => item.category === '鞋履').length
+    };
+    
+    // 应用当前筛选条件
+    let filteredList = this.applyFilters(clothingList);
+    
+    // 为列表中的每个服装项获取带签名的图片URL
+    let processedCount = 0;
+    const totalItems = clothingList.length;
+    
+    if (totalItems === 0) {
+      this.setData({
+        clothingList: clothingList,
+        filteredClothingList: filteredList,
+        totalCount: totalCount,
+        categoryCounts: categoryCounts
+      });
+      return;
+    }
+    
+    clothingList.forEach((clothing, index) => {
+      if (clothing.image_url) {
+        this.getSignedCosUrl(clothing.image_url, (signedUrl) => {
+          clothingList[index].image_url = signedUrl;
+          processedCount++;
+          
+          // 当所有项都处理完后更新数据
+          if (processedCount === totalItems) {
+            this.setData({
+              clothingList: clothingList,
+              filteredClothingList: filteredList,
+              totalCount: totalCount,
+              categoryCounts: categoryCounts
+            });
+          }
+        });
+      } else {
+        processedCount++;
+        
+        // 当所有项都处理完后更新数据
+        if (processedCount === totalItems) {
+          this.setData({
+            clothingList: clothingList,
+            filteredClothingList: filteredList,
+            totalCount: totalCount,
+            categoryCounts: categoryCounts
+          });
+        }
+      }
+    });
+  },
+  
+  // 应用筛选条件
+  applyFilters: function(clothingList) {
+    let filteredList = clothingList;
+    
+    // 按分类筛选
+    if (this.data.currentCategory !== 'all') {
+      filteredList = filteredList.filter(item => item.category === this.data.currentCategory);
+    }
+    
+    // 按颜色筛选
+    if (this.data.selectedColor) {
+      filteredList = filteredList.filter(item => item.color === this.data.selectedColor);
+    }
+    
+    // 按季节筛选
+    if (this.data.selectedSeason) {
+      filteredList = filteredList.filter(item => item.season === this.data.selectedSeason);
+    }
+    
+    return filteredList;
+  },
+  
   // 获取带签名的COS图片URL
   getSignedCosUrl: function(cosUrl, callback) {
     // 如果URL已经包含签名信息，则直接返回
@@ -644,6 +654,86 @@ Page({
     });
   },
   
+  // 切换分类
+  switchCategory: function(e) {
+    const category = e.currentTarget.dataset.category;
+    this.setData({
+      currentCategory: category
+    });
+    
+    // 重新应用筛选
+    const filteredList = this.applyFilters(this.data.clothingList);
+    this.setData({
+      filteredClothingList: filteredList
+    });
+  },
+  
+  // 选择颜色
+  selectColor: function(e) {
+    const color = e.currentTarget.dataset.color;
+    this.setData({
+      selectedColor: color
+    });
+    
+    // 重新应用筛选
+    const filteredList = this.applyFilters(this.data.clothingList);
+    this.setData({
+      filteredClothingList: filteredList
+    });
+  },
+  
+  // 选择季节
+  selectSeason: function(e) {
+    const season = e.currentTarget.dataset.season;
+    this.setData({
+      selectedSeason: season
+    });
+    
+    // 重新应用筛选
+    const filteredList = this.applyFilters(this.data.clothingList);
+    this.setData({
+      filteredClothingList: filteredList
+    });
+  },
+  
+  // 搜索衣物
+  searchClothing(keyword) {
+    if (!keyword) {
+      // 如果搜索关键词为空，显示完整列表
+      this.getClothingList();
+      return;
+    }
+    
+    wx.request({
+      url: config.getFullURL('clothing') + '/search',
+      method: 'POST',
+      data: {
+        user_id: 1,
+        keyword: keyword
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          let clothingList = res.data;
+          console.log('搜索到的衣物列表:', clothingList);
+          this.setData({
+            searchResults: clothingList
+          });
+        } else {
+          wx.showToast({
+            title: '搜索失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
+    });
+  },
+  
   // 搜索输入事件
   onSearchInput: function(e) {
     this.setData({
@@ -674,39 +764,59 @@ Page({
     this.getClothingList();
   },
   
-  // 切换分类
-  switchCategory: function(e) {
-    const category = e.currentTarget.dataset.category;
-    this.setData({
-      currentCategory: category
-    });
-    
-    // 根据分类筛选衣物
-    this.filterClothingByCategory(category);
-  },
-  
-  // 根据分类筛选衣物
-  filterClothingByCategory: function(category) {
-    let filteredItems = [];
-    
-    if (category === 'all') {
-      // 显示所有衣物
-      filteredItems = this.data.clothingList;
-    } else {
-      // 根据分类筛选
-      filteredItems = this.data.clothingList.filter(item => item.category === category);
-    }
-    
-    this.setData({
-      categoryItems: filteredItems
+  // 清理衣物
+  cleanClothing: function() {
+    wx.showModal({
+      title: '确认清理',
+      content: '确定要清理选中的衣物吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showToast({
+            title: '清理功能待实现',
+            icon: 'none'
+          });
+        }
+      }
     });
   },
   
-  // 跳转到随意搭页面
-  goToRandomMatch: function() {
-    wx.navigateTo({
-      url: '/pages/random-match/random-match'
+  // 跳转到今日穿搭
+  goToTodayOutfit: function() {
+    wx.showToast({
+      title: '今日穿搭功能待实现',
+      icon: 'none'
     });
+  },
+  
+  // 返回上一页
+  goBack: function() {
+    wx.navigateBack();
+  },
+  
+  // 根据颜色标签获取颜色
+  getColorByTag: function(color) {
+    const colorMap = {
+      '绿色': '#4CAF50',
+      '黄色': '#FFEB3B',
+      '棕色': '#795548',
+      '灰色': '#9E9E9E',
+      '红色': '#F44336',
+      '蓝色': '#2196F3',
+      '黑色': '#000000',
+      '白色': '#FFFFFF'
+    };
+    return colorMap[color] || '#CCCCCC';
+  },
+  
+  // 根据季节标签获取显示文本
+  getSeasonByTag: function(season) {
+    const seasonMap = {
+      'spring': '春',
+      'summer': '夏',
+      'autumn': '秋',
+      'winter': '冬'
+    };
+    return seasonMap[season] || season;
   },
   
   // 跳转到详情页

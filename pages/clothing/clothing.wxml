@@ -1,107 +1,126 @@
 <view class="container">
-  <view class="header">
-    <text class="title">{{title}}</text>
-  </view>
-  
-  <!-- 功能按钮区 -->
-  <view class="function-buttons">
-    <view class="function-btn">
-      <text class="icon">↔</text>
+  <!-- 顶部导航区 -->
+  <view class="top-nav">
+    <view class="nav-header">
+      <view class="back-btn" bindtap="goBack">
+        <text class="icon">←</text>
+      </view>
+      <text class="page-title">衣橱列表页</text>
+      <view class="search-btn" bindtap="showSearch">
+        <text class="icon">🔍</text>
+      </view>
     </view>
-    <view class="function-btn">
-      <text class="icon">⚙</text>
-    </view>
-    <view class="function-btn">
-      <text class="icon">⋮</text>
-    </view>
-    <view class="function-btn" bindtap="showAddModal">
-      <text class="icon">+</text>
-    </view>
-    <view class="function-btn random-btn" bindtap="goToRandomMatch">
-      <text class="icon">👗</text>
-      <text class="btn-text">随意搭</text>
-    </view>
-  </view>
-  
-  <!-- 主内容区 -->
-  <view class="main-content">
-    <!-- 分类列表区（左侧导航） -->
-    <scroll-view class="category-list" scroll-y="true">
-      <view 
-        class="category-item {{currentCategory === 'all' ? 'active' : ''}}" 
-        data-category="all" 
-        bindtap="switchCategory">
-        <text class="category-text">全部</text>
+    
+    <!-- 分类标签 -->
+    <scroll-view class="category-tabs" scroll-x="true">
+      <view class="tab-item {{currentCategory === 'all' ? 'active' : ''}}" data-category="all" bindtap="switchCategory">
+        <text>总览</text>
       </view>
-      <view 
-        class="category-item {{currentCategory === '外套' ? 'active' : ''}}" 
-        data-category="外套" 
-        bindtap="switchCategory">
-        <text class="category-text">外套</text>
+      <view class="tab-item {{currentCategory === '上衣' ? 'active' : ''}}" data-category="上衣" bindtap="switchCategory">
+        <text>上衣</text>
       </view>
-      <view 
-        class="category-item {{currentCategory === '内搭' ? 'active' : ''}}" 
-        data-category="内搭" 
-        bindtap="switchCategory">
-        <text class="category-text">内搭</text>
+      <view class="tab-item {{currentCategory === '裤装' ? 'active' : ''}}" data-category="裤装" bindtap="switchCategory">
+        <text>裤装</text>
       </view>
-      <view 
-        class="category-item {{currentCategory === '下装' ? 'active' : ''}}" 
-        data-category="下装" 
-        bindtap="switchCategory">
-        <text class="category-text">下装</text>
+      <view class="tab-item {{currentCategory === '外套' ? 'active' : ''}}" data-category="外套" bindtap="switchCategory">
+        <text>外套</text>
       </view>
-      <view 
-        class="category-item {{currentCategory === '鞋子' ? 'active' : ''}}" 
-        data-category="鞋子" 
-        bindtap="switchCategory">
-        <text class="category-text">鞋子</text>
-      </view>
-      <view 
-        class="category-item {{currentCategory === '包包' ? 'active' : ''}}" 
-        data-category="包包" 
-        bindtap="switchCategory">
-        <text class="category-text">包包</text>
-      </view>
-      <view 
-        class="category-item {{currentCategory === '配饰' ? 'active' : ''}}" 
-        data-category="配饰" 
-        bindtap="switchCategory">
-        <text class="category-text">配饰</text>
-      </view>
-      <view 
-        class="category-item {{currentCategory === '彩妆' ? 'active' : ''}}" 
-        data-category="彩妆" 
-        bindtap="switchCategory">
-        <text class="category-text">彩妆</text>
+      <view class="tab-item {{currentCategory === '鞋履' ? 'active' : ''}}" data-category="鞋履" bindtap="switchCategory">
+        <text>鞋履</text>
       </view>
     </scroll-view>
     
-    <!-- 内容展示区（右侧列表） -->
-    <view class="content-area">
-      <!-- 顶部功能按钮 -->
-      <view class="content-header">
-        <text class="category-title">{{currentCategory === 'all' ? '全部' : currentCategory}}</text>
-        <view class="header-buttons">
-          <view class="header-btn">
-            <text class="icon">⋯</text>
-          </view>
-          <view class="header-btn">
-            <text class="icon">📷</text>
-          </view>
+    <!-- 颜色筛选 -->
+    <view class="color-filter">
+      <text class="filter-label">颜色：</text>
+      <view class="color-dot {{selectedColor === '' ? 'active' : ''}}" style="background-color: #ccc;" data-color="" bindtap="selectColor"></view>
+      <view class="color-dot {{selectedColor === 'green' ? 'active' : ''}}" style="background-color: #4CAF50;" data-color="green" bindtap="selectColor"></view>
+      <view class="color-dot {{selectedColor === 'yellow' ? 'active' : ''}}" style="background-color: #FFEB3B;" data-color="yellow" bindtap="selectColor"></view>
+      <view class="color-dot {{selectedColor === 'brown' ? 'active' : ''}}" style="background-color: #795548;" data-color="brown" bindtap="selectColor"></view>
+      <view class="color-dot {{selectedColor === 'gray' ? 'active' : ''}}" style="background-color: #9E9E9E;" data-color="gray" bindtap="selectColor"></view>
+    </view>
+    
+    <!-- 季节筛选 -->
+    <view class="season-filter">
+      <text class="filter-label">季节：</text>
+      <view class="season-dot {{selectedSeason === '' ? 'active' : ''}}" data-season="" bindtap="selectSeason">全部</view>
+      <view class="season-dot {{selectedSeason === 'spring' ? 'active' : ''}}" data-season="spring" bindtap="selectSeason">春</view>
+      <view class="season-dot {{selectedSeason === 'summer' ? 'active' : ''}}" data-season="summer" bindtap="selectSeason">夏</view>
+      <view class="season-dot {{selectedSeason === 'autumn' ? 'active' : ''}}" data-season="autumn" bindtap="selectSeason">秋</view>
+      <view class="season-dot {{selectedSeason === 'winter' ? 'active' : ''}}" data-season="winter" bindtap="selectSeason">冬</view>
+    </view>
+  </view>
+  
+  <!-- 数据概览区 -->
+  <view class="data-overview">
+    <view class="total-count">
+      <text class="count-number">{{totalCount}}</text>
+      <text class="count-label">件衣物</text>
+    </view>
+    
+    <view class="category-counts">
+      <view class="count-item">
+        <text class="count-name">上衣</text>
+        <text class="count-value">{{categoryCounts.shangyi || 0}}</text>
+      </view>
+      <view class="count-item">
+        <text class="count-name">裤装</text>
+        <text class="count-value">{{categoryCounts.kuzhuang || 0}}</text>
+      </view>
+      <view class="count-item">
+        <text class="count-name">外套</text>
+        <text class="count-value">{{categoryCounts.waitao || 0}}</text>
+      </view>
+      <view class="count-item">
+        <text class="count-name">鞋履</text>
+        <text class="count-value">{{categoryCounts.xielv || 0}}</text>
+      </view>
+    </view>
+    
+    <view class="clean-btn" bindtap="cleanClothing">
+      <text class="icon">🗑</text>
+    </view>
+  </view>
+  
+  <!-- 衣物展示区 -->
+  <view class="clothing-grid">
+    <view class="clothing-card" wx:for="{{filteredClothingList}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <view class="card-content">
+        <view class="clothing-name">{{item.name}}</view>
+        <view class="clothing-brand">{{item.brand || '无品牌'}}</view>
+        <view class="clothing-tags">
+          <view class="tag color-tag" style="background-color: {{getColorByTag(item.color)}};">{{item.color}}</view>
+          <view class="tag season-tag">{{getSeasonByTag(item.season)}}</view>
+        </view>
+        <view class="clothing-time">{{item.last_worn || '刚刚添加'}}</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部工具区 -->
+  <view class="bottom-tools">
+    <view class="floating-btn" bindtap="goToTodayOutfit">
+      <text class="icon">✨</text>
+      <text class="btn-text">今日穿搭</text>
+    </view>
+  </view>
+  
+  <!-- 搜索弹窗 -->
+  <view class="search-modal" wx:if="{{showSearchModal}}">
+    <view class="search-content">
+      <view class="search-header">
+        <text class="search-title">搜索衣物</text>
+        <view class="close-btn" bindtap="hideSearch">✕</view>
+      </view>
+      <view class="search-box">
+        <input class="search-input" placeholder="搜索衣物名称或品牌" value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" />
+        <button class="search-button" bindtap="onSearch">搜索</button>
+      </view>
+      <view class="search-results">
+        <view class="result-item" wx:for="{{searchResults}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+          <text>{{item.name}} - {{item.brand}}</text>
         </view>
       </view>
-      
-      <!-- 分类内容卡片 -->
-      <scroll-view class="content-cards" scroll-y="true">
-        <view class="card-item" wx:for="{{categoryItems}}" wx:key="id">
-          <image class="card-image" src="{{item.image_url || '/images/default-clothing.png'}}" mode="aspectFill"></image>
-          <view class="card-overlay">
-            <text class="card-title">{{item.name}}</text>
-            <text class="card-subtitle">{{item.category}}</text>
-          </view>
-        </view>
-      </scroll-view>
     </view>
   </view>
   
