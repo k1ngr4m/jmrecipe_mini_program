@@ -4,6 +4,7 @@
   min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* 顶部导航区 */
@@ -18,8 +19,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 5px;
   height: 60px;
+  position: relative;
 }
 
 .back-btn, .search-btn {
@@ -36,17 +38,30 @@
   color: #333;
 }
 
+.search-btn {
+  position: absolute;
+  right: 20px;
+}
+
 .page-title {
   font-size: 18px;
   font-weight: bold;
   color: #333;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* 分类标签 */
 .category-tabs {
-  display: flex;
   padding: 0 20px 10px;
   white-space: nowrap;
+}
+
+.tab-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .tab-item {
@@ -57,6 +72,7 @@
   border-radius: 20px;
   font-size: 14px;
   color: #666;
+  white-space: nowrap;
 }
 
 .tab-item.active {
@@ -64,192 +80,167 @@
   color: white;
 }
 
-/* 颜色筛选 */
-.color-filter {
+/* 主内容区 */
+.main-content {
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+
+.statistics-header {
+  margin-bottom: 20px;
+}
+
+.total-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.category-stats {
   display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid #f0f0f0;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.filter-label {
-  font-size: 14px;
-  color: #666;
-  margin-right: 10px;
-}
-
-.color-dot {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid transparent;
-}
-
-.color-dot.active {
-  border-color: #333;
-  transform: scale(1.2);
-}
-
-/* 季节筛选 */
-.season-filter {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-}
-
-.season-dot {
-  padding: 6px 12px;
-  margin-right: 10px;
-  background-color: #f0f0f0;
-  border-radius: 15px;
-  font-size: 12px;
-  color: #666;
-}
-
-.season-dot.active {
-  background-color: #8B5A2B;
-  color: white;
-}
-
-/* 数据概览区 */
-.data-overview {
+.stat-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  background-color: white;
-  margin: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.total-count {
-  text-align: center;
+.stat-item:last-child {
+  border-bottom: none;
 }
 
-.count-number {
-  font-size: 24px;
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 16px;
   font-weight: bold;
   color: #8B5A2B;
 }
 
-.count-label {
-  font-size: 12px;
-  color: #999;
+/* 商品卡片模块 */
+.products-container {
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.category-counts {
+.products-grid {
   display: flex;
-  flex-direction: column;
-}
-
-.count-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
-
-.count-name {
-  font-size: 12px;
-  color: #666;
-  margin-right: 10px;
-}
-
-.count-value {
-  font-size: 12px;
-  color: #333;
-  font-weight: bold;
-}
-
-.clean-btn {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-  border-radius: 50%;
-}
-
-.clean-btn .icon {
-  font-size: 18px;
-  color: #666;
-}
-
-/* 衣物展示区 */
-.clothing-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  flex-wrap: wrap;
   gap: 15px;
-  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.clothing-card {
+.product-card {
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   transition: transform 0.2s ease;
+  width: calc(50% - 8px);
+  box-sizing: border-box;
+  min-width: 0;
 }
 
-.clothing-card:active {
+/* 在小屏幕上，使用单列布局 */
+@media (max-width: 576px) {
+  .product-card {
+    width: 100%;
+  }
+}
+
+.product-card:active {
   transform: scale(0.98);
 }
 
-.clothing-image {
+.product-image {
   width: 100%;
-  height: 150px;
+  height: 200px;
   object-fit: cover;
+  min-width: 0;
 }
 
-.card-content {
-  padding: 10px;
+@media (max-width: 768px) {
+  .product-image {
+    height: 150px;
+  }
 }
 
-.clothing-name {
-  font-size: 14px;
+.product-info {
+  padding: 15px;
+}
+
+.product-name {
+  display: block;
+  font-size: 16px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.clothing-brand {
+.product-brand {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-date {
+  display: block;
   font-size: 12px;
   color: #999;
-  margin-bottom: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.clothing-tags {
+/* 空状态 */
+.empty-state {
   display: flex;
-  margin-bottom: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  padding: 20px;
 }
 
-.tag {
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 8px;
-  margin-right: 5px;
+.empty-content {
+  text-align: center;
 }
 
-.color-tag {
+.empty-illustration {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+}
+
+.empty-text {
+  display: block;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.add-clothing-button {
+  background-color: #8B5A2B;
   color: white;
-}
-
-.season-tag {
-  background-color: #E8F5E9;
-  color: #4CAF50;
-}
-
-.clothing-time {
-  font-size: 10px;
-  color: #999;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 16px;
 }
 
 /* 底部工具区 */
@@ -257,34 +248,8 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 15px;
 }
 
-.floating-btn {
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, #8B5A2B, #A0522D);
-  border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.floating-btn .icon {
-  font-size: 16px;
-  color: white;
-  margin-right: 5px;
-}
-
-.btn-text {
-  font-size: 14px;
-  color: white;
-  font-weight: bold;
-}
-
-/* 添加衣物按钮 */
 .add-clothing-btn {
   width: 50px;
   height: 50px;
@@ -454,6 +419,18 @@
   border-color: #8B5A2B;
 }
 
+.picker {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+}
+
 .upload-area {
   width: 100%;
   height: 100px;
@@ -507,23 +484,6 @@
   margin-top: 10px;
 }
 
-/* 选中标识 */
-.selection-indicator {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  background-color: #8B5A2B;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
 /* 批量操作工具栏 */
 .batch-toolbar {
   position: fixed;
@@ -574,37 +534,19 @@
   color: white;
 }
 
-/* 空状态 */
-.empty-state {
+/* 选中标识 */
+.selection-indicator {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background-color: #8B5A2B;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
-  padding: 20px;
-}
-
-.empty-content {
-  text-align: center;
-}
-
-.empty-illustration {
-  width: 150px;
-  height: 150px;
-  margin-bottom: 20px;
-}
-
-.empty-text {
-  display: block;
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.add-clothing-button {
-  background-color: #8B5A2B;
   color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 12px 24px;
-  font-size: 16px;
+  font-size: 12px;
+  font-weight: bold;
 }

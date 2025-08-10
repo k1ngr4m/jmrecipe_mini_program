@@ -13,119 +13,53 @@
     
     <!-- 分类标签 -->
     <scroll-view class="category-tabs" scroll-x="true">
-      <view class="tab-item {{currentCategory === 'all' ? 'active' : ''}}" data-category="all" bindtap="switchCategory">
-        <text>总览</text>
-      </view>
-      <view class="tab-item {{currentCategory === '上衣' ? 'active' : ''}}" data-category="上衣" bindtap="switchCategory">
-        <text>上衣</text>
-      </view>
-      <view class="tab-item {{currentCategory === '裤装' ? 'active' : ''}}" data-category="裤装" bindtap="switchCategory">
-        <text>裤装</text>
-      </view>
-      <view class="tab-item {{currentCategory === '外套' ? 'active' : ''}}" data-category="外套" bindtap="switchCategory">
-        <text>外套</text>
-      </view>
-      <view class="tab-item {{currentCategory === '鞋履' ? 'active' : ''}}" data-category="鞋履" bindtap="switchCategory">
-        <text>鞋履</text>
+      <view class="tab-container">
+        <view class="tab-item {{currentCategory === 'all' ? 'active' : ''}}" data-category="all" bindtap="switchCategory">
+          <text>总览</text>
+        </view>
+        <view class="tab-item {{currentCategory === '上衣' ? 'active' : ''}}" data-category="上衣" bindtap="switchCategory">
+          <text>上衣</text>
+        </view>
+        <view class="tab-item {{currentCategory === '裤装' ? 'active' : ''}}" data-category="裤装" bindtap="switchCategory">
+          <text>裤装</text>
+        </view>
+        <view class="tab-item {{currentCategory === '外套' ? 'active' : ''}}" data-category="外套" bindtap="switchCategory">
+          <text>外套</text>
+        </view>
+        <view class="tab-item {{currentCategory === '鞋履' ? 'active' : ''}}" data-category="鞋履" bindtap="switchCategory">
+          <text>鞋履</text>
+        </view>
       </view>
     </scroll-view>
-    
-    <!-- 颜色筛选 -->
-    <view class="color-filter">
-      <text class="filter-label">颜色：</text>
-      <view class="color-dot {{selectedColor === '' ? 'active' : ''}}" style="background-color: #ccc;" data-color="" bindtap="selectColor"></view>
-      <view class="color-dot {{selectedColor === 'green' ? 'active' : ''}}" style="background-color: #4CAF50;" data-color="green" bindtap="selectColor"></view>
-      <view class="color-dot {{selectedColor === 'yellow' ? 'active' : ''}}" style="background-color: #FFEB3B;" data-color="yellow" bindtap="selectColor"></view>
-      <view class="color-dot {{selectedColor === 'brown' ? 'active' : ''}}" style="background-color: #795548;" data-color="brown" bindtap="selectColor"></view>
-      <view class="color-dot {{selectedColor === 'gray' ? 'active' : ''}}" style="background-color: #9E9E9E;" data-color="gray" bindtap="selectColor"></view>
-    </view>
-    
-    <!-- 季节筛选 -->
-    <view class="season-filter">
-      <text class="filter-label">季节：</text>
-      <view class="season-dot {{selectedSeason === '' ? 'active' : ''}}" data-season="" bindtap="selectSeason">全部</view>
-      <view class="season-dot {{selectedSeason === 'spring' ? 'active' : ''}}" data-season="spring" bindtap="selectSeason">春</view>
-      <view class="season-dot {{selectedSeason === 'summer' ? 'active' : ''}}" data-season="summer" bindtap="selectSeason">夏</view>
-      <view class="season-dot {{selectedSeason === 'autumn' ? 'active' : ''}}" data-season="autumn" bindtap="selectSeason">秋</view>
-      <view class="season-dot {{selectedSeason === 'winter' ? 'active' : ''}}" data-season="winter" bindtap="selectSeason">冬</view>
-    </view>
   </view>
   
-  <!-- 数据概览区 -->
-  <view class="data-overview">
-    <view class="total-count">
-      <text class="count-number">{{totalCount}}</text>
-      <text class="count-label">件衣物</text>
-    </view>
-    
-    <view class="category-counts">
-      <view class="count-item">
-        <text class="count-name">上衣</text>
-        <text class="count-value">{{categoryCounts.shangyi || 0}}</text>
-      </view>
-      <view class="count-item">
-        <text class="count-name">裤装</text>
-        <text class="count-value">{{categoryCounts.kuzhuang || 0}}</text>
-      </view>
-      <view class="count-item">
-        <text class="count-name">外套</text>
-        <text class="count-value">{{categoryCounts.waitao || 0}}</text>
-      </view>
-      <view class="count-item">
-        <text class="count-name">鞋履</text>
-        <text class="count-value">{{categoryCounts.xielv || 0}}</text>
-      </view>
-    </view>
-    
-    <view class="clean-btn" bindtap="cleanClothing">
-      <text class="icon">🗑</text>
-    </view>
-  </view>
-  
-  <!-- 衣物展示区 -->
-  <view class="clothing-grid" wx:if="{{!isEmptyState()}}">
-    <view class="clothing-card" wx:for="{{filteredClothingList}}" wx:key="id" bindtap="goToDetail" bindlongpress="onLongPressClothing" data-id="{{item.id}}">
-      <view class="card-content">
-        <view class="clothing-name">{{item.name}}</view>
-        <view class="clothing-brand">{{item.brand || '无品牌'}}</view>
-        <view class="clothing-tags">
-          <view class="tag color-tag" style="background-color: {{getColorByTag(item.color)}};">{{item.color}}</view>
-          <view class="tag season-tag">{{getSeasonByTag(item.season)}}</view>
+  <!-- 主内容区 -->
+  <view class="main-content">
+    <!-- 商品卡片模块 -->
+    <view class="products-container">
+      <view class="products-grid" wx:if="{{!isEmptyState()}}">
+        <view class="product-card" wx:for="{{filteredClothingList}}" wx:key="id" bindtap="goToDetail" bindlongpress="onLongPressClothing" data-id="{{item.id}}">
+          <image class="product-image" src="{{item.image_url || '/images/default-clothing.png'}}" mode="aspectFill"></image>
+          <view class="product-info">
+            <text class="product-name">{{item.name}}</text>
+            <text class="product-brand">{{item.brand || '无品牌'}}</text>
+            <text class="product-date">购买日期: {{item.purchase_date || '未知'}}</text>
+          </view>
         </view>
-        <view class="clothing-time">{{item.last_worn || '刚刚添加'}}</view>
-        <!-- 批量选择模式下的选中标识 -->
-        <view class="selection-indicator" wx:if="{{isBatchMode && selectedClothingIds.indexOf(item.id) !== -1}}">✓</view>
       </view>
-    </view>
-  </view>
-  
-  <!-- 空状态 -->
-  <view class="empty-state" wx:if="{{isEmptyState()}}">
-    <view class="empty-content">
-      <image class="empty-illustration" src="/images/empty-closet.png" mode="aspectFit"></image>
-      <text class="empty-text">还没有添加衣物，快来丰富你的衣橱吧</text>
-      <button class="add-clothing-button" bindtap="showAddModal">添加衣物</button>
-    </view>
-  </view>
-  
-  <!-- 批量操作工具栏 -->
-  <view class="batch-toolbar" wx:if="{{isBatchMode}}">
-    <view class="batch-toolbar-content">
-      <text class="selected-count">{{selectedClothingIds.length}} 项已选择</text>
-      <view class="batch-actions">
-        <button class="batch-action-btn move-btn" bindtap="batchMoveCategory">移动</button>
-        <button class="batch-action-btn delete-btn" bindtap="batchDeleteClothing">删除</button>
-        <button class="batch-action-btn cancel-btn" bindtap="exitBatchMode">取消</button>
+      
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{isEmptyState()}}">
+        <view class="empty-content">
+          <image class="empty-illustration" src="/images/empty-closet.png" mode="aspectFit"></image>
+          <text class="empty-text">还没有添加衣物，快来丰富你的衣橱吧</text>
+          <button class="add-clothing-button" bindtap="showAddModal">添加衣物</button>
+        </view>
       </view>
-    </view>
   </view>
   
   <!-- 底部工具区 -->
   <view class="bottom-tools">
-    <view class="floating-btn" bindtap="goToTodayOutfit">
-      <text class="icon">✨</text>
-      <text class="btn-text">今日穿搭</text>
-    </view>
     <view class="add-clothing-btn" bindtap="showAddModal">
       <text class="icon">+</text>
     </view>
@@ -168,7 +102,12 @@
         </view>
         <view class="form-item">
           <text class="label">颜色</text>
-          <input class="input" name="color" value="{{color}}" bindinput="onColorInput" placeholder="请输入颜色" />
+          <picker mode="selector" range="{{colorOptions}}" value="{{colorIndex}}" bindchange="onColorChange">
+            <view class="picker">
+              <text wx:if="{{color}}">{{color}}</text>
+              <text wx:else>请选择颜色</text>
+            </view>
+          </picker>
         </view>
         <view class="form-item">
           <text class="label">品牌</text>
@@ -198,4 +137,17 @@
       </form>
     </view>
   </view>
+  
+  <!-- 批量操作工具栏 -->
+  <view class="batch-toolbar" wx:if="{{isBatchMode}}">
+    <view class="batch-toolbar-content">
+      <text class="selected-count">{{selectedClothingIds.length}} 项已选择</text>
+      <view class="batch-actions">
+        <button class="batch-action-btn move-btn" bindtap="batchMoveCategory">移动</button>
+        <button class="batch-action-btn delete-btn" bindtap="batchDeleteClothing">删除</button>
+        <button class="batch-action-btn cancel-btn" bindtap="exitBatchMode">取消</button>
+      </view>
+    </view>
+  </view>
 </view>
+  </view>
