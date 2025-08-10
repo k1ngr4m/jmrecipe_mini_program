@@ -83,8 +83,8 @@
   </view>
   
   <!-- 衣物展示区 -->
-  <view class="clothing-grid">
-    <view class="clothing-card" wx:for="{{filteredClothingList}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+  <view class="clothing-grid" wx:if="{{!isEmptyState()}}">
+    <view class="clothing-card" wx:for="{{filteredClothingList}}" wx:key="id" bindtap="goToDetail" bindlongpress="onLongPressClothing" data-id="{{item.id}}">
       <view class="card-content">
         <view class="clothing-name">{{item.name}}</view>
         <view class="clothing-brand">{{item.brand || '无品牌'}}</view>
@@ -93,6 +93,29 @@
           <view class="tag season-tag">{{getSeasonByTag(item.season)}}</view>
         </view>
         <view class="clothing-time">{{item.last_worn || '刚刚添加'}}</view>
+        <!-- 批量选择模式下的选中标识 -->
+        <view class="selection-indicator" wx:if="{{isBatchMode && selectedClothingIds.indexOf(item.id) !== -1}}">✓</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{isEmptyState()}}">
+    <view class="empty-content">
+      <image class="empty-illustration" src="/images/empty-closet.png" mode="aspectFit"></image>
+      <text class="empty-text">还没有添加衣物，快来丰富你的衣橱吧</text>
+      <button class="add-clothing-button" bindtap="showAddModal">添加衣物</button>
+    </view>
+  </view>
+  
+  <!-- 批量操作工具栏 -->
+  <view class="batch-toolbar" wx:if="{{isBatchMode}}">
+    <view class="batch-toolbar-content">
+      <text class="selected-count">{{selectedClothingIds.length}} 项已选择</text>
+      <view class="batch-actions">
+        <button class="batch-action-btn move-btn" bindtap="batchMoveCategory">移动</button>
+        <button class="batch-action-btn delete-btn" bindtap="batchDeleteClothing">删除</button>
+        <button class="batch-action-btn cancel-btn" bindtap="exitBatchMode">取消</button>
       </view>
     </view>
   </view>
@@ -102,6 +125,9 @@
     <view class="floating-btn" bindtap="goToTodayOutfit">
       <text class="icon">✨</text>
       <text class="btn-text">今日穿搭</text>
+    </view>
+    <view class="add-clothing-btn" bindtap="showAddModal">
+      <text class="icon">+</text>
     </view>
   </view>
   

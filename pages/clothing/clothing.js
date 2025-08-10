@@ -27,7 +27,9 @@ Page({
       kuzhuang: 0,
       waitao: 0,
       xielv: 0
-    }
+    },
+    isBatchMode: false, // 是否为批量选择模式
+    selectedClothingIds: [] // 已选择的衣物ID数组
   },
   
   onLoad() {
@@ -582,6 +584,11 @@ Page({
     return filteredList;
   },
   
+  // 检查当前筛选结果是否为空
+  isEmptyState: function() {
+    return this.data.filteredClothingList.length === 0;
+  },
+  
   // 获取带签名的COS图片URL
   getSignedCosUrl: function(cosUrl, callback) {
     // 如果URL已经包含签名信息，则直接返回
@@ -821,9 +828,180 @@ Page({
   
   // 跳转到详情页
   goToDetail: function(e) {
+    // 如果在批量选择模式下，执行选择操作而不是跳转
+    if (this.data.isBatchMode) {
+      const clothingId = e.currentTarget.dataset.id;
+      this.toggleClothingSelection(clothingId);
+      return;
+    }
+    
     const clothingId = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/clothing-detail/clothing-detail?id=${clothingId}`
+    });
+  },
+  
+  // 长按衣物卡片
+  onLongPressClothing: function(e) {
+    // 进入批量选择模式
+    this.setData({
+      isBatchMode: true,
+      selectedClothingIds: []
+    });
+    
+    // 选择当前长按的衣物
+    const clothingId = e.currentTarget.dataset.id;
+    this.toggleClothingSelection(clothingId);
+  },
+  
+  // 切换衣物选择状态
+  toggleClothingSelection: function(clothingId) {
+    const selectedIds = this.data.selectedClothingIds;
+    const index = selectedIds.indexOf(clothingId);
+    
+    if (index > -1) {
+      // 如果已选择，则取消选择
+      selectedIds.splice(index, 1);
+    } else {
+      // 如果未选择，则添加到选择列表
+      selectedIds.push(clothingId);
+    }
+    
+    this.setData({
+      selectedClothingIds: selectedIds
+    });
+  },
+  
+  // 退出批量选择模式
+  exitBatchMode: function() {
+    this.setData({
+      isBatchMode: false,
+      selectedClothingIds: []
+    });
+  },
+  
+  // 批量删除衣物
+  batchDeleteClothing: function() {
+    if (this.data.selectedClothingIds.length === 0) {
+      wx.showToast({
+        title: '请选择要删除的衣物',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    wx.showModal({
+      title: '确认删除',
+      content: `确定要删除选中的${this.data.selectedClothingIds.length}件衣物吗？`,
+      success: (res) => {
+        if (res.confirm) {
+          // 实现实际的删除逻辑
+          this.deleteClothingBatch(this.data.selectedClothingIds);
+        }
+      }
+    });
+  },
+  
+  // 批量删除衣物的API调用
+  deleteClothingBatch: function(clothingIds) {
+    wx.request({
+      url: config.getFullURL('clothing') + '/batch_delete',
+      method: 'POST',
+      data: {
+        user_id: 1,
+        clothing_ids: clothingIds
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.showToast({
+            title: '删除成功',
+            icon: 'success'
+          });
+          
+          // 删除完成后退出批量模式
+          this.exitBatchMode();
+          
+          // 刷新列表
+          this.getClothingList();
+        } else {
+          wx.showToast({
+            title: '删除失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
+    });
+  },
+  
+  // 批量移动分类
+  batchMoveCategory: function() {
+    if (this.data.selectedClothingIds.length === 0) {
+      wx.showToast({
+        title: '请选择要移动的衣物',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 显示选择分类的弹窗
+    this.showCategorySelectionModal();
+  },
+  
+  // 显示分类选择弹窗
+  showCategorySelectionModal: function() {
+    const categories = ['上衣', '裤装', '外套', '鞋履'];
+    wx.showActionSheet({
+      itemList: categories,
+      success: (res) => {
+        if (!res.cancel) {
+          const selectedCategory = categories[res.tapIndex];
+          this.moveClothingBatch(this.data.selectedClothingIds, selectedCategory);
+        }
+      }
+    });
+  },
+  
+  // 批量移动衣物分类的API调用
+  moveClothingBatch: function(clothingIds, category) {
+    wx.request({
+      url: config.getFullURL('clothing') + '/batch_move',
+      method: 'POST',
+      data: {
+        user_id: 1,
+        clothing_ids: clothingIds,
+        category: category
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.showToast({
+            title: '移动成功',
+            icon: 'success'
+          });
+          
+          // 移动完成后退出批量模式
+          this.exitBatchMode();
+          
+          // 刷新列表
+          this.getClothingList();
+        } else {
+          wx.showToast({
+            title: '移动失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
     });
   }
 })
