@@ -36,10 +36,11 @@ Page({
   // 获取衣物详情
   getClothingDetail: function (clothingId) {
     wx.request({
-      url: config.getFullURL('clothing') + '/detail?user_id=1',
+      url: config.getFullURL('clothing') + '/detail',
       method: 'POST',
       data: {
-        clothing_id: parseInt(clothingId)
+        clothing_id: parseInt(clothingId),
+        user_id: 1
       },
       header: {
         'Content-Type': 'application/json'
