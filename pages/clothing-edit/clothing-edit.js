@@ -76,6 +76,21 @@ Page({
             icon: 'none'
           });
           wx.navigateBack();
+        } else if (res.statusCode === 422) {
+          // 专门处理422错误，显示更详细的错误信息
+          let errorMsg = '数据验证失败';
+          if (res.data && res.data.detail) {
+            // 解析错误详情
+            const details = res.data.detail;
+            if (Array.isArray(details) && details.length > 0) {
+              errorMsg = details[0].msg || errorMsg;
+            }
+          }
+          wx.showToast({
+            title: errorMsg,
+            icon: 'none'
+          });
+          wx.navigateBack();
         } else {
           wx.showToast({
             title: '获取详情失败',
