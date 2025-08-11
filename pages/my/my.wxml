@@ -14,42 +14,6 @@
       <navigator url="/pages/login/login" class="login-btn">点击登录</navigator>
     </view>
   </view>
-  
-<!--  &lt;!&ndash; 调试信息 &ndash;&gt;-->
-<!--  <view wx:if="{{userInfo}}" class="debug-info">-->
-<!--    <text>avatarUrl: {{userInfo.avatarUrl || '未设置'}}</text>-->
-<!--    <text>nickName: {{userInfo.nickName}}</text>-->
-<!--    <text>shouldShowGuide: {{!userInfo.avatarUrl || !userInfo.nickName || userInfo.nickName === '微信用户'}}</text>-->
-<!--  </view>-->
-  
-<!--  &lt;!&ndash; 引导用户完善资料 &ndash;&gt;-->
-<!--  <view wx:if="{{userInfo && (!userInfo.avatarUrl || !userInfo.nickName || userInfo.nickName === '微信用户')}}" class="profile-guide">-->
-<!--    <view class="guide-title">完善个人资料</view>-->
-<!--    <view class="guide-desc">请上传头像并填写昵称，让我们更好地为您服务</view>-->
-<!--    -->
-<!--    &lt;!&ndash; 头像上传 &ndash;&gt;-->
-<!--    <button class="avatar-wrapper" bindtap="chooseAvatar">-->
-<!--      <image class="avatar-preview" src="{{tempAvatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>-->
-<!--      <text class="change-avatar-text">点击上传头像</text>-->
-<!--    </button>-->
-<!--    -->
-<!--    &lt;!&ndash; 昵称填写 &ndash;&gt;-->
-<!--    <form bindsubmit="onSubmitNickname">-->
-<!--      <view class="nickname-input-wrapper">-->
-<!--        <view class="input-label">昵称：</view>-->
-<!--        <input -->
-<!--          class="nickname-input" -->
-<!--          placeholder="请输入昵称" -->
-<!--          type="text" -->
-<!--          name="nickname" -->
-<!--          value="{{tempNickname || ''}}"-->
-<!--          maxlength="32">-->
-<!--        </input>-->
-<!--      </view>-->
-<!--      <button class="save-btn" form-type="submit">保存资料</button>-->
-<!--    </form>-->
-<!--  </view>-->
-  
   <view class="menu-list">
     <view class="menu-item" bindtap="goToProfile">
       <text class="menu-text">个人资料</text>
