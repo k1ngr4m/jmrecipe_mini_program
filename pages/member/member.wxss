@@ -1,0 +1,286 @@
+/* pages/member/member.wxss */
+.container {
+  padding: 0;
+  background-color: #f5f5f5;
+  /* 让容器占满视口高度 */
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  /* 新增 flex 布局，子元素垂直排列并置顶 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* 顶部导航区 */
+.top-nav {
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.nav-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  box-sizing: border-box;
+}
+
+.back-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  font-size: 20px;
+  color: #333;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.placeholder {
+  width: 30px;
+}
+
+/* 主内容区 */
+.main-content {
+  padding: 15px;
+  /* 新增 flex 布局，让子元素垂直排列 */
+  display: flex;
+  flex-direction: column;
+  /* 让内容靠顶部显示，可根据需求改，比如 center 居中 */
+  justify-content: flex-start;
+}
+
+.members-container {
+  width: 100%;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.member-detail {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.member-relationship {
+  display: block;
+  font-size: 12px;
+  color: #999;
+}
+
+.member-actions {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-icon {
+  font-size: 16px;
+  color: #999;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  padding: 20px;
+}
+
+.empty-content {
+  text-align: center;
+}
+
+.empty-illustration {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+}
+
+.empty-text {
+  display: block;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* 底部工具区 */
+.bottom-tools {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.add-member-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #8B5A2B;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.add-member-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.add-member-btn .icon {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* 弹窗样式 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #999;
+}
+
+.add-form {
+  padding: 20px;
+}
+
+.form-item {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #8B5A2B;
+}
+
+.picker {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+}
+
+.date-picker {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+}
+
+.picker:active,
+.date-picker:active {
+  border-color: #8B5A2B;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: #8B5A2B;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 10px;
+}

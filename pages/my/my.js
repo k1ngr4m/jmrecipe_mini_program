@@ -178,4 +178,11 @@ Page({
       })
     }
   },
+
+  // 跳转到成员管理页面
+  goToMemberManagement() {
+    wx.navigateTo({
+      url: '/pages/member/member'
+    });
+  },
 })

@@ -5,6 +5,7 @@ Page({
   data: {
     title: '衣橱列表页',
     showModal: false,
+    showAddOptionsModal: false, // 新增服装选择弹窗
     showSearchModal: false,
     imageUrl: '',
     cosImageUrl: '',  // COS图片URL
@@ -94,11 +95,40 @@ Page({
     return requestData;
   },
   
+  // 显示新增服装选择弹窗
   showAddModal() {
     this.setData({
+      showAddOptionsModal: true
+    });
+  },
+  
+  // 隐藏新增服装选择弹窗
+  hideAddOptionsModal() {
+    this.setData({
+      showAddOptionsModal: false
+    });
+  },
+  
+  // 显示手动填写表单弹窗
+  showManualAddModal() {
+    this.setData({
+      showAddOptionsModal: false,
       showModal: true,
       colorIndex: 0,
       color: ''
+    });
+  },
+  
+  // 拍照识别功能
+  chooseTakePhoto() {
+    wx.showToast({
+      title: '拍照识别功能正在开发中',
+      icon: 'none'
+    });
+    
+    // 隐藏选择弹窗
+    this.setData({
+      showAddOptionsModal: false
     });
   },
   

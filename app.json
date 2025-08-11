@@ -9,7 +9,8 @@
     "pages/travel/travel",
     "pages/profile/profile",
     "pages/login/login",
-    "pages/my/my"
+    "pages/my/my",
+    "pages/member/member"
   ],
   "window": {
     "navigationBarTextStyle": "black",

@@ -6,7 +6,8 @@ const config = {
     api: {
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
-      login: '/api/wechat/getopenid' // 微信登录接口
+      login: '/api/wechat/getopenid', // 微信登录接口
+      familyMembers: '/api/family/members'
     }
   },
   
@@ -16,7 +17,8 @@ const config = {
     api: {
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
-      login: '/api/wechat/getopenid' // 微信登录接口
+      login: '/api/wechat/getopenid', // 微信登录接口
+      familyMembers: '/api/family/members'
     }
   }
 }

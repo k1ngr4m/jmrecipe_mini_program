@@ -5,6 +5,10 @@
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  /* 新增 flex 布局，子元素垂直排列并置顶 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 /* 顶部导航区 */
@@ -86,6 +90,10 @@
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  /* 让内容靠顶部显示，可根据需求改，比如 center 居中 */
+  justify-content: flex-start;
 }
 
 
@@ -454,6 +462,41 @@
   height: 100%;
   object-fit: cover;
   border-radius: 6px;
+}
+
+/* 新增服装选择弹窗样式 */
+.add-options {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 15px;
+}
+
+.add-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.add-option-btn:active {
+  background-color: #f0f0f0;
+  transform: scale(0.98);
+}
+
+.option-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.option-text {
+  font-size: 16px;
+  color: #333;
 }
 
 /* 日期选择器样式 */
