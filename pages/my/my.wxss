@@ -36,6 +36,12 @@
   margin-bottom: 10rpx;
 }
 
+.family-name {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
 .view-profile {
   font-size: 24rpx;
   color: #999;

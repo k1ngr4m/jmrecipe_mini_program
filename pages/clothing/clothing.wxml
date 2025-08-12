@@ -11,24 +11,60 @@
       </view>
     </view>
     
-    <!-- 分类标签 -->
+    <!-- 一级分类标签 -->
     <scroll-view class="category-tabs" scroll-x="true">
       <view class="tab-container">
-        <view class="tab-item {{currentCategory === 'all' ? 'active' : ''}}" data-category="all" bindtap="switchCategory">
+        <view class="tab-item {{currentPrimaryCategory === '总览' ? 'active' : ''}}" data-category="总览" bindtap="switchPrimaryCategory">
           <text>总览</text>
         </view>
-        <view class="tab-item {{currentCategory === '上衣' ? 'active' : ''}}" data-category="上衣" bindtap="switchCategory">
-          <text>上衣</text>
+        <block wx:for="{{currentCategories}}" wx:key="*this">
+          <view class="tab-item {{currentPrimaryCategory === item[0] ? 'active' : ''}}" data-category="{{item[0]}}" bindtap="switchPrimaryCategory">
+            <text>{{item[0]}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+    
+    <!-- 二级分类标签 -->
+    <scroll-view class="category-tabs secondary-tabs" scroll-x="true" wx:if="{{currentPrimaryCategory !== '总览'}}">
+      <view class="tab-container">
+        <view class="tab-item {{currentSecondaryCategory === 'all' ? 'active' : ''}}" data-category="all" bindtap="switchSecondaryCategory">
+          <text>全部</text>
         </view>
-        <view class="tab-item {{currentCategory === '裤装' ? 'active' : ''}}" data-category="裤装" bindtap="switchCategory">
-          <text>裤装</text>
+        <block wx:for="{{currentCategories[currentPrimaryCategory]}}" wx:key="*this">
+          <view class="tab-item {{currentSecondaryCategory === item ? 'active' : ''}}" data-category="{{item}}" bindtap="switchSecondaryCategory">
+            <text>{{item}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+    
+    <!-- 颜色筛选 -->
+    <scroll-view class="color-filter" scroll-x="true">
+      <view class="color-container">
+        <view class="color-item {{selectedColor === '' ? 'active' : ''}}" bindtap="selectColor" data-color="">
+          <text class="color-text">全部</text>
         </view>
-        <view class="tab-item {{currentCategory === '外套' ? 'active' : ''}}" data-category="外套" bindtap="switchCategory">
-          <text>外套</text>
+        <block wx:for="{{colorOptions}}" wx:key="*this">
+          <view class="color-item {{selectedColor === item ? 'active' : ''}}" bindtap="selectColor" data-color="{{item}}">
+            <view class="color-circle" style="background-color: {{getColorValue(item)}};"></view>
+            <text class="color-text">{{item}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+    
+    <!-- 季节筛选 -->
+    <scroll-view class="season-filter" scroll-x="true">
+      <view class="season-container">
+        <view class="season-item {{selectedSeason === '' ? 'active' : ''}}" bindtap="selectSeason" data-season="">
+          <text class="season-text">全部季节</text>
         </view>
-        <view class="tab-item {{currentCategory === '鞋履' ? 'active' : ''}}" data-category="鞋履" bindtap="switchCategory">
-          <text>鞋履</text>
-        </view>
+        <block wx:for="{{seasonOptions}}" wx:key="*this">
+          <view class="season-item {{selectedSeason === item ? 'active' : ''}}" bindtap="selectSeason" data-season="{{item}}">
+            <text class="season-text">{{item}}</text>
+          </view>
+        </block>
       </view>
     </scroll-view>
   </view>
@@ -116,10 +152,29 @@
           <text class="label">名称 *</text>
           <input class="input" name="name" value="{{name}}" bindinput="onNameInput" placeholder="请输入衣物名称" required />
         </view>
+        
+        <!-- 一级分类选择 -->
         <view class="form-item">
-          <text class="label">分类 *</text>
-          <input class="input" name="category" value="{{category}}" bindinput="onCategoryInput" placeholder="请输入衣物分类" required />
+          <text class="label">一级分类 *</text>
+          <picker mode="selector" range="{{Object.keys(currentCategories)}}" bindchange="onPrimaryCategoryChange">
+            <view class="picker">
+              <text wx:if="{{primaryCategory}}">{{primaryCategory}}</text>
+              <text wx:else>请选择一级分类</text>
+            </view>
+          </picker>
         </view>
+        
+        <!-- 二级分类选择（根据一级分类动态显示） -->
+        <view class="form-item" wx:if="{{primaryCategory && currentCategories[primaryCategory]}}">
+          <text class="label">二级分类 *</text>
+          <picker mode="selector" range="{{currentCategories[primaryCategory]}}" bindchange="onSecondaryCategoryChange">
+            <view class="picker">
+              <text wx:if="{{secondaryCategory}}">{{secondaryCategory}}</text>
+              <text wx:else>请选择二级分类</text>
+            </view>
+          </picker>
+        </view>
+        
         <view class="form-item">
           <text class="label">颜色</text>
           <picker mode="selector" range="{{colorOptions}}" value="{{colorIndex}}" bindchange="onColorChange">
@@ -129,10 +184,23 @@
             </view>
           </picker>
         </view>
+        
+        <!-- 品牌选择（支持模糊搜索） -->
         <view class="form-item">
           <text class="label">品牌</text>
           <input class="input" name="brand" value="{{brand}}" bindinput="onBrandInput" placeholder="请输入品牌" />
         </view>
+        
+        <view class="form-item">
+          <text class="label">适用季节</text>
+          <picker mode="selector" range="{{seasonOptions}}" bindchange="onSeasonChange">
+            <view class="picker">
+              <text wx:if="{{season}}">{{season}}</text>
+              <text wx:else>请选择适用季节</text>
+            </view>
+          </picker>
+        </view>
+        
         <view class="form-item">
           <text class="label">购买日期</text>
           <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
@@ -142,10 +210,12 @@
             </view>
           </picker>
         </view>
+        
         <view class="form-item">
           <text class="label">价格</text>
           <input class="input" name="price" value="{{price}}" bindinput="onPriceInput" type="digit" placeholder="请输入价格" />
         </view>
+        
         <view class="form-item">
           <text class="label">图片</text>
           <view class="upload-area" bindtap="chooseAndUploadImage">
@@ -153,6 +223,7 @@
             <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image" />
           </view>
         </view>
+        
         <button class="submit-btn" bindtap="handleSubmit">确定</button>
       </form>
     </view>

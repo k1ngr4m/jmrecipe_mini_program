@@ -7,7 +7,9 @@ const config = {
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口
-      familyMembers: '/api/family/members'
+      familyMembers: '/api/family/members',
+      familyQuery: '/api/family/query',
+      familyCreate: '/api/family/create'
     }
   },
   
@@ -18,7 +20,9 @@ const config = {
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口
-      familyMembers: '/api/family/members'
+      familyMembers: '/api/family/members',
+      familyQuery: '/api/family/query',
+      familyCreate: '/api/family/create'
     }
   }
 }

@@ -13,24 +13,37 @@ Page({
     filteredClothingList: [],
     purchaseDate: '',
     name: '',
-    category: '',
+    primaryCategory: '', // 一级分类
+    secondaryCategory: '', // 二级分类
     color: '',
     colorIndex: 0,
-    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色', '混合色'],
+    colorOptions: ['红', '橙', '黄', '绿', '蓝', '紫', '黑', '白'],
     brand: '',
+    brandList: [], // 品牌列表
     price: '',
+    season: '', // 适用季节
+    seasonOptions: ['春', '夏', '秋', '冬'],
     searchKeyword: '',
     searchResults: [],
-    currentCategory: 'all', // 当前选中的分类
+    currentPrimaryCategory: '总览', // 当前选中的一级分类
+    currentSecondaryCategory: 'all', // 当前选中的二级分类
     selectedColor: '', // 当前选中的颜色
     selectedSeason: '', // 当前选中的季节
     totalCount: 0, // 总件数
-    categoryCounts: {
-      shangyi: 0,
-      kuzhuang: 0,
-      waitao: 0,
-      xielv: 0
+    // 按性别区分的一级分类和二级分类
+    maleCategories: {
+      '上装': ['衬衫', 'T恤', '毛衣/针织衫', '外套', '卫衣', '背心'],
+      '下装': ['长裤', '短裤', '牛仔裤', '内裤'],
+      '鞋袜': ['鞋子', '袜子']
     },
+    femaleCategories: {
+      '上装': ['衬衫', 'T恤', '毛衣/针织衫', '外套', '卫衣', '背心', '吊带', '内衣'],
+      '下装': ['长裤', '短裤', '牛仔裤', '内裤', '裙子'],
+      '连衣裙': ['长裙', '短裙'],
+      '鞋袜': ['鞋子', '袜子']
+    },
+    // 当前用户的分类（根据成员性别确定）
+    currentCategories: {},
     isBatchMode: false, // 是否为批量选择模式
     selectedClothingIds: [] // 已选择的衣物ID数组
   },
@@ -51,9 +64,32 @@ Page({
         }
       })
     } else {
-      // 如果用户已登录，加载衣物列表
+      // 如果用户已登录，初始化分类数据并加载衣物列表
+      this.initCategories();
+      this.getBrandList();
       this.getClothingList();
     }
+  },
+  
+  // 初始化分类数据（根据成员性别）
+  initCategories: function() {
+    // 获取选中的成员ID和性别
+    const selectedMemberId = wx.getStorageSync('selectedMemberId');
+    const members = wx.getStorageSync('members') || [];
+    const selectedMember = members.find(member => member.id === selectedMemberId);
+    
+    // 根据成员性别设置分类数据
+    let currentCategories = {};
+    if (selectedMember && selectedMember.gender === '女') {
+      currentCategories = this.data.femaleCategories;
+    } else {
+      // 默认为男性分类（包括未设置性别的情况）
+      currentCategories = this.data.maleCategories;
+    }
+    
+    this.setData({
+      currentCategories: currentCategories
+    });
   },
   
   // 工具函数：格式化请求数据
@@ -61,9 +97,11 @@ Page({
     const requestData = {
       user_id: formData.user_id || 1, // 实际开发中需要获取当前用户ID
       name: formData.name,
-      category: formData.category,
+      primary_category: formData.primary_category, // 一级分类
+      secondary_category: formData.secondary_category, // 二级分类
       color: formData.color || '',
       brand: formData.brand || '',
+      season: formData.season || '', // 适用季节
       purchase_date: formData.purchase_date || '',
       price: formData.price ? parseFloat(formData.price) : 0,
       image_url: formData.image_url || '',
@@ -95,6 +133,29 @@ Page({
     return requestData;
   },
   
+  // 获取品牌列表
+  getBrandList: function() {
+    wx.request({
+      url: config.getFullURL('clothing') + '/brands/list',
+      method: 'POST',
+      data: {
+        user_id: 1
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          this.setData({
+            brandList: res.data || []
+          });
+        } else {
+          console.log('获取品牌列表失败');
+        }
+      },
+      fail: () => {
+        console.log('获取品牌列表网络错误');
+      }
+    });
+  },
+  
   // 显示新增服装选择弹窗
   showAddModal() {
     this.setData({
@@ -114,8 +175,11 @@ Page({
     this.setData({
       showAddOptionsModal: false,
       showModal: true,
+      primaryCategory: '',
+      secondaryCategory: '',
       colorIndex: 0,
-      color: ''
+      color: '',
+      season: ''
     });
   },
   
@@ -138,8 +202,11 @@ Page({
       imageUrl: '',
       cosImageUrl: '',  // 清空COS图片URL
       purchaseDate: '',  // 清空日期选择
+      primaryCategory: '',
+      secondaryCategory: '',
       colorIndex: 0,
-      color: ''
+      color: '',
+      season: ''
     });
   },
   
@@ -212,9 +279,17 @@ Page({
     });
   },
   
-  onCategoryInput: function(e) {
+  onPrimaryCategoryChange: function(e) {
+    const primaryCategory = e.detail.value;
     this.setData({
-      category: e.detail.value
+      primaryCategory: primaryCategory,
+      secondaryCategory: '' // 重置二级分类
+    });
+  },
+  
+  onSecondaryCategoryChange: function(e) {
+    this.setData({
+      secondaryCategory: e.detail.value
     });
   },
   
@@ -224,6 +299,12 @@ Page({
     this.setData({
       colorIndex: colorIndex,
       color: color
+    });
+  },
+  
+  onSeasonChange: function(e) {
+    this.setData({
+      season: e.detail.value
     });
   },
   
@@ -245,9 +326,11 @@ Page({
     // 构造表单数据
     const formData = {
       name: this.data.name || '',
-      category: this.data.category || '',
+      primary_category: this.data.primaryCategory || '',
+      secondary_category: this.data.secondaryCategory || '',
       color: this.data.color || '',
       brand: this.data.brand || '',
+      season: this.data.season || '',
       price: this.data.price || '',
       purchase_date: this.data.purchaseDate || '',
       image_url: this.data.imageUrl || ''
@@ -256,7 +339,7 @@ Page({
     console.log('页面数据:', formData);
     
     // 验证必填字段
-    if (!formData.name || !formData.category) {
+    if (!formData.name || !formData.primary_category) {
       wx.showToast({
         title: '请填写必填字段',
         icon: 'none'
@@ -400,7 +483,7 @@ Page({
     console.log('表单数据:', formData);
     
     // 验证必填字段
-    if (!formData.name || !formData.category) {
+    if (!formData.name || !this.data.primaryCategory) {
       wx.showToast({
         title: '请填写必填字段',
         icon: 'none'
@@ -409,7 +492,13 @@ Page({
     }
     
     // 添加其他字段到formData
+    formData.primary_category = this.data.primaryCategory || '';
+    formData.secondary_category = this.data.secondaryCategory || '';
+    formData.color = this.data.color || '';
+    formData.brand = this.data.brand || '';
+    formData.season = this.data.season || '';
     formData.purchase_date = this.data.purchaseDate || '';
+    formData.price = this.data.price || '';
     formData.image_url = this.data.imageUrl || '';
     
     // 如果有本地图片但还没有上传到COS，则先上传
@@ -501,12 +590,23 @@ Page({
   },
   
   getClothingList() {
+    // 获取选中的成员ID
+    const selectedMemberId = wx.getStorageSync('selectedMemberId');
+    
+    // 准备请求数据
+    const requestData = {
+      user_id: 1 // 默认用户ID
+    };
+    
+    // 如果有选中的成员，添加成员ID到请求数据中
+    if (selectedMemberId) {
+      requestData.member_id = selectedMemberId;
+    }
+    
     wx.request({
       url: config.getFullURL('clothing') + '/list',
       method: 'POST',
-      data: {
-        user_id: 1
-      },
+      data: requestData,
       success: (res) => {
         if (res.statusCode === 200) {
           let clothingList = res.data;
@@ -543,14 +643,8 @@ Page({
     
     console.log('处理后的衣物列表:', clothingList);
     
-    // 更新总数和分类统计
+    // 更新总数
     const totalCount = clothingList.length;
-    const categoryCounts = {
-      shangyi: clothingList.filter(item => item.category === '上衣').length,
-      kuzhuang: clothingList.filter(item => item.category === '裤装').length,
-      waitao: clothingList.filter(item => item.category === '外套').length,
-      xielv: clothingList.filter(item => item.category === '鞋履').length
-    };
     
     // 应用当前筛选条件
     let filteredList = this.applyFilters(clothingList);
@@ -563,8 +657,7 @@ Page({
       this.setData({
         clothingList: clothingList,
         filteredClothingList: filteredList,
-        totalCount: totalCount,
-        categoryCounts: categoryCounts
+        totalCount: totalCount
       });
       return;
     }
@@ -580,8 +673,7 @@ Page({
             this.setData({
               clothingList: clothingList,
               filteredClothingList: filteredList,
-              totalCount: totalCount,
-              categoryCounts: categoryCounts
+              totalCount: totalCount
             });
           }
         });
@@ -593,8 +685,7 @@ Page({
           this.setData({
             clothingList: clothingList,
             filteredClothingList: filteredList,
-            totalCount: totalCount,
-            categoryCounts: categoryCounts
+            totalCount: totalCount
           });
         }
       }
@@ -605,9 +696,14 @@ Page({
   applyFilters: function(clothingList) {
     let filteredList = clothingList;
     
-    // 按分类筛选
-    if (this.data.currentCategory !== 'all') {
-      filteredList = filteredList.filter(item => item.category === this.data.currentCategory);
+    // 按一级分类筛选
+    if (this.data.currentPrimaryCategory !== '总览') {
+      filteredList = filteredList.filter(item => item.primary_category === this.data.currentPrimaryCategory);
+    }
+    
+    // 按二级分类筛选
+    if (this.data.currentSecondaryCategory !== 'all') {
+      filteredList = filteredList.filter(item => item.secondary_category === this.data.currentSecondaryCategory);
     }
     
     // 按颜色筛选
@@ -691,11 +787,26 @@ Page({
     });
   },
   
-  // 切换分类
-  switchCategory: function(e) {
-    const category = e.currentTarget.dataset.category;
+  // 切换一级分类
+  switchPrimaryCategory: function(e) {
+    const primaryCategory = e.currentTarget.dataset.category;
     this.setData({
-      currentCategory: category
+      currentPrimaryCategory: primaryCategory,
+      currentSecondaryCategory: 'all' // 重置二级分类筛选
+    });
+    
+    // 重新应用筛选
+    const filteredList = this.applyFilters(this.data.clothingList);
+    this.setData({
+      filteredClothingList: filteredList
+    });
+  },
+  
+  // 切换二级分类
+  switchSecondaryCategory: function(e) {
+    const secondaryCategory = e.currentTarget.dataset.category;
+    this.setData({
+      currentSecondaryCategory: secondaryCategory
     });
     
     // 重新应用筛选
@@ -830,17 +941,17 @@ Page({
     wx.navigateBack();
   },
   
-  // 根据颜色标签获取颜色
-  getColorByTag: function(color) {
+  // 根据颜色标签获取颜色值
+  getColorValue: function(color) {
     const colorMap = {
-      '绿色': '#4CAF50',
-      '黄色': '#FFEB3B',
-      '棕色': '#795548',
-      '灰色': '#9E9E9E',
-      '红色': '#F44336',
-      '蓝色': '#2196F3',
-      '黑色': '#000000',
-      '白色': '#FFFFFF'
+      '红': '#F44336',
+      '橙': '#FF9800',
+      '黄': '#FFEB3B',
+      '绿': '#4CAF50',
+      '蓝': '#2196F3',
+      '紫': '#9C27B0',
+      '黑': '#000000',
+      '白': '#FFFFFF'
     };
     return colorMap[color] || '#CCCCCC';
   },

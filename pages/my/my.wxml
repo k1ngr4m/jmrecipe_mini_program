@@ -5,6 +5,7 @@
       <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
       <view class="user-text">
         <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="family-name">{{familyName || '我的家庭'}}</text>
         <text class="view-profile">查看个人资料</text>
       </view>
     </view>
@@ -21,6 +22,14 @@
     
     <view class="menu-item" bindtap="goToMemberManagement">
       <text class="menu-text">成员管理</text>
+    </view>
+    
+    <view class="menu-item" bindtap="goToBrandManagement">
+      <text class="menu-text">品牌管理</text>
+    </view>
+    
+    <view class="menu-item" bindtap="goToCategoryManagement">
+      <text class="menu-text">分类管理</text>
     </view>
     
     <view class="menu-item" bindtap="logout" wx:if="{{userInfo}}">

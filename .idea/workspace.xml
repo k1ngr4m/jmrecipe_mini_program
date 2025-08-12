@@ -5,12 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/PRD.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index/index.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login/login.wxss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/member/member.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/member/member.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/member/member.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.private.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/project.private.config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +46,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/linyiming/Projects/WeChatProjects/jmrecipe/images/index",
+    "last_opened_file_path": "/Users/linyiming/Projects/WeChatProjects/jmrecipe/libs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -48,6 +60,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/libs" />
       <recent name="$PROJECT_DIR$/images/index" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -74,7 +87,9 @@
       <workItem from="1754489909549" duration="6360000" />
       <workItem from="1754496973466" duration="954000" />
       <workItem from="1754533336507" duration="10280000" />
-      <workItem from="1754712459270" duration="4845000" />
+      <workItem from="1754712459270" duration="8872000" />
+      <workItem from="1754807667512" duration="31601000" />
+      <workItem from="1754967262184" duration="9640000" />
     </task>
     <servers />
   </component>

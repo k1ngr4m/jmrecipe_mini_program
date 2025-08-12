@@ -4,11 +4,24 @@ Page({
   data: {
     title: '我的',
     userInfo: null,
+    familyName: null,
   },
 
   onLoad() {
     // 页面加载时，无论是否已登录都调用getUserCode()
     this.getUserCode()
+    // 加载family信息
+    this.loadFamilyInfo()
+  },
+
+  // 加载family信息
+  loadFamilyInfo() {
+    const familyName = wx.getStorageSync('family_name')
+    if (familyName) {
+      this.setData({
+        familyName: familyName
+      })
+    }
   },
 
   // 从本地存储加载用户信息
@@ -128,6 +141,9 @@ Page({
           this.setData({
             userInfo: userInfo
           });
+          
+          // 查询并创建family信息
+          this.queryAndCreateFamily(userData.openid);
         } else {
           // 登录失败
           wx.showToast({
@@ -183,6 +199,103 @@ Page({
   goToMemberManagement() {
     wx.navigateTo({
       url: '/pages/member/member'
+    });
+  },
+  
+  // 跳转到品牌管理页面
+  goToBrandManagement() {
+    wx.navigateTo({
+      url: '/pages/brand/brand'
+    });
+  },
+  
+  // 跳转到分类管理页面
+  goToCategoryManagement() {
+    // 分类管理功能将在后续版本中实现
+    wx.showToast({
+      title: '分类管理功能正在开发中',
+      icon: 'none'
+    });
+  },
+  
+  // 查询并创建family信息
+  queryAndCreateFamily(openid) {
+    const config = require('../../config/api.js');
+    
+    // 查询用户family信息
+    wx.request({
+      url: config.getFullURL('familyQuery'),
+      method: 'POST',
+      data: {
+        openid: openid
+      },
+      header: {
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200 && res.data) {
+          const familyData = res.data;
+          
+          // 保存family信息到本地存储
+          wx.setStorageSync('family_id', familyData.family_id);
+          wx.setStorageSync('family_name', familyData.family_name);
+          
+          // 更新页面显示
+          this.setData({
+            familyName: familyData.family_name
+          });
+          
+          console.log('查询到family信息:', familyData);
+        } else {
+          // 如果没有family信息，则创建新的family
+          this.createFamily(openid);
+        }
+      },
+      fail: (err) => {
+        console.error('查询family信息失败:', err);
+        // 即使查询失败，也尝试创建family
+        this.createFamily(openid);
+      }
+    });
+  },
+  
+  // 创建新的family
+  createFamily(openid) {
+    const config = require('../../config/api.js');
+    const userInfo = wx.getStorageSync('userInfo') || {};
+    
+    // 准备family数据
+    const familyData = {
+      openid: openid,
+      family_name: userInfo.nickName ? `${userInfo.nickName}的家庭` : '我的家庭'
+    };
+    
+    wx.request({
+      url: config.getFullURL('familyCreate'),
+      method: 'POST',
+      data: familyData,
+      header: {
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200 && res.data) {
+          // 保存新创建的family信息到本地存储
+          wx.setStorageSync('family_id', res.data.family_id);
+          wx.setStorageSync('family_name', res.data.family_name);
+          
+          // 更新页面显示
+          this.setData({
+            familyName: res.data.family_name
+          });
+          
+          console.log('创建family成功:', res.data);
+        } else {
+          console.error('创建family失败:', res);
+        }
+      },
+      fail: (err) => {
+        console.error('创建family请求失败:', err);
+      }
     });
   },
 })

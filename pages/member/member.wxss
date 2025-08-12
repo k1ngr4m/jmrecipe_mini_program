@@ -77,8 +77,23 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.member-info {
-  flex: 1;
+.member-item.selected {
+  border: 2px solid #8B5A2B;
+  background-color: #fff9f5;
+}
+
+.member-selected-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selected-icon {
+  font-size: 20px;
+  color: #8B5A2B;
+  font-weight: bold;
 }
 
 .member-name {

@@ -4,6 +4,7 @@ const config = require('../../config/api.js');
 Page({
   data: {
     members: [],
+    selectedMemberId: null, // 选中的成员ID
     showModal: false,
     name: '',
     gender: '',
@@ -13,8 +14,86 @@ Page({
   },
 
   onLoad() {
-    // 页面加载时获取成员列表
+    // 页面加载时检查是否有已保存的选中成员
+    const savedSelectedMemberId = wx.getStorageSync('selectedMemberId');
+    if (savedSelectedMemberId) {
+      this.setData({
+        selectedMemberId: savedSelectedMemberId
+      });
+    }
+    
+    // 获取成员列表
     this.getMemberList();
+  },
+  
+  onShow() {
+    // 页面显示时检查成员列表，确保默认成员存在
+    this.checkAndCreateDefaultMember();
+  },
+  
+  // 检查并创建默认成员
+  checkAndCreateDefaultMember() {
+    const members = this.data.members;
+    if (!members || members.length === 0) {
+      // 如果成员列表为空，尝试创建默认成员
+      this.createDefaultMember();
+    }
+  },
+  
+  // 创建默认成员
+  createDefaultMember() {
+    const openid = wx.getStorageSync('openid') || '';
+    if (!openid) {
+      console.log('未获取到openid，无法创建默认成员');
+      return;
+    }
+    
+    // 获取用户信息（如果有的话）
+    const userInfo = wx.getStorageSync('userInfo') || {};
+    
+    // 准备默认成员数据
+    const requestData = {
+      openid: openid,
+      name: userInfo.nickName || '默认成员',
+      gender: '男', // 默认性别为男
+      birthday: '1990-01-01', // 默认生日
+      relationship: '本人'
+    };
+    
+    console.log('创建默认成员请求数据:', requestData);
+
+    wx.request({
+      url: config.getFullURL('familyMembers') + '/create',
+      method: 'POST',
+      data: requestData,
+      header: {
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.showToast({
+            title: '默认成员创建成功',
+            icon: 'success'
+          });
+          
+          // 刷新成员列表
+          this.getMemberList();
+        } else {
+          console.error('创建默认成员失败:', res);
+          wx.showToast({
+            title: '创建默认成员失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('创建默认成员请求失败:', err);
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
+    });
   },
 
   // 获取成员列表
@@ -42,6 +121,11 @@ Page({
           this.setData({
             members: res.data
           });
+          
+          // 如果还没有选中的成员，且列表不为空，设置第一个成员为默认选中
+          if (!this.data.selectedMemberId && res.data.length > 0) {
+            this.selectMember({currentTarget: {dataset: {id: res.data[0].id}}});
+          }
         } else {
           wx.showToast({
             title: '获取成员列表失败',
@@ -56,6 +140,19 @@ Page({
         });
       }
     });
+  },
+
+  // 选中成员
+  selectMember(e) {
+    const memberId = e.currentTarget.dataset.id;
+    this.setData({
+      selectedMemberId: memberId
+    });
+    
+    // 保存选中的成员ID到本地存储
+    wx.setStorageSync('selectedMemberId', memberId);
+    
+    console.log('选中的成员ID:', memberId);
   },
 
   // 显示新增成员弹窗

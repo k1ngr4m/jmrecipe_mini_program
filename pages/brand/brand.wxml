@@ -1,0 +1,63 @@
+<view class="container">
+
+  <!-- 主体内容 -->
+  <scroll-view class="main-content" scroll-y>
+    <!-- 搜索框 -->
+    <view class="search-bar">
+      <input
+              class="search-input"
+              placeholder="搜索品牌名称"
+              value="{{searchKeyword}}"
+              bindinput="onSearchInput"
+              confirm-type="search"
+      />
+    </view>
+
+    <!-- 品牌列表 -->
+    <block wx:if="{{filteredBrands.length}}">
+      <block wx:for="{{filteredBrands}}" wx:key="id">
+        <view class="brand-item">
+          <text class="brand-name">{{item.name}}</text>
+          <view class="brand-actions">
+            <view class="icon-btn edit" bindtap="showBrandModal" data-brand="{{item}}">
+              ✏️ 编辑
+            </view>
+            <view class="icon-btn delete" bindtap="deleteBrand" data-brand="{{item}}">
+              🗑 删除
+            </view>
+          </view>
+        </view>
+      </block>
+    </block>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <image class="empty-img" src="/images/empty-brands.png" mode="aspectFit"></image>
+      <text class="empty-text">
+        {{brands.length > 0 ? '没有找到相关品牌' : '还没有添加品牌'}}
+      </text>
+    </view>
+  </scroll-view>
+
+  <!-- 悬浮添加按钮 -->
+  <view class="fab-btn" bindtap="showBrandModal">
+    <text class="fab-icon">＋</text>
+  </view>
+
+  <!-- 弹窗 -->
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{isEditing ? '编辑品牌' : '新增品牌'}}</text>
+        <text class="close-btn" bindtap="hideBrandModal">✕</text>
+      </view>
+      <form class="modal-form">
+        <view class="form-item">
+          <text class="label">品牌名称 *</text>
+          <input class="input" value="{{name}}" bindinput="onNameInput" placeholder="请输入品牌名称" />
+        </view>
+        <button class="submit-btn" bindtap="saveBrand">确定</button>
+      </form>
+    </view>
+  </view>
+</view>
