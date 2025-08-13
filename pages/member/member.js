@@ -142,7 +142,7 @@ Page({
             this.createDefaultMember();
           } else {
             // 如果还没有选中的成员，且列表不为空，设置第一个成员为默认选中
-            if (!this.data.selectedMemberId && res.data.length > 0) {
+            if (!this.data.selectedMemberId && res.data.length > 0 && res.data[0].memberid) {
               this.selectMember({currentTarget: {dataset: {id: res.data[0].memberid}}});
             }
           }
@@ -165,14 +165,20 @@ Page({
   // 选中成员
   selectMember(e) {
     const memberId = e.currentTarget.dataset.id;
-    this.setData({
-      selectedMemberId: memberId
-    });
     
-    // 保存选中的成员ID到本地存储
-    wx.setStorageSync('selectedMemberId', memberId);
-    
-    console.log('选中的成员ID:', memberId);
+    // 确保memberId有效再设置
+    if (memberId) {
+      this.setData({
+        selectedMemberId: memberId
+      });
+      
+      // 保存选中的成员ID到本地存储
+      wx.setStorageSync('selectedMemberId', memberId);
+      
+      console.log('选中的成员ID:', memberId);
+    } else {
+      console.error('无效的成员ID:', memberId);
+    }
   },
 
   // 显示新增成员弹窗
