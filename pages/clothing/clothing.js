@@ -178,6 +178,8 @@ Page({
       showModal: true,
       primaryCategory: '',
       secondaryCategory: '',
+      primaryCategoryIndex: -1,
+      secondaryCategoryIndex: -1,
       colorIndex: 0,
       color: '',
       season: ''
@@ -281,16 +283,28 @@ Page({
   },
   
   onPrimaryCategoryChange: function(e) {
-    const primaryCategory = e.detail.value;
+    const primaryCategoryIndex = e.detail.value;
+    const primaryCategory = this.data.primaryCategories[primaryCategoryIndex];
+    
+    // 获取当前一级分类下的二级分类选项
+    const secondaryCategoryOptions = this.getCurrentSecondaryCategories(primaryCategory ? primaryCategory.id : '');
+    
     this.setData({
-      primaryCategory: primaryCategory,
-      secondaryCategory: '' // 重置二级分类
+      primaryCategoryIndex: primaryCategoryIndex,
+      primaryCategory: primaryCategory ? primaryCategory.id : '',
+      secondaryCategory: '', // 重置二级分类
+      secondaryCategoryIndex: -1, // 重置二级分类索引
+      secondaryCategoryOptions: secondaryCategoryOptions // 更新二级分类选项
     });
   },
   
   onSecondaryCategoryChange: function(e) {
+    const secondaryCategoryIndex = e.detail.value;
+    const secondaryCategory = this.data.secondaryCategoryOptions[secondaryCategoryIndex];
+    
     this.setData({
-      secondaryCategory: e.detail.value
+      secondaryCategoryIndex: secondaryCategoryIndex,
+      secondaryCategory: secondaryCategory ? secondaryCategory.id : ''
     });
   },
   
@@ -907,74 +921,6 @@ Page({
     });
   },
   
-  // 搜索衣物
-  searchClothing(keyword) {
-    if (!keyword) {
-      // 如果搜索关键词为空，显示完整列表
-      this.getClothingList();
-      return;
-    }
-    
-    wx.request({
-      url: config.getFullURL('clothing') + '/search',
-      method: 'POST',
-      data: {
-        user_id: 1,
-        keyword: keyword
-      },
-      success: (res) => {
-        if (res.statusCode === 200) {
-          let clothingList = res.data;
-          console.log('搜索到的衣物列表:', clothingList);
-          this.setData({
-            searchResults: clothingList
-          });
-        } else {
-          wx.showToast({
-            title: '搜索失败',
-            icon: 'none'
-          });
-        }
-      },
-      fail: () => {
-        wx.showToast({
-          title: '网络错误',
-          icon: 'none'
-        });
-      }
-    });
-  },
-  
-  // 搜索输入事件
-  onSearchInput: function(e) {
-    this.setData({
-      searchKeyword: e.detail.value
-    });
-  },
-  
-  // 搜索确认事件（回车搜索）
-  onSearchConfirm: function(e) {
-    const keyword = e.detail.value;
-    this.setData({
-      searchKeyword: keyword
-    });
-    this.searchClothing(keyword);
-  },
-  
-  // 搜索按钮点击事件
-  onSearch: function() {
-    this.searchClothing(this.data.searchKeyword);
-  },
-  
-  // 清除搜索
-  clearSearch: function() {
-    this.setData({
-      searchKeyword: ''
-    });
-    // 重新加载完整列表
-    this.getClothingList();
-  },
-  
   // 清理衣物
   cleanClothing: function() {
     wx.showModal({
@@ -989,19 +935,6 @@ Page({
         }
       }
     });
-  },
-  
-  // 跳转到今日穿搭
-  goToTodayOutfit: function() {
-    wx.showToast({
-      title: '今日穿搭功能待实现',
-      icon: 'none'
-    });
-  },
-  
-  // 返回上一页
-  goBack: function() {
-    wx.navigateBack();
   },
   
   // 根据颜色标签获取颜色值

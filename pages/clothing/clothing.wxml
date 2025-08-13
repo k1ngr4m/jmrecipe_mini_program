@@ -120,7 +120,7 @@
   </view>
   
   <!-- 新增服装选择弹窗 -->
-  <view class="modal" wx:if="{{showAddOptionsModal}}">
+  <view class="modal {{showAddOptionsModal ? 'modal-visible' : ''}}" wx:if="{{showAddOptionsModal}}">
     <view class="modal-content">
       <view class="modal-header">
         <text class="modal-title">新增服装</text>
