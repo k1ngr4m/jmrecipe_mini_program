@@ -33,6 +33,7 @@ Page({
     // 分类数据
     primaryCategories: [], // 一级分类
     secondaryCategories: [], // 二级分类
+    currentSecondaryCategories: [], // 当前一级分类下的二级分类
     primaryCategoryIndex: -1, // 一级分类选择索引
     secondaryCategoryIndex: -1, // 二级分类选择索引
     secondaryCategoryOptions: [], // 当前一级分类下的二级分类选项
@@ -713,6 +714,43 @@ Page({
     });
   },
   
+  // 获取当前一级分类下的二级分类
+  getCurrentSecondaryCategories: function(primaryCategoryId) {
+    // 如果没有传入参数，使用当前选中的一级分类
+    const categoryId = primaryCategoryId || this.data.currentPrimaryCategory;
+    
+    if (categoryId === '总览') {
+      return [];
+    }
+    
+    // 从secondaryCategories中筛选出属于当前一级分类的二级分类
+    // 尝试多种可能的关联字段
+    return this.data.secondaryCategories.filter(item => {
+      // 如果item是对象且有parent属性
+      if (typeof item === 'object') {
+        // 尝试parent_id字段
+        if (item.parent_id !== undefined && item.parent_id == categoryId) {
+          return true;
+        }
+        // 尝试parent_category_id字段
+        if (item.parent_category_id !== undefined && item.parent_category_id == categoryId) {
+          return true;
+        }
+        // 尝试primary_category_id字段
+        if (item.primary_category_id !== undefined && item.primary_category_id == categoryId) {
+          return true;
+        }
+        // 尝试category_id字段
+        if (item.category_id !== undefined && item.category_id == categoryId) {
+          return true;
+        }
+        // 尝试name或id匹配（如果一级分类和二级分类有某种命名规律）
+        // 这里可以根据实际数据结构调整
+      }
+      return false;
+    });
+  },
+
   // 应用筛选条件
   applyFilters: function(clothingList) {
     let filteredList = clothingList;
@@ -811,9 +849,13 @@ Page({
   // 切换一级分类
   switchPrimaryCategory: function(e) {
     const primaryCategory = e.currentTarget.dataset.category;
+    // 获取当前一级分类下的二级分类
+    const currentSecondaryCategories = this.getCurrentSecondaryCategories(primaryCategory);
+    
     this.setData({
       currentPrimaryCategory: primaryCategory,
-      currentSecondaryCategory: 'all' // 重置二级分类筛选
+      currentSecondaryCategory: 'all', // 重置二级分类筛选
+      currentSecondaryCategories: currentSecondaryCategories // 更新当前二级分类列表
     });
     
     // 重新应用筛选
@@ -1189,6 +1231,7 @@ Page({
       success: (res) => {
         console.log('获取分类数据成功', res);
         if (res.statusCode === 200) {
+          console.log('完整的分类数据', res.data);
           const primary = res.data.filter(c => c.level === 1);
           const secondary = res.data.filter(c => c.level === 2);
           console.log('一级分类', primary);

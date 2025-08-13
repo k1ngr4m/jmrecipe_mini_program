@@ -1,7 +1,4 @@
 <view class="container">
-  <!-- 页面标题 -->
-  <view class="top-nav">{{title}}</view>
-  
   <!-- 一级分类导航 -->
   <scroll-view class="primary-categories" scroll-x>
     <view 
@@ -31,7 +28,7 @@
     >
       全部
     </view>
-    <block wx:for="{{secondaryCategories}}" wx:key="id">
+    <block wx:for="{{currentSecondaryCategories}}" wx:key="id">
       <view 
         class="subcategory-item {{currentSecondaryCategory === item.id ? 'active' : ''}}" 
         bindtap="switchSecondaryCategory" 
