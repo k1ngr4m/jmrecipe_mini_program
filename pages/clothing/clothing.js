@@ -66,7 +66,7 @@ Page({
     } else {
       // 如果用户已登录，初始化分类数据并加载衣物列表
       this.initCategories();
-      this.getBrandList();
+      // this.getBrandList();
       this.getClothingList();
     }
   },
@@ -139,7 +139,7 @@ Page({
       url: config.getFullURL('clothing') + '/brands/list',
       method: 'POST',
       data: {
-        user_id: 1
+        familyid: wx.getStorageSync('familyid') || '',
       },
       success: (res) => {
         if (res.statusCode === 200) {
@@ -593,14 +593,35 @@ Page({
     // 获取选中的成员ID
     const selectedMemberId = wx.getStorageSync('selectedMemberId');
     
+    // 获取用户ID
+    const userid = wx.getStorageSync('userid') || 1;
+    
     // 准备请求数据
     const requestData = {
-      user_id: 1 // 默认用户ID
+      userid: userid,
+      familyid: wx.getStorageSync('familyid') || '', // 家庭ID
     };
     
     // 如果有选中的成员，添加成员ID到请求数据中
     if (selectedMemberId) {
-      requestData.member_id = selectedMemberId;
+      requestData.family_member_id = selectedMemberId;
+    }
+    
+    // 添加筛选参数
+    if (this.data.currentPrimaryCategory !== '总览') {
+      requestData.category_id = this.data.currentPrimaryCategory;
+    }
+    
+    if (this.data.currentSecondaryCategory !== 'all') {
+      requestData.sub_category_id = this.data.currentSecondaryCategory;
+    }
+    
+    if (this.data.selectedColor) {
+      requestData.color = this.data.selectedColor;
+    }
+    
+    if (this.data.selectedSeason) {
+      requestData.season = this.data.selectedSeason;
     }
     
     wx.request({
