@@ -1173,6 +1173,12 @@ Page({
     const selectedMember = members.find(m => m.id === selectedMemberId);
     const gender = selectedMember && selectedMember.gender === '女' ? 'female' : 'male';
 
+    console.log('获取分类数据', {
+      selectedMemberId,
+      familyid: wx.getStorageSync('familyid') || '',
+      gender
+    });
+
     wx.request({
       url: config.getFullURL('categories') + '/list',
       method: 'POST',
@@ -1181,14 +1187,22 @@ Page({
         gender: gender
       },
       success: (res) => {
+        console.log('获取分类数据成功', res);
         if (res.statusCode === 200) {
           const primary = res.data.filter(c => c.level === 1);
           const secondary = res.data.filter(c => c.level === 2);
+          console.log('一级分类', primary);
+          console.log('二级分类', secondary);
           this.setData({
             primaryCategories: primary,
             secondaryCategories: secondary
           });
+        } else {
+          console.error('获取分类数据失败', res);
         }
+      },
+      fail: (err) => {
+        console.error('获取分类数据网络错误', err);
       }
     });
   }

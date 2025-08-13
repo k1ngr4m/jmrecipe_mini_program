@@ -9,7 +9,8 @@ const config = {
       login: '/api/wechat/getopenid', // 微信登录接口
       familyMembers: '/api/family/members',
       familyQuery: '/api/family/query',
-      familyCreate: '/api/family/create'
+      familyCreate: '/api/family/create',
+      categories: '/api/categories'
     }
   },
   
@@ -22,7 +23,8 @@ const config = {
       login: '/api/wechat/getopenid', // 微信登录接口
       familyMembers: '/api/family/members',
       familyQuery: '/api/family/query',
-      familyCreate: '/api/family/create'
+      familyCreate: '/api/family/create',
+      categories: '/api/categories'
     }
   }
 }
