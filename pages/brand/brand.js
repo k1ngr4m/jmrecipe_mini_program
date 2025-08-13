@@ -17,10 +17,13 @@ Page({
 
   // 获取品牌列表
   getBrandList() {
+    const familyid = wx.getStorageSync('familyid');
     wx.request({
       url: config.getFullURL('clothing') + '/brands/list',
       method: 'POST',
-      data: {},
+      data: {
+        familyid: familyid
+      },
       success: (res) => {
         if (res.statusCode === 200) {
           this.setData({
@@ -170,11 +173,13 @@ Page({
     // 创建品牌
     if (!this.data.isEditing) {
       const requestData = {
-        name: this.data.name.trim()
+        name: this.data.name.trim(),
+        familyid: wx.getStorageSync('familyid') || '',
+        logo_url: ''
       };
 
       wx.request({
-        url: config.getFullURL('clothing') + '/brands/add',
+        url: config.getFullURL('clothing') + '/brands/create',
         method: 'POST',
         data: requestData,
         header: {
@@ -265,7 +270,8 @@ Page({
             url: config.getFullURL('clothing') + '/brands/delete',
             method: 'POST',
             data: {
-              brand_id: brand.id
+              brand_id: brand.id,
+              familyid: wx.getStorageSync('familyid') || '',
             },
             header: {
               'Content-Type': 'application/json'

@@ -11,7 +11,8 @@ Page({
     genderIndex: 0,
     genderOptions: ['男', '女'],
     birthday: '',
-    hasAttemptedToCreateDefaultMember: false // 是否已尝试创建默认成员
+    hasAttemptedToCreateDefaultMember: false, // 是否已尝试创建默认成员
+    hasLoadedMembers: false // 是否已加载过成员列表
   },
 
   onLoad() {
@@ -33,7 +34,10 @@ Page({
   },
   
   onShow() {
-    this.getMemberList(false)
+    // 只有在已经加载过成员列表的情况下才刷新列表
+    if (this.data.hasLoadedMembers) {
+      this.getMemberList(false)
+    }
   },
   
   // 检查并创建默认成员
@@ -126,7 +130,8 @@ Page({
       success: (res) => {
         if (res.statusCode === 200) {
           this.setData({
-            members: res.data
+            members: res.data,
+            hasLoadedMembers: true
           });
           
           // 如果成员列表为空，创建默认成员
