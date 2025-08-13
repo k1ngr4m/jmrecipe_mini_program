@@ -1,15 +1,6 @@
 <view class="container">
   <!-- 顶部导航区 -->
   <view class="top-nav">
-    <view class="nav-header">
-      <view class="back-btn" bindtap="goBack">
-        <text class="icon">←</text>
-      </view>
-      <text class="page-title">衣橱列表页</text>
-      <view class="search-btn" bindtap="showSearch">
-        <text class="icon">🔍</text>
-      </view>
-    </view>
     
     <!-- 一级分类标签 -->
     <scroll-view class="category-tabs" scroll-x="true">
