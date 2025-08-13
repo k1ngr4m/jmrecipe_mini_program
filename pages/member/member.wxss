@@ -13,43 +13,55 @@
   justify-content: flex-start;
 }
 
-/* 顶部导航区 */
+/* 顶部导航 */
 .top-nav {
-  width: 100%;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
-
 .nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 56px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  box-sizing: border-box;
-}
-
-.back-btn {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.icon {
-  font-size: 20px;
-  color: #333;
+  padding: 0 12px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  z-index: 999;
 }
 
 .page-title {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #222;
+}
+
+.nav-header .icon {
+  font-size: 20px;
   color: #333;
 }
 
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.back-btn:hover {
+  background: rgba(0,0,0,0.05);
+}
+
 .placeholder {
-  width: 30px;
+  width: 36px;
 }
 
 /* 主内容区 */
@@ -156,35 +168,69 @@
   margin-bottom: 20px;
 }
 
-/* 底部工具区 */
-.bottom-tools {
+/* 悬浮按钮 */
+.fab-btn {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 999;
-}
-
-.add-member-btn {
-  width: 50px;
-  height: 50px;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background-color: #8B5A2B;
+  background: linear-gradient(135deg, #ff8a00, #ff6600);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   display: flex;
-  justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transition: all 0.2s ease;
+  justify-content: center;
+  cursor: pointer;
+
+  /* 初始弹出动画 */
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  animation: fabPopUp 0.4s ease-out forwards, fabBreath 2.5s ease-in-out infinite 0.5s;
 }
 
-.add-member-btn:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+.fab-icon {
+  font-size: 28px;
+  color: #fff;
+  line-height: 1;
 }
 
-.add-member-btn .icon {
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
+/* 点击反馈 */
+.fab-btn:active {
+  transform: scale(0.85);
+  animation: none; /* 点击时暂停呼吸动画 */
+}
+
+/* 页面载入弹出 */
+@keyframes fabPopUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 呼吸浮动动画 */
+@keyframes fabBreath {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.28);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
 }
 
 /* 弹窗样式 */

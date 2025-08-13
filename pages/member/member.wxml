@@ -26,11 +26,9 @@
     </view>
   </view>
   
-  <!-- 底部工具区 -->
-  <view class="bottom-tools">
-    <view class="add-member-btn" bindtap="showAddModal">
-      <text class="icon">+</text>
-    </view>
+  <!-- 悬浮按钮 -->
+  <view class="fab-btn" bindtap="showAddModal">
+    <text class="fab-icon">+</text>
   </view>
   
   <!-- 新增成员表单弹窗 -->
