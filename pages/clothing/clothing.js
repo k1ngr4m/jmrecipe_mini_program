@@ -728,12 +728,12 @@ Page({
     }
     
     // 按颜色筛选
-    if (this.data.selectedColor) {
+    if (this.data.selectedColor !== '') {
       filteredList = filteredList.filter(item => item.color === this.data.selectedColor);
     }
     
     // 按季节筛选
-    if (this.data.selectedSeason) {
+    if (this.data.selectedSeason !== '') {
       filteredList = filteredList.filter(item => item.season === this.data.selectedSeason);
     }
     
