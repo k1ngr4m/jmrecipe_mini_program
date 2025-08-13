@@ -8,6 +8,7 @@ page {
   flex-direction: column;
   height: 100%;
   justify-content: flex-start;
+  padding: 0;
 }
 
 .top-nav {
@@ -80,6 +81,7 @@ page {
 
 /* 颜色筛选器 - 小圆圈样式 */
 .color-circle-item {
+  display: inline-block;
   width: 30px;
   height: 30px;
   border-radius: 50%;
