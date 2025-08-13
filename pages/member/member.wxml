@@ -5,12 +5,12 @@
     <!-- 成员列表 -->
     <view class="members-container">
       <view class="members-list" wx:if="{{members.length > 0}}">
-        <view class="member-item {{selectedMemberId === item.id ? 'selected' : ''}}" wx:for="{{members}}" wx:key="id" bindtap="selectMember" data-id="{{item.id}}">
+        <view class="member-item {{selectedMemberId === item.memberid ? 'selected' : ''}}" wx:for="{{members}}" wx:key="memberid" bindtap="selectMember" data-id="{{item.memberid}}">
           <view class="member-info">
             <text class="member-name">{{item.name}}</text>
             <text class="member-detail">{{item.gender}} | {{item.birthday}}</text>
           </view>
-          <view class="member-selected-icon" wx:if="{{selectedMemberId === item.id}}">
+          <view class="member-selected-icon" wx:if="{{selectedMemberId === item.memberid}}">
             <text class="selected-icon">✓</text>
           </view>
         </view>

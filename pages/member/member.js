@@ -143,7 +143,7 @@ Page({
           } else {
             // 如果还没有选中的成员，且列表不为空，设置第一个成员为默认选中
             if (!this.data.selectedMemberId && res.data.length > 0) {
-              this.selectMember({currentTarget: {dataset: {id: res.data[0].id}}});
+              this.selectMember({currentTarget: {dataset: {id: res.data[0].memberid}}});
             }
           }
         } else {
