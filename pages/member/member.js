@@ -10,7 +10,8 @@ Page({
     gender: '',
     genderIndex: 0,
     genderOptions: ['男', '女'],
-    birthday: ''
+    birthday: '',
+    hasAttemptedToCreateDefaultMember: false // 是否已尝试创建默认成员
   },
 
   onLoad() {
@@ -22,13 +23,17 @@ Page({
       });
     }
     
+    // 重置尝试创建默认成员的标志位
+    this.setData({
+      hasAttemptedToCreateDefaultMember: false
+    });
+    
     // 获取成员列表
     this.getMemberList();
   },
   
   onShow() {
-    // 页面显示时检查成员列表，确保默认成员存在
-    this.checkAndCreateDefaultMember();
+    this.getMemberList(false)
   },
   
   // 检查并创建默认成员
@@ -42,9 +47,9 @@ Page({
   
   // 创建默认成员
   createDefaultMember() {
-    const openid = wx.getStorageSync('openid') || '';
-    if (!openid) {
-      console.log('未获取到openid，无法创建默认成员');
+    const userid = wx.getStorageSync('userid') || '';
+    if (!userid) {
+      console.log('未获取到userid，无法创建默认成员');
       return;
     }
     
@@ -53,11 +58,11 @@ Page({
     
     // 准备默认成员数据
     const requestData = {
-      openid: openid,
+      userid: userid,
+      familyid: wx.getStorageSync('familyid') || '',
       name: userInfo.nickName || '默认成员',
       gender: '男', // 默认性别为男
       birthday: '1990-01-01', // 默认生日
-      relationship: '本人'
     };
     
     console.log('创建默认成员请求数据:', requestData);
@@ -76,8 +81,8 @@ Page({
             icon: 'success'
           });
           
-          // 刷新成员列表
-          this.getMemberList();
+          // 重新获取成员列表并设置选中状态，但不创建默认成员
+          this.getMemberList(false);
         } else {
           console.error('创建默认成员失败:', res);
           wx.showToast({
@@ -97,9 +102,10 @@ Page({
   },
 
   // 获取成员列表
-  getMemberList() {
-    const openid = wx.getStorageSync('openid') || '';
-    if (!openid) {
+  getMemberList(shouldCreateDefault = true) {
+    const userid = wx.getStorageSync('userid') || '';
+    const familyid = wx.getStorageSync('familyid') || '';
+    if (!userid) {
       wx.showToast({
         title: '请先登录',
         icon: 'none'
@@ -111,7 +117,8 @@ Page({
       url: config.getFullURL('familyMembers') + '/list',
       method: 'POST',
       data: {
-        openid: openid
+        userid: userid,
+        familyid: familyid
       },
       header: {
         'Content-Type': 'application/json'
@@ -122,9 +129,17 @@ Page({
             members: res.data
           });
           
-          // 如果还没有选中的成员，且列表不为空，设置第一个成员为默认选中
-          if (!this.data.selectedMemberId && res.data.length > 0) {
-            this.selectMember({currentTarget: {dataset: {id: res.data[0].id}}});
+          // 如果成员列表为空，创建默认成员
+          if (shouldCreateDefault && (!res.data || res.data.length === 0) && !this.data.hasAttemptedToCreateDefaultMember) {
+            this.setData({
+              hasAttemptedToCreateDefaultMember: true
+            });
+            this.createDefaultMember();
+          } else {
+            // 如果还没有选中的成员，且列表不为空，设置第一个成员为默认选中
+            if (!this.data.selectedMemberId && res.data.length > 0) {
+              this.selectMember({currentTarget: {dataset: {id: res.data[0].id}}});
+            }
           }
         } else {
           wx.showToast({
@@ -164,7 +179,6 @@ Page({
       gender: '',
       genderIndex: 0,
       birthday: '',
-      relationship: ''
     });
   },
 
@@ -217,8 +231,9 @@ Page({
 
   // 保存成员
   saveMember() {
-    const openid = wx.getStorageSync('openid') || '';
-    if (!openid) {
+    const userid = wx.getStorageSync('userid') || '';
+    const familyid = wx.getStorageSync('familyid') || '';
+    if (!userid) {
       wx.showToast({
         title: '请先登录',
         icon: 'none'
@@ -237,15 +252,15 @@ Page({
 
     // 准备发送的数据，确保格式正确
     const requestData = {
-      openid: openid,
+      userid: userid,
+      familyid: familyid,
       name: this.data.name,
       gender: this.data.gender,
       birthday: this.data.birthday,
-      relationship: '家庭成员' // 默认关系值
     };
     
     // 验证日期格式
-    if (requestData.birthday && !/^\d{4}-\d{2}-\d{2}$/.test(requestData.birthday)) {
+    if (this.data.birthday && !/^\d{4}-\d{2}-\d{2}$/.test(this.data.birthday)) {
       wx.showToast({
         title: '日期格式不正确',
         icon: 'none'
