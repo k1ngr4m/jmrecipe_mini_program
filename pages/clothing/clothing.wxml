@@ -1,112 +1,125 @@
 <view class="container">
-  <!-- 顶部导航区 -->
-  <view class="top-nav">
-    
-    <!-- 一级分类标签 -->
-    <scroll-view class="category-tabs" scroll-x="true">
-      <view class="tab-container">
-        <view class="tab-item {{currentPrimaryCategory === '总览' ? 'active' : ''}}" data-category="总览" bindtap="switchPrimaryCategory">
-          <text>总览</text>
-        </view>
-        <block wx:for="{{currentCategories}}" wx:key="*this">
-          <view class="tab-item {{currentPrimaryCategory === item[0] ? 'active' : ''}}" data-category="{{item[0]}}" bindtap="switchPrimaryCategory">
-            <text>{{item[0]}}</text>
-          </view>
-        </block>
-      </view>
-    </scroll-view>
-    
-    <!-- 二级分类标签 -->
-    <scroll-view class="category-tabs secondary-tabs" scroll-x="true" wx:if="{{currentPrimaryCategory !== '总览'}}">
-      <view class="tab-container">
-        <view class="tab-item {{currentSecondaryCategory === 'all' ? 'active' : ''}}" data-category="all" bindtap="switchSecondaryCategory">
-          <text>全部</text>
-        </view>
-        <block wx:for="{{currentCategories[currentPrimaryCategory]}}" wx:key="*this">
-          <view class="tab-item {{currentSecondaryCategory === item ? 'active' : ''}}" data-category="{{item}}" bindtap="switchSecondaryCategory">
-            <text>{{item}}</text>
-          </view>
-        </block>
-      </view>
-    </scroll-view>
-    
-    <!-- 颜色筛选 -->
-    <scroll-view class="color-filter" scroll-x="true">
-      <view class="color-container">
-        <view class="color-item {{selectedColor === '' ? 'active' : ''}}" bindtap="selectColor" data-color="">
-          <text class="color-text">全部</text>
-        </view>
-        <block wx:for="{{colorOptions}}" wx:key="*this">
-          <view class="color-item {{selectedColor === item ? 'active' : ''}}" bindtap="selectColor" data-color="{{item}}">
-            <view class="color-circle" style="background-color: {{getColorValue(item)}};"></view>
-            <text class="color-text">{{item}}</text>
-          </view>
-        </block>
-      </view>
-    </scroll-view>
-    
-    <!-- 季节筛选 -->
-    <scroll-view class="season-filter" scroll-x="true">
-      <view class="season-container">
-        <view class="season-item {{selectedSeason === '' ? 'active' : ''}}" bindtap="selectSeason" data-season="">
-          <text class="season-text">全部季节</text>
-        </view>
-        <block wx:for="{{seasonOptions}}" wx:key="*this">
-          <view class="season-item {{selectedSeason === item ? 'active' : ''}}" bindtap="selectSeason" data-season="{{item}}">
-            <text class="season-text">{{item}}</text>
-          </view>
-        </block>
-      </view>
-    </scroll-view>
-  </view>
+  <!-- 页面标题 -->
+  <view class="top-nav">{{title}}</view>
   
-  <!-- 主内容区 -->
-  <view class="main-content">
-    <!-- 商品卡片模块 -->
-    <view class="products-container">
-      <view class="products-grid" wx:if="{{!isEmptyState()}}">
-        <view class="product-card" wx:for="{{filteredClothingList}}" wx:key="id" bindtap="goToDetail" bindlongpress="onLongPressClothing" data-id="{{item.id}}">
-          <image class="product-image" src="{{item.image_url || '/images/default-clothing.png'}}" mode="aspectFill"></image>
-          <view class="product-info">
-            <text class="product-name">{{item.name}}</text>
-            <text class="product-brand">{{item.brand || '无品牌'}}</text>
-            <text class="product-date">购买日期: {{item.purchase_date || '未知'}}</text>
-          </view>
-        </view>
-      </view>
-      
-      <!-- 空状态 -->
-      <view class="empty-state" wx:if="{{isEmptyState()}}">
-        <view class="empty-content">
-          <image class="empty-illustration" src="/images/empty-closet.png" mode="aspectFit"></image>
-          <text class="empty-text">还没有添加衣物，快来丰富你的衣橱吧</text>
-          <button class="add-clothing-button" bindtap="showAddModal">添加衣物</button>
-        </view>
-      </view>
-  </view>
-  
-  <!-- 悬浮按钮 -->
-  <view class="fab-btn" bindtap="showAddModal">
-    <text class="fab-icon">+</text>
-  </view>
-  
-  <!-- 搜索弹窗 -->
-  <view class="search-modal" wx:if="{{showSearchModal}}">
-    <view class="search-content">
-      <view class="search-header">
-        <text class="search-title">搜索衣物</text>
-        <view class="close-btn" bindtap="hideSearch">✕</view>
-      </view>
-      <view class="search-box">
-        <input class="search-input" placeholder="搜索衣物名称或品牌" value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" />
-        <button class="search-button" bindtap="onSearch">搜索</button>
-      </view>
-      <view class="search-results">
-        <view class="result-item" wx:for="{{searchResults}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
-          <text>{{item.name}} - {{item.brand}}</text>
-        </view>
-      </view>
+  <!-- 一级分类导航 -->
+  <scroll-view class="primary-categories" scroll-x>
+    <view 
+      class="category-item {{currentPrimaryCategory === '总览' ? 'active' : ''}}" 
+      bindtap="switchPrimaryCategory" 
+      data-category="总览"
+    >
+      总览
     </view>
+    <block wx:for="{{primaryCategories}}" wx:key="id">
+      <view 
+        class="category-item {{currentPrimaryCategory === item.id ? 'active' : ''}}" 
+        bindtap="switchPrimaryCategory" 
+        data-category="{{item.id}}"
+      >
+        {{item.name}}
+      </view>
+    </block>
+  </scroll-view>
+  
+  <!-- 二级分类导航 -->
+  <scroll-view class="secondary-categories" scroll-x wx:if="{{currentPrimaryCategory !== '总览'}}">
+    <view 
+      class="subcategory-item {{currentSecondaryCategory === 'all' ? 'active' : ''}}" 
+      bindtap="switchSecondaryCategory" 
+      data-category="all"
+    >
+      全部
+    </view>
+    <block wx:for="{{secondaryCategories}}" wx:key="id">
+      <view 
+        class="subcategory-item {{currentSecondaryCategory === item.id ? 'active' : ''}}" 
+        bindtap="switchSecondaryCategory" 
+        data-category="{{item.id}}"
+      >
+        {{item.name}}
+      </view>
+    </block>
+  </scroll-view>
+  
+  <!-- 颜色筛选 -->
+  <scroll-view class="color-filter" scroll-x wx:if="{{currentPrimaryCategory !== '总览'}}">
+    <view 
+      class="color-item {{selectedColor === '' ? 'active' : ''}}" 
+      bindtap="selectColor" 
+      data-color=""
+    >
+      全部颜色
+    </view>
+    <block wx:for="{{colorOptions}}" wx:key="index">
+      <view 
+        class="color-item {{selectedColor === item ? 'active' : ''}}" 
+        bindtap="selectColor" 
+        data-color="{{item}}"
+      >
+        {{item}}
+      </view>
+    </block>
+  </scroll-view>
+  
+  <!-- 季节筛选 -->
+  <scroll-view class="season-filter" scroll-x wx:if="{{currentPrimaryCategory !== '总览'}}">
+    <view 
+      class="season-item {{selectedSeason === '' ? 'active' : ''}}" 
+      bindtap="selectSeason" 
+      data-season=""
+    >
+      全部季节
+    </view>
+    <block wx:for="{{seasonOptions}}" wx:key="index">
+      <view 
+        class="season-item {{selectedSeason === item ? 'active' : ''}}" 
+        bindtap="selectSeason" 
+        data-season="{{item}}"
+      >
+        {{item}}
+      </view>
+    </block>
+  </scroll-view>
+  
+  <!-- 衣物列表 -->
+  <scroll-view class="clothing-list" scroll-y>
+    <block wx:if="{{filteredClothingList.length > 0}}">
+      <block wx:for="{{filteredClothingList}}" wx:key="id">
+        <view class="clothing-card" bindtap="goToDetail" data-id="{{item.id}}" bindlongpress="onLongPressClothing">
+          <image class="clothing-img" src="{{item.image_url}}" mode="aspectFill" wx:if="{{item.image_url}}"></image>
+          <view class="clothing-info">
+            <view class="clothing-name">{{item.name}}</view>
+            <view class="clothing-category">{{item.primary_category}} - {{item.secondary_category}}</view>
+            <view class="clothing-meta">
+              <text wx:if="{{item.color}}">{{item.color}}</text>
+              <text wx:if="{{item.season}}"> | {{item.season}}</text>
+              <text wx:if="{{item.brand}}"> | {{item.brand}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </block>
+    
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-text">暂无衣物数据</text>
+    </view>
+  </scroll-view>
+  
+  <!-- 批量操作工具栏 -->
+  <view class="batch-toolbar" wx:if="{{isBatchMode}}">
+    <view class="batch-info">已选择 {{selectedClothingIds.length}} 件衣物</view>
+    <view class="batch-actions">
+      <button class="batch-btn" bindtap="batchDeleteClothing">删除</button>
+      <button class="batch-btn" bindtap="batchMoveCategory">移动分类</button>
+      <button class="batch-btn cancel" bindtap="exitBatchMode">取消</button>
+    </view>
+  </view>
+  
+  <!-- 悬浮添加按钮 -->
+  <view class="fab" bindtap="showAddModal">
+    <text>＋</text>
   </view>
   
   <!-- 新增服装选择弹窗 -->
@@ -114,52 +127,42 @@
     <view class="modal-content">
       <view class="modal-header">
         <text class="modal-title">新增服装</text>
-        <button class="close-btn" bindtap="hideAddOptionsModal">✕</button>
+        <text class="close-btn" bindtap="hideAddOptionsModal">×</text>
       </view>
-      <view class="add-options">
-        <button class="add-option-btn" bindtap="chooseTakePhoto">
-          <text class="option-icon">📷</text>
-          <text class="option-text">拍照识别</text>
-        </button>
-        <button class="add-option-btn" bindtap="showManualAddModal">
-          <text class="option-icon">📝</text>
-          <text class="option-text">手动填写</text>
-        </button>
+      <view class="modal-body">
+        <button class="option-btn" bindtap="showManualAddModal">手动填写</button>
+        <button class="option-btn" bindtap="chooseTakePhoto">拍照识别</button>
       </view>
     </view>
   </view>
   
-  <!-- 新增服装表单弹窗 -->
+  <!-- 手动添加弹窗 -->
   <view class="modal" wx:if="{{showModal}}">
     <view class="modal-content">
       <view class="modal-header">
-        <text class="modal-title">新增服装</text>
-        <button class="close-btn" bindtap="hideAddModal">✕</button>
+        <text class="modal-title">添加衣物</text>
+        <text class="close-btn" bindtap="hideAddModal">×</text>
       </view>
-      <form class="add-form" bindsubmit="addClothing">
+      <form class="modal-form" bindsubmit="addClothing">
         <view class="form-item">
           <text class="label">名称 *</text>
-          <input class="input" name="name" value="{{name}}" bindinput="onNameInput" placeholder="请输入衣物名称" required />
+          <input class="input" name="name" value="{{name}}" bindinput="onNameInput" placeholder="请输入衣物名称" />
         </view>
         
-        <!-- 一级分类选择 -->
         <view class="form-item">
           <text class="label">一级分类 *</text>
-          <picker mode="selector" range="{{Object.keys(currentCategories)}}" bindchange="onPrimaryCategoryChange">
+          <picker mode="selector" range="{{primaryCategories}}" range-key="name" value="{{primaryCategoryIndex}}" bindchange="onPrimaryCategoryChange">
             <view class="picker">
-              <text wx:if="{{primaryCategory}}">{{primaryCategory}}</text>
-              <text wx:else>请选择一级分类</text>
+              {{primaryCategoryIndex >= 0 ? primaryCategories[primaryCategoryIndex].name : '请选择一级分类'}}
             </view>
           </picker>
         </view>
         
-        <!-- 二级分类选择（根据一级分类动态显示） -->
-        <view class="form-item" wx:if="{{primaryCategory && currentCategories[primaryCategory]}}">
-          <text class="label">二级分类 *</text>
-          <picker mode="selector" range="{{currentCategories[primaryCategory]}}" bindchange="onSecondaryCategoryChange">
+        <view class="form-item">
+          <text class="label">二级分类</text>
+          <picker mode="selector" range="{{secondaryCategoryOptions}}" range-key="name" value="{{secondaryCategoryIndex}}" bindchange="onSecondaryCategoryChange">
             <view class="picker">
-              <text wx:if="{{secondaryCategory}}">{{secondaryCategory}}</text>
-              <text wx:else>请选择二级分类</text>
+              {{secondaryCategoryIndex >= 0 ? secondaryCategoryOptions[secondaryCategoryIndex].name : '请选择二级分类'}}
             </view>
           </picker>
         </view>
@@ -168,66 +171,80 @@
           <text class="label">颜色</text>
           <picker mode="selector" range="{{colorOptions}}" value="{{colorIndex}}" bindchange="onColorChange">
             <view class="picker">
-              <text wx:if="{{color}}">{{color}}</text>
-              <text wx:else>请选择颜色</text>
+              {{colorOptions[colorIndex]}}
             </view>
           </picker>
         </view>
         
-        <!-- 品牌选择（支持模糊搜索） -->
+        <view class="form-item">
+          <text class="label">适用季节</text>
+          <picker mode="selector" range="{{seasonOptions}}" value="{{seasonIndex}}" bindchange="onSeasonChange">
+            <view class="picker">
+              {{seasonOptions[seasonIndex]}}
+            </view>
+          </picker>
+        </view>
+        
         <view class="form-item">
           <text class="label">品牌</text>
           <input class="input" name="brand" value="{{brand}}" bindinput="onBrandInput" placeholder="请输入品牌" />
         </view>
         
         <view class="form-item">
-          <text class="label">适用季节</text>
-          <picker mode="selector" range="{{seasonOptions}}" bindchange="onSeasonChange">
-            <view class="picker">
-              <text wx:if="{{season}}">{{season}}</text>
-              <text wx:else>请选择适用季节</text>
-            </view>
-          </picker>
+          <text class="label">价格</text>
+          <input class="input" type="digit" name="price" value="{{price}}" bindinput="onPriceInput" placeholder="请输入价格" />
         </view>
         
         <view class="form-item">
           <text class="label">购买日期</text>
           <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
-            <view class="date-picker">
-              <text wx:if="{{purchaseDate}}">{{purchaseDate}}</text>
-              <text wx:else>请选择购买日期</text>
+            <view class="picker">
+              {{purchaseDate ? purchaseDate : '请选择日期'}}
             </view>
           </picker>
         </view>
         
         <view class="form-item">
-          <text class="label">价格</text>
-          <input class="input" name="price" value="{{price}}" bindinput="onPriceInput" type="digit" placeholder="请输入价格" />
-        </view>
-        
-        <view class="form-item">
           <text class="label">图片</text>
-          <view class="upload-area" bindtap="chooseAndUploadImage">
-            <text wx:if="{{!imageUrl}}">点击上传图片</text>
-            <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image" />
+          <view class="image-upload" bindtap="chooseImage">
+            <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image"></image>
+            <view wx:else class="upload-placeholder">＋ 上传图片</view>
           </view>
         </view>
         
-        <button class="submit-btn" bindtap="handleSubmit">确定</button>
+        <button class="submit-btn" form-type="submit">确定</button>
       </form>
     </view>
   </view>
   
-  <!-- 批量操作工具栏 -->
-  <view class="batch-toolbar" wx:if="{{isBatchMode}}">
-    <view class="batch-toolbar-content">
-      <text class="selected-count">{{selectedClothingIds.length}} 项已选择</text>
-      <view class="batch-actions">
-        <button class="batch-action-btn move-btn" bindtap="batchMoveCategory">移动</button>
-        <button class="batch-action-btn delete-btn" bindtap="batchDeleteClothing">删除</button>
-        <button class="batch-action-btn cancel-btn" bindtap="exitBatchMode">取消</button>
+  <!-- 搜索弹窗 -->
+  <view class="modal" wx:if="{{showSearchModal}}">
+    <view class="modal-content search-modal">
+      <view class="modal-header">
+        <text class="modal-title">搜索衣物</text>
+        <text class="close-btn" bindtap="hideSearch">×</text>
+      </view>
+      <view class="search-bar">
+        <input
+          class="search-input"
+          placeholder="搜索衣物名称"
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+          bindconfirm="onSearchConfirm"
+          confirm-type="search"
+        />
+        <button class="search-btn" bindtap="onSearch">搜索</button>
+      </view>
+      <scroll-view class="search-results" scroll-y wx:if="{{searchResults.length > 0}}">
+        <block wx:for="{{searchResults}}" wx:key="id">
+          <view class="search-result-item" bindtap="goToDetail" data-id="{{item.id}}">
+            <text>{{item.name}}</text>
+          </view>
+        </block>
+      </scroll-view>
+      <view class="empty-state" wx:elif="{{searchKeyword && searchResults.length === 0}}">
+        <text class="empty-text">未找到相关衣物</text>
       </view>
     </view>
   </view>
 </view>
-  </view>

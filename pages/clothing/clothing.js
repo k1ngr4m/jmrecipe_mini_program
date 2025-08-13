@@ -30,17 +30,16 @@ Page({
     selectedColor: '', // 当前选中的颜色
     selectedSeason: '', // 当前选中的季节
     totalCount: 0, // 总件数
+    // 分类数据
+    primaryCategories: [], // 一级分类
+    secondaryCategories: [], // 二级分类
+    primaryCategoryIndex: -1, // 一级分类选择索引
+    secondaryCategoryIndex: -1, // 二级分类选择索引
+    secondaryCategoryOptions: [], // 当前一级分类下的二级分类选项
     // 按性别区分的一级分类和二级分类
     maleCategories: {
-      '上装': ['衬衫', 'T恤', '毛衣/针织衫', '外套', '卫衣', '背心'],
-      '下装': ['长裤', '短裤', '牛仔裤', '内裤'],
-      '鞋袜': ['鞋子', '袜子']
     },
     femaleCategories: {
-      '上装': ['衬衫', 'T恤', '毛衣/针织衫', '外套', '卫衣', '背心', '吊带', '内衣'],
-      '下装': ['长裤', '短裤', '牛仔裤', '内裤', '裙子'],
-      '连衣裙': ['长裙', '短裙'],
-      '鞋袜': ['鞋子', '袜子']
     },
     // 当前用户的分类（根据成员性别确定）
     currentCategories: {},
@@ -65,12 +64,13 @@ Page({
       })
     } else {
       // 如果用户已登录，初始化分类数据并加载衣物列表
-      this.initCategories();
+      // this.initCategories();
+      this.getCategories(); // 获取分类数据
       // this.getBrandList();
       this.getClothingList();
     }
   },
-  
+
   // 初始化分类数据（根据成员性别）
   initCategories: function() {
     // 获取选中的成员ID和性别
@@ -1163,6 +1163,32 @@ Page({
           title: '网络错误',
           icon: 'none'
         });
+      }
+    });
+  },
+
+  getCategories() {
+    const selectedMemberId = wx.getStorageSync('selectedMemberId');
+    const members = wx.getStorageSync('members') || [];
+    const selectedMember = members.find(m => m.id === selectedMemberId);
+    const gender = selectedMember && selectedMember.gender === '女' ? 'female' : 'male';
+
+    wx.request({
+      url: config.getFullURL('categories') + '/list',
+      method: 'POST',
+      data: {
+        familyid: wx.getStorageSync('familyid') || '',
+        gender: gender
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          const primary = res.data.filter(c => c.level === 1);
+          const secondary = res.data.filter(c => c.level === 2);
+          this.setData({
+            primaryCategories: primary,
+            secondaryCategories: secondary
+          });
+        }
       }
     });
   }
