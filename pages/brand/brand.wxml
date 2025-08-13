@@ -1,5 +1,4 @@
 <view class="container">
-
   <!-- 主体内容 -->
   <scroll-view class="main-content" scroll-y>
     <!-- 搜索框 -->

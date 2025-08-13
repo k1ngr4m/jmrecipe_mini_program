@@ -1,16 +1,5 @@
 <!--pages/member/member.wxml-->
 <view class="container">
-  <!-- 顶部导航区 -->
-  <view class="top-nav">
-    <view class="nav-header">
-      <view class="back-btn" bindtap="goBack">
-        <text class="icon">←</text>
-      </view>
-      <text class="page-title">成员管理</text>
-      <view class="placeholder"></view>
-    </view>
-  </view>
-  
   <!-- 主内容区 -->
   <view class="main-content">
     <!-- 成员列表 -->

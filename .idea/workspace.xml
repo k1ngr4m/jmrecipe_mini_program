@@ -5,24 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/PRD.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index/index.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/login/login.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/login/login.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/login/login.wxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/login/login.wxss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/brand/brand.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/brand/brand.wxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/member/member.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/member/member.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/member/member.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/member/member.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/member/member.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/member/member.wxss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/my/my.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/my/my.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.private.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/project.private.config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,24 +27,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "hotfix/v1.0.0",
-    "last_opened_file_path": "/Users/linyiming/Projects/WeChatProjects/jmrecipe/libs",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true",
-    "wxn.project": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;hotfix/v1.0.0&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/linyiming/Projects/WeChatProjects/jmrecipe/libs&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;wxn.project&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/libs" />
@@ -89,7 +76,8 @@
       <workItem from="1754533336507" duration="10280000" />
       <workItem from="1754712459270" duration="8872000" />
       <workItem from="1754807667512" duration="31601000" />
-      <workItem from="1754967262184" duration="10003000" />
+      <workItem from="1754967262184" duration="14780000" />
+      <workItem from="1755002598018" duration="6188000" />
     </task>
     <servers />
   </component>

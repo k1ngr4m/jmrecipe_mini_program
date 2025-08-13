@@ -118,14 +118,14 @@ Page({
           const userInfo = {
             nickName: userData.nickname,
             avatarUrl: userData.avatar_url,
-            openid: userData.openid
+            userid: userData.openid
           };
           
           // 保存用户信息到全局变量和本地存储
           const app = getApp();
           if (app.globalData) {
             app.globalData.userInfo = userInfo;
-            app.globalData.openid = userData.openid;
+            app.globalData.userid = userData.openid;
             app.globalData.session_key = userData.session_key;
             app.globalData.unionid = userData.unionid;
             app.globalData.hasLoggedIn = true; // 设置登录状态
@@ -133,7 +133,7 @@ Page({
           
           wx.setStorageSync('hasLoggedIn', true); // 保存登录状态到本地存储
           wx.setStorageSync('userInfo', userInfo); // 保存用户信息到本地存储
-          wx.setStorageSync('openid', userData.openid); // 保存openid到本地存储
+          wx.setStorageSync('userid', userData.openid); // 保存openid为userid到本地存储
           
           console.log('登录成功，更新用户信息');
           
@@ -237,7 +237,7 @@ Page({
           const familyData = res.data;
           
           // 保存family信息到本地存储
-          wx.setStorageSync('family_id', familyData.family_id);
+          wx.setStorageSync('familyid', familyData.familyid);
           wx.setStorageSync('family_name', familyData.family_name);
           
           // 更新页面显示
@@ -248,13 +248,13 @@ Page({
           console.log('查询到family信息:', familyData);
         } else {
           // 如果没有family信息，则创建新的family
-          this.createFamily(openid);
+          // this.createFamily(openid);
         }
       },
       fail: (err) => {
         console.error('查询family信息失败:', err);
         // 即使查询失败，也尝试创建family
-        this.createFamily(openid);
+        // this.createFamily(openid);
       }
     });
   },
