@@ -40,7 +40,7 @@
   </scroll-view>
   
   <!-- 颜色筛选 -->
-  <scroll-view class="color-filter" scroll-x wx:if="{{currentPrimaryCategory !== '总览'}}">
+  <scroll-view class="color-filter" scroll-x>
     <view 
       class="color-item {{selectedColor === '' ? 'active' : ''}}" 
       bindtap="selectColor" 
@@ -60,7 +60,7 @@
   </scroll-view>
   
   <!-- 季节筛选 -->
-  <scroll-view class="season-filter" scroll-x wx:if="{{currentPrimaryCategory !== '总览'}}">
+  <scroll-view class="season-filter" scroll-x>
     <view 
       class="season-item {{selectedSeason === '' ? 'active' : ''}}" 
       bindtap="selectSeason" 
