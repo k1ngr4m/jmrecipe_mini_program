@@ -1,29 +1,43 @@
 page {
   background-color: #f9f5e6; /* 米黄色背景 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .container {
   display: flex;
   flex-direction: column;
   height: 100%;
+  justify-content: flex-start;
 }
 
 .top-nav {
-  padding: 12px;
+  padding: 16px 12px;
   text-align: center;
   font-size: 18px;
   font-weight: bold;
   background-color: #f3e7c9;
+  color: #8b6e41;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
+/* 分类和筛选区域 */
 .primary-categories,
 .secondary-categories,
 .color-filter,
 .season-filter {
   display: flex;
-  padding: 8px;
+  padding: 10px 8px;
   background-color: #f9f5e6;
   white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none; /* 隐藏滚动条 */
+}
+
+.primary-categories::-webkit-scrollbar,
+.secondary-categories::-webkit-scrollbar,
+.color-filter::-webkit-scrollbar,
+.season-filter::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条 */
 }
 
 .category-item,
@@ -31,11 +45,21 @@ page {
 .color-item,
 .season-item {
   display: inline-block;
-  padding: 6px 12px;
-  margin-right: 8px;
-  border-radius: 16px;
+  padding: 7px 14px;
+  margin-right: 10px;
+  border-radius: 20px;
   background-color: #fff3d4;
   font-size: 14px;
+  color: #8b6e41;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.category-item:last-child,
+.subcategory-item:last-child,
+.color-item:last-child,
+.season-item:last-child {
+  margin-right: 0;
 }
 
 .category-item.active,
@@ -44,38 +68,74 @@ page {
 .season-item.active {
   background-color: #d8b95f;
   color: #fff;
+  box-shadow: 0 2px 8px rgba(216, 185, 95, 0.3);
 }
 
+.category-item:hover,
+.subcategory-item:hover,
+.color-item:hover,
+.season-item:hover {
+  background-color: #ffe8b0;
+}
+
+/* 颜色筛选器 - 小圆圈样式 */
+.color-circle-item {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.color-circle-item.active {
+  border-color: #d8b95f;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px #d8b95f, 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* 衣物列表 */
 .clothing-list {
   flex: 1;
   display: flex;
   flex-wrap: wrap;
-  padding: 8px;
+  padding: 10px;
 }
 
 .clothing-card {
   width: 48%;
   margin: 1%;
   background-color: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.clothing-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
 }
 
 .clothing-img {
   width: 100%;
-  height: 140px;
+  height: 150px;
+  object-fit: cover;
 }
 
 .clothing-info {
-  padding: 8px;
+  padding: 10px;
   font-size: 14px;
   color: #333;
 }
 
 .clothing-name {
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
+  color: #6d5836;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .clothing-category {
@@ -87,12 +147,20 @@ page {
 .clothing-meta {
   color: #999;
   font-size: 12px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .empty-state {
   text-align: center;
-  padding: 40px 0;
+  padding: 60px 20px;
   color: #aaa;
+}
+
+.empty-icon {
+  font-size: 50px;
+  margin-bottom: 15px;
+  color: #e0d6c0;
 }
 
 /* 右下角悬浮按钮 */
@@ -109,7 +177,14 @@ page {
   justify-content: center;
   color: white;
   font-size: 28px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(216, 185, 95, 0.4);
+  transition: all 0.2s;
+  z-index: 900;
+}
+
+.fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(216, 185, 95, 0.5);
 }
 
 /* 弹窗样式 */
@@ -119,101 +194,204 @@ page {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.modal.modal-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .modal-content {
   background-color: #fff;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  max-height: 80vh;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  max-height: 85vh;
   overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal.modal-visible .modal-content {
+  transform: translateY(0);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
+  padding: 18px 20px;
+  border-bottom: 1px solid #f0e8d6;
+  background-color: #f9f5e6;
+  border-radius: 16px 16px 0 0;
 }
 
 .modal-title {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: bold;
+  color: #8b6e41;
 }
 
 .close-btn {
-  font-size: 24px;
-  color: #999;
+  font-size: 26px;
+  color: #a68d63;
+  transition: color 0.2s, background-color 0.2s;
+  padding: 4px;
+  border-radius: 50%;
+  line-height: 1;
 }
 
-.modal-body {
-  padding: 16px;
+.close-btn:hover {
+  color: #8b6e41;
+  background-color: rgba(139, 110, 65, 0.1);
 }
 
-.option-btn {
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 12px;
-  background-color: #f3e7c9;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
+.modal-form {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px dashed #f0e8d6;
+}
+
+.form-group:last-child {
+  border-bottom: none;
+  margin-bottom: 10px;
+  padding-bottom: 0;
 }
 
 .form-item {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
 }
 
 .label {
   display: block;
-  margin-bottom: 6px;
-  font-weight: bold;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #6d5836;
+  font-size: 15px;
+}
+
+.label .required {
+  color: #e74c3c;
+  margin-left: 3px;
 }
 
 .input, .picker {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 12px 14px;
+  border: 1px solid #e0d6c0;
+  border-radius: 10px;
   box-sizing: border-box;
+  font-size: 16px;
+  background-color: #fcfaf5;
+  transition: all 0.2s;
 }
 
+.input:focus, .picker:active {
+  border-color: #d8b95f;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(216, 185, 95, 0.1);
+  outline: none;
+}
+
+.picker {
+  display: flex;
+  align-items: center;
+  color: #333;
+  position: relative;
+}
+
+.picker::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #a68d63;
+}
+
+/* 图片上传区域 */
 .image-upload {
   width: 100%;
-  height: 120px;
-  border: 1px dashed #ddd;
-  border-radius: 6px;
+  height: 140px;
+  border: 2px dashed #e0d6c0;
+  border-radius: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: #fcfaf5;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.image-upload:hover {
+  border-color: #d8b95f;
+  background-color: rgba(216, 185, 95, 0.05);
 }
 
 .preview-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 8px;
 }
 
 .upload-placeholder {
-  color: #999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #a68d63;
 }
 
+.upload-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #d8b95f;
+}
+
+.upload-text {
+  font-size: 15px;
+}
+
+/* 提交按钮 */
 .submit-btn {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background-color: #d8b95f;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(216, 185, 95, 0.3);
+}
+
+.submit-btn:hover, .submit-btn:active {
+  background-color: #c7a84a;
+  box-shadow: 0 6px 16px rgba(216, 185, 95, 0.4);
+  transform: translateY(-1px);
 }
 
 /* 搜索弹窗 */
