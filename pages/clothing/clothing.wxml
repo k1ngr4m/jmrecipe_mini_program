@@ -4,7 +4,7 @@
     <view 
       class="category-item {{currentPrimaryCategory === '总览' ? 'active' : ''}}" 
       bindtap="switchPrimaryCategory" 
-      data-category="总览"
+      data-category="全部"
     >
       总览
     </view>
@@ -20,7 +20,7 @@
   </scroll-view>
   
   <!-- 二级分类导航 -->
-  <scroll-view class="secondary-categories" scroll-x wx:if="{{currentPrimaryCategory !== '总览'}}">
+  <scroll-view class="secondary-categories" scroll-x>
     <view 
       class="subcategory-item {{currentSecondaryCategory === 'all' ? 'active' : ''}}" 
       bindtap="switchSecondaryCategory" 
@@ -28,7 +28,7 @@
     >
       全部
     </view>
-    <block wx:for="{{currentSecondaryCategories}}" wx:key="id">
+    <block wx:if="{{currentPrimaryCategory !== '总览'}}" wx:for="{{currentSecondaryCategories}}" wx:key="id">
       <view 
         class="subcategory-item {{currentSecondaryCategory === item.id ? 'active' : ''}}" 
         bindtap="switchSecondaryCategory" 
