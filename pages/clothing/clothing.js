@@ -909,8 +909,14 @@ Page({
   // 切换一级分类
   switchPrimaryCategory: function(e) {
     const primaryCategory = e.currentTarget.dataset.category;
-    // 获取当前一级分类下的二级分类
-    const currentSecondaryCategories = this.getCurrentSecondaryCategories(primaryCategory);
+    let currentSecondaryCategories = [];
+    
+    // 如果选择的是"总览"，则显示所有二级分类；否则显示当前一级分类下的二级分类
+    if (primaryCategory === '总览') {
+      currentSecondaryCategories = this.data.secondaryCategories;
+    } else {
+      currentSecondaryCategories = this.getCurrentSecondaryCategories(primaryCategory);
+    }
     
     this.setData({
       currentPrimaryCategory: primaryCategory,

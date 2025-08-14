@@ -4,7 +4,7 @@
     <view 
       class="category-item {{currentPrimaryCategory === '总览' ? 'active' : ''}}" 
       bindtap="switchPrimaryCategory" 
-      data-category="全部"
+      data-category="总览"
     >
       总览
     </view>
@@ -28,7 +28,7 @@
     >
       全部
     </view>
-    <block wx:if="{{currentPrimaryCategory !== '总览'}}" wx:for="{{currentSecondaryCategories}}" wx:key="id">
+    <block wx:for="{{currentSecondaryCategories}}" wx:key="id">
       <view 
         class="subcategory-item {{currentSecondaryCategory === item.id ? 'active' : ''}}" 
         bindtap="switchSecondaryCategory" 
