@@ -1295,13 +1295,9 @@ Page({
         gender: gender
       },
       success: (res) => {
-        console.log('获取分类数据成功', res);
         if (res.statusCode === 200) {
-          console.log('完整的分类数据', res.data);
           const primary = res.data.filter(c => c.level === 1);
           const secondary = res.data.filter(c => c.level === 2);
-          console.log('一级分类', primary);
-          console.log('二级分类', secondary);
           this.setData({
             primaryCategories: primary,
             secondaryCategories: secondary

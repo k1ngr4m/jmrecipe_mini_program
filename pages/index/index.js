@@ -7,7 +7,14 @@ Page({
   },
   
   onLoad() {
-    this.getUserCode()
+    // 检查是否已登录
+    const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
+    if (hasLoggedIn) {
+      return;
+    }
+    else {
+      this.getUserCode()
+    }
   },
 
   getUserCode() {
@@ -52,23 +59,27 @@ Page({
           const userInfo = {
             nickName: userData.nickname,
             avatarUrl: userData.avatar_url,
-            userid: userData.openid
+            userid: userData.userid
           };
 
           // 保存用户信息到全局变量和本地存储
           const app = getApp();
           if (app.globalData) {
             app.globalData.userInfo = userInfo;
-            app.globalData.userid = userData.openid;
+            app.globalData.userid = userData.userid;
             app.globalData.session_key = userData.session_key;
             app.globalData.unionid = userData.unionid;
+            app.globalData.familyid = userData.familyid;
+            app.globalData.memberid = userData.memberid;
             app.globalData.hasLoggedIn = true; // 设置登录状态
           }
 
           wx.setStorageSync('hasLoggedIn', true); // 保存登录状态到本地存储
           wx.setStorageSync('userInfo', userInfo); // 保存用户信息到本地存储
-          wx.setStorageSync('userid', userData.openid); // 保存openid为userid到本地存储
-
+          wx.setStorageSync('userid', userData.userid); // 保存openid为userid到本地存储
+          wx.setStorageSync('familyid', userData.familyid);
+          wx.setStorageSync('memberid', userData.memberid);
+          wx.setStorageSync('selectedMemberId', userData.memberid);
           console.log('登录成功，更新用户信息');
 
           // 更新页面数据
