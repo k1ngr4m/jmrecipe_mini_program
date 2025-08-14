@@ -636,6 +636,7 @@ Page({
     // 准备请求数据
     const requestData = {
       userid: userid,
+      memberid: wx.getStorageSync('selectedMemberId') || '',
       familyid: wx.getStorageSync('familyid') || '', // 家庭ID
     };
     
@@ -698,6 +699,21 @@ Page({
         clothingList.reverse();
       }
     }
+    
+    // 将分类ID转换为分类名称
+    clothingList.forEach(clothing => {
+      // 保存原始分类ID
+      clothing.primary_category_id = clothing.primary_category;
+      clothing.secondary_category_id = clothing.secondary_category;
+      
+      // 获取分类名称
+      const primaryCategoryName = this.getCategoryNameById(clothing.primary_category, this.data.primaryCategories);
+      const secondaryCategoryName = this.getCategoryNameById(clothing.secondary_category, this.data.secondaryCategories);
+      
+      // 设置分类名称显示
+      clothing.primary_category = primaryCategoryName || clothing.primary_category;
+      clothing.secondary_category = secondaryCategoryName || clothing.secondary_category;
+    });
     
     console.log('处理后的衣物列表:', clothingList);
     
@@ -959,19 +975,12 @@ Page({
     });
   },
   
-  // 根据颜色标签获取颜色值
-  getColorValue: function(color) {
-    const colorMap = {
-      '红': '#F44336',
-      '橙': '#FF9800',
-      '黄': '#FFEB3B',
-      '绿': '#4CAF50',
-      '蓝': '#2196F3',
-      '紫': '#9C27B0',
-      '黑': '#000000',
-      '白': '#FFFFFF'
-    };
-    return colorMap[color] || '#CCCCCC';
+  // 根据分类ID获取分类名称
+  getCategoryNameById: function(categoryId, categories) {
+    if (!categoryId || !categories || categories.length === 0) return '';
+    
+    const category = categories.find(c => c.id == categoryId);
+    return category ? category.name : '';
   },
   
   // 根据季节标签获取显示文本
