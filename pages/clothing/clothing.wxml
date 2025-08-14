@@ -192,7 +192,11 @@
         <view class="form-group">
           <view class="form-item">
             <text class="label">品牌</text>
-            <input class="input" name="brand" value="{{brand}}" bindinput="onBrandInput" placeholder="请输入品牌" />
+            <picker mode="selector" range="{{brandList}}" range-key="name" value="{{brandIndex}}" bindchange="onBrandChange">
+              <view class="picker">
+                {{brandIndex >= 0 ? brandList[brandIndex].name : '请选择品牌'}}
+              </view>
+            </picker>
           </view>
 
           <view class="form-item">

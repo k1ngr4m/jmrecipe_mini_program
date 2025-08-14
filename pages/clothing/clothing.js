@@ -20,8 +20,10 @@ Page({
     colorOptions: ['红', '橙', '黄', '绿', '蓝', '紫', '黑', '白'],
     brand: '',
     brandList: [], // 品牌列表
+    brandIndex: -1, // 品牌选择索引
     price: '',
     season: '', // 适用季节
+    seasonIndex: -1, // 季节选择索引
     seasonOptions: ['春', '夏', '秋', '冬'],
     searchKeyword: '',
     searchResults: [],
@@ -67,7 +69,7 @@ Page({
       // 如果用户已登录，初始化分类数据并加载衣物列表
       // this.initCategories();
       this.getCategories(); // 获取分类数据
-      // this.getBrandList();
+      this.getBrandList(); // 获取品牌列表
       this.getClothingList();
     }
   },
@@ -96,7 +98,7 @@ Page({
   // 工具函数：格式化请求数据
   formatRequestData: function(formData) {
     const requestData = {
-      user_id: formData.user_id || 1, // 实际开发中需要获取当前用户ID
+      userid: wx.getStorageSync('userid'),
       name: formData.name,
       primary_category: formData.primary_category, // 一级分类
       secondary_category: formData.secondary_category, // 二级分类
@@ -114,20 +116,17 @@ Page({
       requestData.price = parseFloat(requestData.price) || 0;
     }
     
-    // 确保日期格式正确
+    // 将purchase_date转换为秒级时间戳
     if (requestData.purchase_date) {
       console.log('原始日期格式:', requestData.purchase_date);
-      // 确保日期格式为 YYYY-MM-DD
-      if (requestData.purchase_date.match(/^\d{4}-\d{2}-\d{2}$/)) {
-        // 已经是正确格式
-        console.log('日期格式已正确');
+      // 将日期字符串转换为时间戳（秒级）
+      const date = new Date(requestData.purchase_date);
+      if (!isNaN(date.getTime())) {
+        requestData.purchase_date = Math.floor(date.getTime() / 1000); // 转换为秒级时间戳
+        console.log('转换后的时间戳:', requestData.purchase_date);
       } else {
-        // 尝试转换日期格式
-        const date = new Date(requestData.purchase_date);
-        if (!isNaN(date.getTime())) {
-          requestData.purchase_date = date.toISOString().split('T')[0];
-          console.log('转换后的日期格式:', requestData.purchase_date);
-        }
+        // 如果转换失败，删除该字段
+        delete requestData.purchase_date;
       }
     }
     
@@ -182,7 +181,10 @@ Page({
       secondaryCategoryIndex: -1,
       colorIndex: 0,
       color: '',
-      season: ''
+      season: '',
+      seasonIndex: -1,
+      brand: '',
+      brandIndex: -1
     });
   },
   
@@ -209,7 +211,10 @@ Page({
       secondaryCategory: '',
       colorIndex: 0,
       color: '',
-      season: ''
+      season: '',
+      seasonIndex: -1,
+      brand: '',
+      brandIndex: -1
     });
   },
   
@@ -318,14 +323,27 @@ Page({
   },
   
   onSeasonChange: function(e) {
+    const seasonIndex = e.detail.value;
+    const season = this.data.seasonOptions[seasonIndex];
     this.setData({
-      season: e.detail.value
+      seasonIndex: seasonIndex,
+      season: season
     });
   },
   
   onBrandInput: function(e) {
     this.setData({
       brand: e.detail.value
+    });
+  },
+  
+  // 品牌选择改变事件
+  onBrandChange: function(e) {
+    const brandIndex = e.detail.value;
+    const brand = this.data.brandList[brandIndex];
+    this.setData({
+      brandIndex: brandIndex,
+      brand: brand ? brand.name : ''
     });
   },
   
@@ -397,7 +415,7 @@ Page({
     console.log('提交的数据:', requestData);
     
     // 检查数据格式
-    if (!requestData.name || !requestData.category) {
+    if (!requestData.name || !requestData.primary_category) {
       wx.showToast({
         title: '名称和分类为必填项',
         icon: 'none'
@@ -497,16 +515,7 @@ Page({
     const formData = e.detail.value;
     console.log('表单数据:', formData);
     
-    // 验证必填字段
-    if (!formData.name || !this.data.primaryCategory) {
-      wx.showToast({
-        title: '请填写必填字段',
-        icon: 'none'
-      });
-      return;
-    }
-    
-    // 添加其他字段到formData
+    // 添加其他字段到formData（在验证之前）
     formData.primary_category = this.data.primaryCategory || '';
     formData.secondary_category = this.data.secondaryCategory || '';
     formData.color = this.data.color || '';
@@ -515,6 +524,15 @@ Page({
     formData.purchase_date = this.data.purchaseDate || '';
     formData.price = this.data.price || '';
     formData.image_url = this.data.imageUrl || '';
+    
+    // 验证必填字段
+    if (!formData.name || !formData.primary_category) {
+      wx.showToast({
+        title: '请填写必填字段',
+        icon: 'none'
+      });
+      return;
+    }
     
     // 如果有本地图片但还没有上传到COS，则先上传
     if (this.data.imageUrl && !this.data.cosImageUrl) {
@@ -543,13 +561,17 @@ Page({
   createClothing(data) {
     console.log('发送网络请求:', data);
     
-    // 从数据中提取user_id并从请求体中移除
-    const user_id = data.user_id || 1;
-    const requestData = { ...data };
-    delete requestData.user_id;
-    
+    // 从数据中提取userid并从请求体中移除
+    const userid = wx.getStorageSync('userid');
+    const requestData = {
+      userid: userid,
+      familyid: wx.getStorageSync('familyid') || '',
+      memberid: wx.getStorageSync('selectedMemberId') || '',
+      ...data
+    };
+
     wx.request({
-      url: config.getFullURL('clothing') + '?user_id=' + user_id,
+      url: config.getFullURL('clothing') + '/create',
       method: 'POST',
       data: requestData,
       header: {
@@ -1045,7 +1067,7 @@ Page({
       url: config.getFullURL('clothing') + '/batch_delete',
       method: 'POST',
       data: {
-        user_id: 1,
+        userid: wx.getStorageSync('userid'),
         clothing_ids: clothingIds
       },
       success: (res) => {
@@ -1110,7 +1132,7 @@ Page({
       url: config.getFullURL('clothing') + '/batch_move',
       method: 'POST',
       data: {
-        user_id: 1,
+        userid: wx.getStorageSync('userid'),
         clothing_ids: clothingIds,
         category: category
       },
