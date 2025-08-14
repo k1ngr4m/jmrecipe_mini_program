@@ -737,24 +737,40 @@ Page({
       return;
     }
     
+    // 分离需要处理签名URL的项目和需要使用缺省图片的项目
+    const itemsWithImages = [];
+    const itemsWithoutImages = [];
+    
     clothingList.forEach((clothing, index) => {
       if (clothing.image_url) {
-        this.getSignedCosUrl(clothing.image_url, (signedUrl) => {
-          clothingList[index].image_url = signedUrl;
-          processedCount++;
-          
-          // 当所有项都处理完后更新数据
-          if (processedCount === totalItems) {
-            this.setData({
-              clothingList: clothingList,
-              filteredClothingList: filteredList,
-              totalCount: totalCount
-            });
-          }
-        });
+        itemsWithImages.push({clothing, index});
       } else {
-        // 如果没有图片，使用缺省图片
-        this.getDefaultImageSignedUrl((defaultImageUrl) => {
+        itemsWithoutImages.push({clothing, index});
+      }
+    });
+    
+    // 处理有图片的项目
+    itemsWithImages.forEach(({clothing, index}) => {
+      this.getSignedCosUrl(clothing.image_url, (signedUrl) => {
+        clothingList[index].image_url = signedUrl;
+        processedCount++;
+        
+        // 当所有项都处理完后更新数据
+        if (processedCount === totalItems) {
+          this.setData({
+            clothingList: clothingList,
+            filteredClothingList: filteredList,
+            totalCount: totalCount
+          });
+        }
+      });
+    });
+    
+    // 处理没有图片的项目
+    if (itemsWithoutImages.length > 0) {
+      // 只获取一次缺省图片签名URL，然后应用到所有没有图片的项目
+      this.getDefaultImageSignedUrl((defaultImageUrl) => {
+        itemsWithoutImages.forEach(({clothing, index}) => {
           if (defaultImageUrl) {
             clothingList[index].image_url = defaultImageUrl;
           }
@@ -769,8 +785,8 @@ Page({
             });
           }
         });
-      }
-    });
+      });
+    }
   },
   
   // 获取当前一级分类下的二级分类
