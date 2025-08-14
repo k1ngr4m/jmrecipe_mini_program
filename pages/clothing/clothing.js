@@ -9,6 +9,7 @@ Page({
     showSearchModal: false,
     imageUrl: '',
     cosImageUrl: '',  // COS图片URL
+    defaultImageUrl: '', // 缺省图片URL（带签名）
     clothingList: [],
     filteredClothingList: [],
     purchaseDate: '',
@@ -752,16 +753,22 @@ Page({
           }
         });
       } else {
-        processedCount++;
-        
-        // 当所有项都处理完后更新数据
-        if (processedCount === totalItems) {
-          this.setData({
-            clothingList: clothingList,
-            filteredClothingList: filteredList,
-            totalCount: totalCount
-          });
-        }
+        // 如果没有图片，使用缺省图片
+        this.getDefaultImageSignedUrl((defaultImageUrl) => {
+          if (defaultImageUrl) {
+            clothingList[index].image_url = defaultImageUrl;
+          }
+          processedCount++;
+          
+          // 当所有项都处理完后更新数据
+          if (processedCount === totalItems) {
+            this.setData({
+              clothingList: clothingList,
+              filteredClothingList: filteredList,
+              totalCount: totalCount
+            });
+          }
+        });
       }
     });
   },
@@ -956,6 +963,64 @@ Page({
     const filteredList = this.applyFilters(this.data.clothingList);
     this.setData({
       filteredClothingList: filteredList
+    });
+  },
+
+  // 获取缺省图片的带签名URL
+  getDefaultImageSignedUrl: function(callback) {
+    // 如果已经有缓存的签名URL且未过期，则直接使用
+    if (this.data.defaultImageUrl) {
+      callback(this.data.defaultImageUrl);
+      return;
+    }
+    
+    // 缺省图片的COS路径
+    const defaultImagePath = 'jmrecipe/Index/设计缺省页.png';
+    const bucket = 'jmrecipe-1309147067';
+    const region = 'ap-shanghai';
+    const key = defaultImagePath;
+    
+    // 引入COS凭证管理器
+    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
+    const COS = require('../../utils/cos-wx-sdk-v5.js');
+    
+    // 获取有效的凭证
+    cosCredentialsManager.getValidCredentials().then(credentials => {
+      // 初始化COS实例
+      const cos = new COS({
+        getAuthorization: function (options, callback) {
+          callback({
+            TmpSecretId: credentials.tmp_secret_id,
+            TmpSecretKey: credentials.tmp_secret_key,
+            SecurityToken: credentials.token,
+            StartTime: credentials.start_time,
+            ExpiredTime: credentials.expired_time
+          });
+        },
+        SimpleUploadMethod: 'putObject'
+      });
+      
+      // 获取带签名的URL
+      cos.getObjectUrl({
+        Bucket: bucket,
+        Region: region,
+        Key: key,
+        Sign: true
+      }, (err, data) => {
+        if (err) {
+          console.error('获取缺省图片签名URL失败:', err);
+          callback(''); // 如果获取失败，返回空字符串
+        } else {
+          // 缓存签名URL
+          this.setData({
+            defaultImageUrl: data.Url
+          });
+          callback(data.Url);
+        }
+      });
+    }).catch(error => {
+      console.error('获取COS凭证失败:', error);
+      callback(''); // 如果获取失败，返回空字符串
     });
   },
   

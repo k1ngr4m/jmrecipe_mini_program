@@ -84,7 +84,7 @@
     <view wx:if="{{filteredClothingList.length > 0}}" class="clothing-list-container">
       <block wx:for="{{filteredClothingList}}" wx:key="id">
         <view class="clothing-card" bindtap="goToDetail" data-id="{{item.id}}" bindlongpress="onLongPressClothing">
-          <image class="clothing-img" src="{{item.image_url}}" mode="aspectFill" wx:if="{{item.image_url}}"></image>
+          <image class="clothing-img" src="{{item.image_url}}" mode="aspectFill"></image>
           <view class="clothing-info">
             <view class="clothing-name">{{item.name}}</view>
             <view class="clothing-category">{{item.primary_category}} - {{item.secondary_category}}</view>
