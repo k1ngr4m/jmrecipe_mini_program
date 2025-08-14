@@ -639,22 +639,22 @@ Page({
     // 准备请求数据
     const requestData = {
       userid: userid,
-      memberid: wx.getStorageSync('selectedMemberId') || '',
+      // memberid: wx.getStorageSync('selectedMemberId') || '',
       familyid: wx.getStorageSync('familyid') || '', // 家庭ID
     };
     
     // 如果有选中的成员，添加成员ID到请求数据中
     if (selectedMemberId) {
-      requestData.family_member_id = selectedMemberId;
+      requestData.memberid = selectedMemberId;
     }
     
     // 添加筛选参数
     if (this.data.currentPrimaryCategory !== '总览') {
-      requestData.category_id = this.data.currentPrimaryCategory;
+      requestData.primary_category = this.data.currentPrimaryCategory;
     }
     
     if (this.data.currentSecondaryCategory !== 'all') {
-      requestData.sub_category_id = this.data.currentSecondaryCategory;
+      requestData.secondary_category = this.data.currentSecondaryCategory;
     }
     
     if (this.data.selectedColor) {
@@ -723,8 +723,8 @@ Page({
     // 更新总数
     const totalCount = clothingList.length;
     
-    // 应用当前筛选条件
-    let filteredList = this.applyFilters(clothingList);
+    // 不再应用前端筛选，直接使用接口返回的数据
+    let filteredList = clothingList;
     
     // 为列表中的每个服装项获取带签名的图片URL
     let processedCount = 0;
@@ -924,11 +924,8 @@ Page({
       currentSecondaryCategories: currentSecondaryCategories // 更新当前二级分类列表
     });
     
-    // 重新应用筛选
-    const filteredList = this.applyFilters(this.data.clothingList);
-    this.setData({
-      filteredClothingList: filteredList
-    });
+    // 重新请求接口获取数据
+    this.getClothingList();
   },
   
   // 切换二级分类
@@ -938,11 +935,8 @@ Page({
       currentSecondaryCategory: secondaryCategory
     });
     
-    // 重新应用筛选
-    const filteredList = this.applyFilters(this.data.clothingList);
-    this.setData({
-      filteredClothingList: filteredList
-    });
+    // 重新请求接口获取数据
+    this.getClothingList();
   },
   
   // 选择颜色
@@ -952,11 +946,8 @@ Page({
       selectedColor: color
     });
     
-    // 重新应用筛选
-    const filteredList = this.applyFilters(this.data.clothingList);
-    this.setData({
-      filteredClothingList: filteredList
-    });
+    // 重新请求接口获取数据
+    this.getClothingList();
   },
   
   // 选择季节
@@ -966,11 +957,8 @@ Page({
       selectedSeason: season
     });
     
-    // 重新应用筛选
-    const filteredList = this.applyFilters(this.data.clothingList);
-    this.setData({
-      filteredClothingList: filteredList
-    });
+    // 重新请求接口获取数据
+    this.getClothingList();
   },
 
   // 获取缺省图片的带签名URL
