@@ -3,7 +3,9 @@ const config = require('../../config/api.js');
 Page({
   data: {
     clothing: null,
-    isLoading: true
+    isLoading: true,
+    primaryCategories: [], // 一级分类
+    secondaryCategories: [] // 二级分类
   },
 
   // 将秒级时间戳转换为年月日格式
@@ -28,9 +30,18 @@ Page({
     return `${year}-${month}-${day}`;
   },
 
+  // 根据分类ID获取分类名称
+  getCategoryNameById: function(categoryId, categories) {
+    if (!categoryId || !categories || categories.length === 0) return '';
+    
+    const category = categories.find(c => c.id == categoryId);
+    return category ? category.name : '';
+  },
+
   onLoad: function (options) {
     const clothingId = options.id;
     if (clothingId) {
+      this.getCategories(); // 获取分类数据
       this.getClothingDetail(clothingId);
     } else {
       wx.showToast({
@@ -40,7 +51,39 @@ Page({
       wx.navigateBack();
     }
   },
-  
+
+  // 获取分类数据
+  getCategories: function() {
+    const selectedMemberId = wx.getStorageSync('selectedMemberId');
+    const members = wx.getStorageSync('members') || [];
+    const selectedMember = members.find(m => m.id === selectedMemberId);
+    const gender = selectedMember && selectedMember.gender === '女' ? 'female' : 'male';
+
+    wx.request({
+      url: config.getFullURL('categories') + '/list',
+      method: 'POST',
+      data: {
+        familyid: wx.getStorageSync('familyid') || '',
+        gender: gender
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          const primary = res.data.filter(c => c.level === 1);
+          const secondary = res.data.filter(c => c.level === 2);
+          this.setData({
+            primaryCategories: primary,
+            secondaryCategories: secondary
+          });
+        } else {
+          console.error('获取分类数据失败', res);
+        }
+      },
+      fail: (err) => {
+        console.error('获取分类数据网络错误', err);
+      }
+    });
+  },
+
   // 编辑衣物
   editClothing: function() {
     const clothingId = this.data.clothing.id;
@@ -48,7 +91,7 @@ Page({
       url: `/pages/clothing-edit/clothing-edit?id=${clothingId}`
     });
   },
-  
+
   // 删除衣物
   deleteClothing: function() {
     const that = this;
@@ -65,7 +108,7 @@ Page({
       }
     });
   },
-  
+
   // 执行删除操作
   performDelete: function(clothingId) {
     wx.request({
@@ -186,6 +229,18 @@ Page({
           if (clothing.purchase_date) {
             clothing.purchase_date = this.formatTimestampToDate(clothing.purchase_date);
           }
+          
+          // 设置原始分类ID
+          clothing.primary_category_id = clothing.primary_category;
+          clothing.secondary_category_id = clothing.secondary_category;
+          
+          // 获取分类名称
+          const primaryCategoryName = this.getCategoryNameById(clothing.primary_category, this.data.primaryCategories);
+          const secondaryCategoryName = this.getCategoryNameById(clothing.secondary_category, this.data.secondaryCategories);
+          
+          // 设置分类名称显示
+          clothing.primary_category = primaryCategoryName || clothing.primary_category;
+          clothing.secondary_category = secondaryCategoryName || clothing.secondary_category;
           
           // 如果有图片URL，则获取带签名的URL
           if (clothing.image_url) {
