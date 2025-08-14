@@ -17,6 +17,40 @@ Page({
     purchaseDate: '',
   },
 
+  // 将秒级时间戳转换为年月日格式
+  formatTimestampToDate: function(timestamp) {
+    if (!timestamp) return '';
+    
+    // 如果是字符串，尝试转换为数字
+    if (typeof timestamp === 'string') {
+      timestamp = parseInt(timestamp);
+    }
+    
+    // 如果是秒级时间戳，转换为毫秒级
+    if (timestamp < 10000000000) {
+      timestamp = timestamp * 1000;
+    }
+    
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  },
+  
+  // 将年月日格式转换为秒级时间戳
+  formatDateToTimestamp: function(dateString) {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return '';
+    }
+    
+    return Math.floor(date.getTime() / 1000);
+  },
+
   onLoad: function (options) {
     const clothingId = options.id;
     if (clothingId) {
@@ -40,7 +74,7 @@ Page({
       method: 'POST',
       data: {
         clothing_id: parseInt(clothingId),
-        user_id: 1
+        userid: wx.getStorageSync('userid'),
       },
       header: {
         'Content-Type': 'application/json'
@@ -56,7 +90,7 @@ Page({
             color: clothing.color || '',
             brand: clothing.brand || '',
             price: clothing.price || '',
-            purchaseDate: clothing.purchase_date || '',
+            purchaseDate: clothing.purchase_date ? this.formatTimestampToDate(clothing.purchase_date) : '',
             imageUrl: clothing.image_url || '',
             cosImageUrl: clothing.image_url || ''
           });
@@ -231,7 +265,7 @@ Page({
       color: this.data.color || '',
       brand: this.data.brand || '',
       price: this.data.price || '',
-      purchase_date: this.data.purchaseDate || '',
+      purchase_date: this.data.purchaseDate ? this.formatDateToTimestamp(this.data.purchaseDate) : '',
       image_url: this.data.cosImageUrl || ''
     };
     
@@ -246,7 +280,7 @@ Page({
     
     // 发送更新请求
     wx.request({
-      url: config.getFullURL('clothing') + `/${clothingId}?user_id=1`,
+      url: config.getFullURL('clothing') + `/${clothingId}?userid=1`,
       method: 'PUT',
       data: formData,
       header: {

@@ -6,6 +6,28 @@ Page({
     isLoading: true
   },
 
+  // 将秒级时间戳转换为年月日格式
+  formatTimestampToDate: function(timestamp) {
+    if (!timestamp) return '';
+    
+    // 如果是字符串，尝试转换为数字
+    if (typeof timestamp === 'string') {
+      timestamp = parseInt(timestamp);
+    }
+    
+    // 如果是秒级时间戳，转换为毫秒级
+    if (timestamp < 10000000000) {
+      timestamp = timestamp * 1000;
+    }
+    
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  },
+
   onLoad: function (options) {
     const clothingId = options.id;
     if (clothingId) {
@@ -47,7 +69,7 @@ Page({
   // 执行删除操作
   performDelete: function(clothingId) {
     wx.request({
-      url: config.getFullURL('clothing') + `/${clothingId}?user_id=1`,
+      url: config.getFullURL('clothing') + `/${clothingId}?userid=1`,
       method: 'DELETE',
       success: (res) => {
         if (res.statusCode === 200) {
@@ -151,7 +173,7 @@ Page({
       method: 'POST',
       data: {
         clothing_id: parseInt(clothingId),
-        user_id: 1
+        userid: wx.getStorageSync('userid')
       },
       header: {
         'Content-Type': 'application/json'
@@ -159,6 +181,11 @@ Page({
       success: (res) => {
         if (res.statusCode === 200) {
           const clothing = res.data;
+          
+          // 将时间戳转换为日期格式
+          if (clothing.purchase_date) {
+            clothing.purchase_date = this.formatTimestampToDate(clothing.purchase_date);
+          }
           
           // 如果有图片URL，则获取带签名的URL
           if (clothing.image_url) {
