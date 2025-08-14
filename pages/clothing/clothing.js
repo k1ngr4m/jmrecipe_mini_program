@@ -10,6 +10,7 @@ Page({
     imageUrl: '',
     cosImageUrl: '',  // COS图片URL
     defaultImageUrl: '', // 缺省图片URL（带签名）
+    cosInstance: null, // 共享的COS实例
     clothingList: [],
     filteredClothingList: [],
     purchaseDate: '',
@@ -71,6 +72,7 @@ Page({
       // this.initCategories();
       this.getCategories(); // 获取分类数据
       this.getBrandList(); // 获取品牌列表
+      this.initCosInstance(); // 初始化COS实例
       this.getClothingList();
     }
   },
@@ -882,25 +884,8 @@ Page({
     const key = match[3]; // clothing/1754496891594_6800.png
     const bucket = bucketWithAppId; // COS SDK可以处理带APPID的bucket名称
     
-    // 引入COS凭证管理器
-    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
-    
-    // 获取有效的凭证
-    cosCredentialsManager.getValidCredentials().then(credentials => {
-      // 初始化COS实例
-      const cos = new COS({
-        getAuthorization: function (options, callback) {
-          callback({
-            TmpSecretId: credentials.tmp_secret_id,
-            TmpSecretKey: credentials.tmp_secret_key,
-            SecurityToken: credentials.token,
-            StartTime: credentials.start_time,
-            ExpiredTime: credentials.expired_time
-          });
-        },
-        SimpleUploadMethod: 'putObject'
-      });
-      
+    // 初始化COS实例
+    this.initCosInstance().then(cos => {
       // 获取带签名的URL
       cos.getObjectUrl({
         Bucket: bucket,
@@ -916,7 +901,7 @@ Page({
         }
       });
     }).catch(error => {
-      console.error('获取COS凭证失败:', error);
+      console.error('初始化COS实例失败:', error);
       callback(cosUrl); // 如果获取失败，返回原始URL
     });
   },
@@ -996,26 +981,8 @@ Page({
     const region = 'ap-shanghai';
     const key = defaultImagePath;
     
-    // 引入COS凭证管理器
-    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
-    const COS = require('../../utils/cos-wx-sdk-v5.js');
-    
-    // 获取有效的凭证
-    cosCredentialsManager.getValidCredentials().then(credentials => {
-      // 初始化COS实例
-      const cos = new COS({
-        getAuthorization: function (options, callback) {
-          callback({
-            TmpSecretId: credentials.tmp_secret_id,
-            TmpSecretKey: credentials.tmp_secret_key,
-            SecurityToken: credentials.token,
-            StartTime: credentials.start_time,
-            ExpiredTime: credentials.expired_time
-          });
-        },
-        SimpleUploadMethod: 'putObject'
-      });
-      
+    // 初始化COS实例
+    this.initCosInstance().then(cos => {
       // 获取带签名的URL
       cos.getObjectUrl({
         Bucket: bucket,
@@ -1035,8 +1002,44 @@ Page({
         }
       });
     }).catch(error => {
-      console.error('获取COS凭证失败:', error);
+      console.error('初始化COS实例失败:', error);
       callback(''); // 如果获取失败，返回空字符串
+    });
+  },
+
+  // 初始化COS实例
+  initCosInstance: function() {
+    // 如果已经有COS实例，则直接返回
+    if (this.data.cosInstance) {
+      return Promise.resolve(this.data.cosInstance);
+    }
+    
+    // 引入COS凭证管理器
+    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
+    const COS = require('../../utils/cos-wx-sdk-v5.js');
+    
+    // 获取有效的凭证
+    return cosCredentialsManager.getValidCredentials().then(credentials => {
+      // 初始化COS实例
+      const cos = new COS({
+        getAuthorization: function (options, callback) {
+          callback({
+            TmpSecretId: credentials.tmp_secret_id,
+            TmpSecretKey: credentials.tmp_secret_key,
+            SecurityToken: credentials.token,
+            StartTime: credentials.start_time,
+            ExpiredTime: credentials.expired_time
+          });
+        },
+        SimpleUploadMethod: 'putObject'
+      });
+      
+      // 缓存COS实例
+      this.setData({
+        cosInstance: cos
+      });
+      
+      return cos;
     });
   },
   
