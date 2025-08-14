@@ -4,6 +4,7 @@ const config = {
   dev: {
     baseURL: 'http://localhost:8088',
     api: {
+      user: 'api/users',
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口
