@@ -1,88 +1,138 @@
 .container {
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #f9f5e6;
   min-height: 100vh;
 }
 
 .edit-form {
   background-color: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 18px;
+  padding: 25px 20px 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .form-item {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .label {
   display: block;
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6d5836;
+  margin-bottom: 10px;
 }
 
+/* 更具体的选择器以提高优先级 */
+.edit-form .form-item .input {
+  width: 100% !important;
+  padding: 16px 18px !important;
+  border: 1px solid #e0d6c0 !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+  font-size: 16px !important;
+  background-color: #fcfaf5 !important;
+  transition: all 0.2s !important;
+  color: #333 !important;
+  min-height: 50px !important; /* 确保最小高度 */
+  line-height: 1.5 !important; /* 确保行高合适 */
+}
+
+/* 通用input样式 */
 .input {
   width: 100%;
-  height: 45px;
-  padding: 0 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.input:focus {
-  outline: none;
-  border-color: #8B5A2B;
+  padding: 16px 18px !important;
+  border: 1px solid #e0d6c0 !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+  font-size: 16px !important;
+  background-color: #fcfaf5 !important;
+  transition: all 0.2s !important;
+  color: #333 !important;
+  min-height: 50px !important; /* 确保最小高度 */
+  line-height: 1.5 !important; /* 确保行高合适 */
 }
 
 .picker, .date-picker {
   width: 100%;
-  height: 45px;
-  padding: 0 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 16px 18px !important;
+  border: 1px solid #e0d6c0 !important;
+  border-radius: 12px !important;
+  box-sizing: border-box;
+  font-size: 16px;
+  background-color: #fcfaf5;
+  transition: all 0.2s;
   color: #333;
-  background-color: white;
   display: flex;
   align-items: center;
   cursor: pointer;
+  position: relative;
+  min-height: 50px !important; /* 确保最小高度与input一致 */
+}
+
+.input:focus, .picker:active, .date-picker:active {
+  border-color: #d8b95f !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(216, 185, 95, 0.1) !important;
+  outline: none !important;
+}
+
+.edit-form .form-item .input:focus {
+  border-color: #d8b95f !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(216, 185, 95, 0.1) !important;
+  outline: none !important;
+}
+
+.picker::after, .date-picker::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #a68d63;
 }
 
 .image-upload {
   width: 100%;
-}
-
-.upload-area {
-  width: 100%;
-  height: 150px;
-  border: 1px dashed #ddd;
-  border-radius: 6px;
+  height: 160px;
+  border: 2px dashed #e0d6c0;
+  border-radius: 14px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #999;
-  font-size: 14px;
+  background-color: #fcfaf5;
+  transition: all 0.3s;
   cursor: pointer;
-  transition: border-color 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
-.upload-area:active {
-  border-color: #8B5A2B;
+.image-upload:hover {
+  border-color: #d8b95f;
+  background-color: rgba(216, 185, 95, 0.08);
+  box-shadow: 0 4px 12px rgba(216, 185, 95, 0.1);
+}
+
+.image-upload:active {
+  transform: scale(0.98);
 }
 
 .preview-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 12px;
 }
 
 .upload-text {
-  color: #999;
+  font-size: 16px;
+  color: #8b6e41;
 }
 
 .form-actions {
@@ -93,21 +143,47 @@
 
 .cancel-btn, .save-btn {
   flex: 1;
-  padding: 12px 20px;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 600;
   border: none;
+  transition: all 0.3s;
+  letter-spacing: 1px;
 }
 
 .cancel-btn {
-  background-color: #9E9E9E;
+  background-color: #999;
   color: white;
   margin-right: 10px;
+  box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3);
+}
+
+.cancel-btn:hover {
+  background-color: #888;
+  box-shadow: 0 6px 20px rgba(153, 153, 153, 0.4);
+  transform: translateY(-2px);
+}
+
+.cancel-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(153, 153, 153, 0.3);
 }
 
 .save-btn {
-  background-color: #8B5A2B;
+  background-color: #d8b95f;
   color: white;
   margin-left: 10px;
+  box-shadow: 0 4px 15px rgba(216, 185, 95, 0.3);
+}
+
+.save-btn:hover {
+  background-color: #c7a84a;
+  box-shadow: 0 6px 20px rgba(216, 185, 95, 0.4);
+  transform: translateY(-2px);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(216, 185, 95, 0.3);
 }

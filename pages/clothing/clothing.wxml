@@ -40,24 +40,24 @@
   </scroll-view>
   
   <!-- 颜色筛选 -->
-  <scroll-view class="color-filter" scroll-x>
-    <view 
-      class="color-item {{selectedColor === '' ? 'active' : ''}}" 
-      bindtap="selectColor" 
-      data-color=""
-    >
-      全部
-    </view>
-    <block wx:for="{{colorOptions}}" wx:key="index">
-      <view 
-        class="color-circle-item {{selectedColor === item ? 'active' : ''}}" 
-        bindtap="selectColor" 
-        data-color="{{item}}"
-        style="background-color: {{getColorValue(item)}} !important;"
-      >
-      </view>
-    </block>
-  </scroll-view>
+<!--  <scroll-view class="color-filter" scroll-x>-->
+<!--    <view -->
+<!--      class="color-item {{selectedColor === '' ? 'active' : ''}}" -->
+<!--      bindtap="selectColor" -->
+<!--      data-color=""-->
+<!--    >-->
+<!--      全部-->
+<!--    </view>-->
+<!--    <block wx:for="{{colorOptions}}" wx:key="index">-->
+<!--      <view -->
+<!--        class="color-circle-item {{selectedColor === item ? 'active' : ''}}" -->
+<!--        bindtap="selectColor" -->
+<!--        data-color="{{item}}"-->
+<!--        style="background-color: {{getColorValue(item)}} !important;"-->
+<!--      >-->
+<!--      </view>-->
+<!--    </block>-->
+<!--  </scroll-view>-->
   
   <!-- 季节筛选 -->
   <scroll-view class="season-filter" scroll-x>

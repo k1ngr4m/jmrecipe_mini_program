@@ -717,9 +717,7 @@ Page({
       clothing.primary_category = primaryCategoryName || clothing.primary_category;
       clothing.secondary_category = secondaryCategoryName || clothing.secondary_category;
     });
-    
-    console.log('处理后的衣物列表:', clothingList);
-    
+
     // 更新总数
     const totalCount = clothingList.length;
     
