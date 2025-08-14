@@ -63,7 +63,8 @@ Page({
       url: config.getFullURL('clothing') + '/brands/search',
       method: 'POST',
       data: {
-        keyword: keyword
+        keyword: keyword,
+        familyid: wx.getStorageSync('familyid')
       },
       header: {
         'Content-Type': 'application/json'
@@ -217,7 +218,8 @@ Page({
         brand_id: this.data.currentBrand.id,
         brand_update: {
           name: this.data.name.trim()
-        }
+        },
+        familyid: wx.getStorageSync('familyid') || '',
       };
 
       wx.request({

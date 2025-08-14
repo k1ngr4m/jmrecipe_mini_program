@@ -224,7 +224,7 @@ Page({
     
     // 查询用户family信息
     wx.request({
-      url: config.getFullURL('familyQuery'),
+      url: config.getFullURL('family') + '/query',
       method: 'POST',
       data: {
         openid: openid
@@ -271,7 +271,7 @@ Page({
     };
     
     wx.request({
-      url: config.getFullURL('familyCreate'),
+      url: config.getFullURL('family') + '/create',
       method: 'POST',
       data: familyData,
       header: {
@@ -280,7 +280,7 @@ Page({
       success: (res) => {
         if (res.statusCode === 200 && res.data) {
           // 保存新创建的family信息到本地存储
-          wx.setStorageSync('family_id', res.data.family_id);
+          wx.setStorageSync('familyid', res.data.familyid);
           wx.setStorageSync('family_name', res.data.family_name);
           
           // 更新页面显示

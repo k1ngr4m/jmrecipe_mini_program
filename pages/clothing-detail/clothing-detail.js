@@ -112,8 +112,12 @@ Page({
   // 执行删除操作
   performDelete: function(clothingId) {
     wx.request({
-      url: config.getFullURL('clothing') + `/${clothingId}?userid=1`,
-      method: 'DELETE',
+      url: config.getFullURL('clothing') + `/delete`,
+      method: 'POST',
+      data: {
+        userid: wx.getStorageSync('userid'),
+        clothing_id: clothingId
+      },
       success: (res) => {
         if (res.statusCode === 200) {
           wx.showToast({

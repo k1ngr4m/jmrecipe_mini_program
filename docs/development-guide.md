@@ -11,8 +11,8 @@
 #### 2.1.1 用户登录
 - 点击「我的」tab → 调用 wx.login() 获取 openid
 - 若数据库无此用户：
-  - 创建用户记录（含 nickname、openid、头像 URL、family_id）
-  - 自动生成 family_id（可存储于 family 表）
+  - 创建用户记录（含 nickname、openid、头像 URL、familyid）
+  - 自动生成 familyid（可存储于 family 表）
 - 登录后展示：nickname、family_name、头像。
 
 #### 2.1.2 成员管理
@@ -34,7 +34,7 @@
 #### 2.2.1 智能衣橱（衣）
 
 ##### 整体说明
-- 整个衣橱的数据根据family_id中的member_id区分，即一个member_id对应一个衣橱数据，并且区分性别。性别只影响默认分类。
+- 整个衣橱的数据根据familyid中的member_id区分，即一个member_id对应一个衣橱数据，并且区分性别。性别只影响默认分类。
 - 要有一个衣橱表存衣橱数据，可以切换衣橱，每一个member_id对应一个衣橱id
 
 ##### 列表页
@@ -69,7 +69,7 @@
   4. 适用季节展示为下拉框，值为"春、夏、秋、冬"，支持多选
   5. 购买日期弹出日期选择，精确到日，转换为秒级别时间戳转给后端保存。
   6. 价格为输入框，只能输入为大于0的数字，展示人民币单位¥
-  7. 点击确定提交表单，存到数据库中（包括user_id、member_id、family_id、衣橱id等)
+  7. 点击确定提交表单，存到数据库中（包括userid、member_id、familyid、衣橱id等)
 - 「智能识别」功能待设计，点击提示"正在开发中"
 
 ##### 服装详情页
@@ -96,7 +96,7 @@
 
 ### 3.2 数据库通用字段要求
 - 必含字段：id、isdel、created_at、updated_at。
-- 尽量包含：user_id、member_id、family_id（便于隔离与查询）。
+- 尽量包含：userid、member_id、familyid（便于隔离与查询）。
 - 删除逻辑：软删除（isdel 设置为 "1"）。
 - 列表默认排序：updated_at 倒序。
 

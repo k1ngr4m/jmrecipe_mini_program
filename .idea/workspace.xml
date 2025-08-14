@@ -6,7 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRD.md" beforeDir="false" afterPath="$PROJECT_DIR$/PRD.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/development-guide.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/development-guide.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/brand/brand.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/brand/brand.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/brand/brand.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/brand/brand.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/member/member.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +83,7 @@
       <workItem from="1754807667512" duration="31601000" />
       <workItem from="1754967262184" duration="14780000" />
       <workItem from="1755002598018" duration="8377000" />
-      <workItem from="1755067074659" duration="3223000" />
+      <workItem from="1755067074659" duration="21312000" />
     </task>
     <servers />
   </component>

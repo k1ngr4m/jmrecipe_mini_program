@@ -72,7 +72,7 @@ Page({
     console.log('创建默认成员请求数据:', requestData);
 
     wx.request({
-      url: config.getFullURL('familyMembers') + '/create',
+      url: config.getFullURL('family') + '/members/create',
       method: 'POST',
       data: requestData,
       header: {
@@ -118,7 +118,7 @@ Page({
     }
 
     wx.request({
-      url: config.getFullURL('familyMembers') + '/list',
+      url: config.getFullURL('family') + '/members/list',
       method: 'POST',
       data: {
         userid: userid,
@@ -282,7 +282,7 @@ Page({
     console.log('发送的数据:', JSON.stringify(requestData, null, 2));
 
     wx.request({
-      url: config.getFullURL('familyMembers') + '/create',
+      url: config.getFullURL('family') + '/members/create',
       method: 'POST',
       data: requestData,
       header: {
