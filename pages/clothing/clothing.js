@@ -909,6 +909,12 @@ Page({
   // 切换一级分类
   switchPrimaryCategory: function(e) {
     const primaryCategory = e.currentTarget.dataset.category;
+    
+    // 如果点击的是已经选中的一级分类，则不重复调用接口
+    if (this.data.currentPrimaryCategory === primaryCategory) {
+      return;
+    }
+    
     let currentSecondaryCategories = [];
     
     // 如果选择的是"总览"，则显示所有二级分类；否则显示当前一级分类下的二级分类
@@ -931,6 +937,12 @@ Page({
   // 切换二级分类
   switchSecondaryCategory: function(e) {
     const secondaryCategory = e.currentTarget.dataset.category;
+    
+    // 如果点击的是已经选中的二级分类，则不重复调用接口
+    if (this.data.currentSecondaryCategory === secondaryCategory) {
+      return;
+    }
+    
     this.setData({
       currentSecondaryCategory: secondaryCategory
     });
@@ -942,6 +954,12 @@ Page({
   // 选择颜色
   selectColor: function(e) {
     const color = e.currentTarget.dataset.color;
+    
+    // 如果点击的是已经选中的颜色，则不重复调用接口
+    if (this.data.selectedColor === color) {
+      return;
+    }
+    
     this.setData({
       selectedColor: color
     });
@@ -953,6 +971,12 @@ Page({
   // 选择季节
   selectSeason: function(e) {
     const season = e.currentTarget.dataset.season;
+    
+    // 如果点击的是已经选中的季节，则不重复调用接口
+    if (this.data.selectedSeason === season) {
+      return;
+    }
+    
     this.setData({
       selectedSeason: season
     });
