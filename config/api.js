@@ -2,7 +2,7 @@
 const config = {
   // 开发环境配置
   dev: {
-    baseURL: 'http://192.168.70.169:8088',
+    baseURL: 'http://localhost:8088',
     api: {
       user: 'api/users',
       clothing: '/api/wardrobe/clothing',
