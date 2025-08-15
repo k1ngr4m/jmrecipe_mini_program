@@ -40,6 +40,58 @@ Page({
     }
   },
   
+  // 处理生日时间戳，转换为日期格式并计算年龄
+  processBirthday(birthdayTimestamp) {
+    if (!birthdayTimestamp) {
+      return {
+        formattedBirthday: '',
+        age: ''
+      };
+    }
+    
+    // 如果是时间戳（数字），则转换为日期对象
+    let birthdayDate;
+    if (typeof birthdayTimestamp === 'number') {
+      // 假设时间戳是秒级的，如果不是需要乘以1000
+      birthdayDate = new Date(birthdayTimestamp * 1000);
+    } else if (typeof birthdayTimestamp === 'string') {
+      // 如果是字符串格式的日期
+      birthdayDate = new Date(birthdayTimestamp);
+    } else {
+      // 如果已经是日期对象
+      birthdayDate = new Date(birthdayTimestamp);
+    }
+    
+    // 检查日期是否有效
+    if (isNaN(birthdayDate.getTime())) {
+      return {
+        formattedBirthday: birthdayTimestamp,
+        age: ''
+      };
+    }
+    
+    // 格式化日期为 YYYY-MM-DD
+    const year = birthdayDate.getFullYear();
+    const month = String(birthdayDate.getMonth() + 1).padStart(2, '0');
+    const day = String(birthdayDate.getDate()).padStart(2, '0');
+    const formattedBirthday = `${year}-${month}-${day}`;
+    
+    // 计算年龄
+    const today = new Date();
+    let age = today.getFullYear() - birthdayDate.getFullYear();
+    const monthDiff = today.getMonth() - birthdayDate.getMonth();
+    
+    // 如果今年的生日还没到，则年龄减1
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdayDate.getDate())) {
+      age--;
+    }
+    
+    return {
+      formattedBirthday: formattedBirthday,
+      age: age
+    };
+  },
+  
   // 检查并创建默认成员
   checkAndCreateDefaultMember() {
     const members = this.data.members;
@@ -129,8 +181,16 @@ Page({
       },
       success: (res) => {
         if (res.statusCode === 200) {
+          // 处理成员数据，转换生日时间戳并计算年龄
+          const processedMembers = res.data.map(member => {
+            return {
+              ...member,
+              ...this.processBirthday(member.birthday)
+            };
+          });
+          
           this.setData({
-            members: res.data,
+            members: processedMembers,
             hasLoadedMembers: true
           });
           
@@ -239,8 +299,99 @@ Page({
     });
   },
 
+  // 表单提交事件处理（仿照 clothing-add 页面）
+  addMember(e) {
+    console.log('表单提交事件触发');
+    
+    const formData = e.detail.value;
+    console.log('表单数据:', formData);
+    
+    // 添加其他字段到formData（在验证之前）
+    formData.name = this.data.name || '';
+    formData.gender = this.data.gender || '';
+    formData.birthday = this.data.birthday || '';
+    
+    // 验证必填字段
+    if (!formData.name || !formData.gender || !formData.birthday) {
+      wx.showToast({
+        title: '请填写所有必填字段',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 验证日期格式
+    if (formData.birthday && !/^\d{4}-\d{2}-\d{2}$/.test(formData.birthday)) {
+      wx.showToast({
+        title: '日期格式不正确',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 直接提交表单
+    this.submitMemberForm(formData);
+  },
+  
+  // 提交成员表单（仿照 clothing-add 页面）
+  submitMemberForm(formData) {
+    const userid = wx.getStorageSync('userid') || '';
+    const familyid = wx.getStorageSync('familyid') || '';
+    if (!userid) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
 
-  // 保存成员
+    // 准备发送的数据，确保格式正确
+    const requestData = {
+      userid: userid,
+      familyid: familyid,
+      name: formData.name,
+      gender: formData.gender,
+      birthday: formData.birthday,
+    };
+    
+    console.log('发送的数据:', JSON.stringify(requestData, null, 2));
+
+    wx.request({
+      url: config.getFullURL('family') + '/members/create',
+      method: 'POST',
+      data: requestData,
+      header: {
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.showToast({
+            title: '创建成功',
+            icon: 'success'
+          });
+          
+          // 关闭弹窗
+          this.hideAddModal();
+          
+          // 刷新列表
+          this.getMemberList();
+        } else {
+          wx.showToast({
+            title: '操作失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  // 保存成员（保持原有函数以确保向后兼容）
   saveMember() {
     const userid = wx.getStorageSync('userid') || '';
     const familyid = wx.getStorageSync('familyid') || '';

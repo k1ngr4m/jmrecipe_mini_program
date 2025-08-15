@@ -8,7 +8,7 @@
         <view class="member-item {{selectedMemberId === item.memberid ? 'selected' : ''}}" wx:for="{{members}}" wx:key="memberid" bindtap="selectMember" data-id="{{item.memberid}}">
           <view class="member-info">
             <text class="member-name">{{item.name}}</text>
-            <text class="member-detail">{{item.gender}} | {{item.birthday}}</text>
+            <text class="member-detail">{{item.gender === 1 ? '男' : item.gender === 2 ? '女' : item.gender}} | {{item.formattedBirthday}}<text wx:if="{{item.age !== ''}}"> ({{item.age}}岁)</text></text>
           </view>
           <view class="member-selected-icon" wx:if="{{selectedMemberId === item.memberid}}">
             <text class="selected-icon">✓</text>
@@ -34,35 +34,42 @@
   <!-- 新增成员表单弹窗 -->
   <view class="modal" wx:if="{{showModal}}">
     <view class="modal-content">
-      <view class="modal-header">
-        <text class="modal-title">新增成员</text>
-        <button class="close-btn" bindtap="hideAddModal">✕</button>
-      </view>
-      <form class="add-form" bindsubmit="saveMember">
-        <view class="form-item">
-          <text class="label">姓名 *</text>
-          <input class="input" name="name" value="{{name}}" bindinput="onNameInput" placeholder="请输入成员姓名" required />
-        </view>
-        <view class="form-item">
-          <text class="label">性别 *</text>
-          <picker mode="selector" range="{{genderOptions}}" value="{{genderIndex}}" bindchange="onGenderChange">
-            <view class="picker">
-              <text wx:if="{{gender}}">{{gender}}</text>
-              <text wx:else>请选择性别</text>
+      <scroll-view class="modal-form-wrapper" scroll-y>
+        <form class="modal-form" bindsubmit="addMember">
+          <view class="modal-header">
+            <text class="modal-title">新增成员</text>
+            <button class="close-btn" bindtap="hideAddModal">✕</button>
+          </view>
+          
+          <!-- 基本信息组 -->
+          <view class="form-group">
+            <view class="form-item">
+              <text class="label">姓名 *</text>
+              <input class="input" name="name" value="{{name}}" bindinput="onNameInput" placeholder="请输入成员姓名" />
             </view>
-          </picker>
-        </view>
-        <view class="form-item">
-          <text class="label">生日 *</text>
-          <picker mode="date" value="{{birthday}}" bindchange="bindDateChange">
-            <view class="date-picker">
-              <text wx:if="{{birthday}}">{{birthday}}</text>
-              <text wx:else>请选择生日</text>
+
+            <view class="form-item">
+              <text class="label">性别 *</text>
+              <picker mode="selector" range="{{genderOptions}}" value="{{genderIndex}}" bindchange="onGenderChange">
+                <view class="picker">
+                  {{genderOptions[genderIndex]}}
+                </view>
+              </picker>
             </view>
-          </picker>
-        </view>
-        <button class="submit-btn" form-type="submit">确定</button>
-      </form>
+
+            <view class="form-item">
+              <text class="label">生日 *</text>
+              <picker mode="date" value="{{birthday}}" bindchange="bindDateChange">
+                <view class="picker">
+                  {{birthday ? birthday : '请选择生日'}}
+                </view>
+              </picker>
+            </view>
+          </view>
+
+          <button class="submit-btn" form-type="submit">确定</button>
+        </form>
+      </scroll-view>
     </view>
   </view>
 </view>
