@@ -2,14 +2,16 @@
 const config = {
   // 开发环境配置
   dev: {
-    baseURL: 'http://localhost:8088',
+    // baseURL: 'http://localhost:8088',
+    baseURL: 'http://192.168.70.169:8088',
     api: {
       user: 'api/users',
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口
       family: '/api/family',
-      categories: '/api/categories'
+      categories: '/api/categories',
+      weather: '/api/weather/now' // 天气接口
     }
   },
   
@@ -22,7 +24,8 @@ const config = {
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口
       family: '/api/family',
-      categories: '/api/categories'
+      categories: '/api/categories',
+      weather: '/api/weather/now' // 天气接口
     }
   }
 }
