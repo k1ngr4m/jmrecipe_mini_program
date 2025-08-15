@@ -1,12 +1,12 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/my/my",
     "pages/clothing/clothing-add/clothing-add",
     "pages/clothing/clothing-detail/clothing-detail",
     "pages/clothing/clothing-edit/clothing-edit",
     "pages/clothing/clothing-list/clothing-list",
     "pages/settings/profile/profile",
-    "pages/settings/my/my",
     "pages/settings/member/member",
     "pages/settings/brand/brand"
   ],
