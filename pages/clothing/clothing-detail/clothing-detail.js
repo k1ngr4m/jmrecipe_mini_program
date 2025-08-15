@@ -318,5 +318,16 @@ Page({
         }, 1500);
       }
     });
+  },
+
+  // 预览图片
+  previewImage: function(e) {
+    const imageUrl = e.currentTarget.dataset.url;
+    if (imageUrl) {
+      wx.previewImage({
+        current: imageUrl,
+        urls: [imageUrl]
+      });
+    }
   }
 });

@@ -2,7 +2,7 @@
   <view class="clothing-detail" wx:if="{{clothing}}">
     <!-- 图片展示 -->
     <view class="image-section">
-      <image wx:if="{{clothing.image_url}}" src="{{clothing.image_url}}" class="clothing-image" mode="aspectFit" />
+      <image wx:if="{{clothing.image_url}}" src="{{clothing.image_url}}" class="clothing-image" mode="aspectFit" bindtap="previewImage" data-url="{{clothing.image_url}}" />
       <view wx:else class="no-image">暂无图片</view>
     </view>
     
