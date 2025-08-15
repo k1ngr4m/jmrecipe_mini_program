@@ -4,7 +4,53 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 代码丢了" />
+    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 更改dev url">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mock/clothing.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mock/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/brand/brand.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/brand/brand.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/brand/brand.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/brand/brand.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/brand/brand.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/brand/brand.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/brand/brand.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/brand/brand.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-detail/clothing-detail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-detail/clothing-detail.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-detail/clothing-detail.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-detail/clothing-detail.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-detail/clothing-detail.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-edit/clothing-edit.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-edit/clothing-edit.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-edit/clothing-edit.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing-edit/clothing-edit.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/food/food.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/food/food.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/food/food.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/food/food.wxss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/living/living.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/living/living.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/living/living.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/living/living.wxss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/member/member.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/profile/profile.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/profile/profile.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/random-match/random-match.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/random-match/random-match.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/random-match/random-match.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/random-match/random-match.wxss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/travel/travel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/travel/travel.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/travel/travel.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/travel/travel.wxss" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,6 +97,8 @@
       <recent name="$PROJECT_DIR$/images/index" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/settings" />
+      <recent name="$PROJECT_DIR$/pages/clothing" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -97,7 +145,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755181375092</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat: 更改dev url">
+      <option name="closed" value="true" />
+      <created>1755181483259</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1755181483259</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,6 +162,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: 不重复登录" />
     <MESSAGE value="feat: 代码丢了" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 代码丢了" />
+    <MESSAGE value="feat: 更改dev url" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 更改dev url" />
   </component>
 </project>

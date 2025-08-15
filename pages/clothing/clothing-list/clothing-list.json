@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "衣橱列表",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
   "usingComponents": {}
 }

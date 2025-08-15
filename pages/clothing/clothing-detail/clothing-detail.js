@@ -1,4 +1,4 @@
-const config = require('../../config/api.js');
+const config = require('../../../config/api.js');
 
 Page({
   data: {
@@ -48,7 +48,9 @@ Page({
         title: '参数错误',
         icon: 'none'
       });
-      wx.navigateBack();
+      setTimeout(() => {
+        wx.navigateBack();
+      }, 1500);
     }
   },
 
@@ -88,7 +90,7 @@ Page({
   editClothing: function() {
     const clothingId = this.data.clothing.id;
     wx.navigateTo({
-      url: `/pages/clothing-edit/clothing-edit?id=${clothingId}`
+      url: `/pages/clothing/clothing-edit/clothing-edit?id=${clothingId}`
     });
   },
 
@@ -125,8 +127,18 @@ Page({
             icon: 'success'
           });
           
-          // 返回上一页
+          // 返回上一页并刷新列表
           setTimeout(() => {
+            // 获取页面栈
+            const pages = getCurrentPages();
+            if (pages.length > 1) {
+              // 获取上一个页面实例
+              const prevPage = pages[pages.length - 2];
+              // 如果上一个页面是clothing列表页，则调用其刷新方法
+              if (prevPage && typeof prevPage.refreshData === 'function') {
+                prevPage.refreshData();
+              }
+            }
             wx.navigateBack();
           }, 1500);
         } else {
@@ -172,11 +184,11 @@ Page({
     
     const bucketWithAppId = match[1]; // jmrecipe-1309147067
     const region = match[2]; // ap-shanghai
-    const key = match[3]; // clothing/1754496891594_6800.png
+    const key = match[3]; // clothing-list/1754496891594_6800.png
     
     // 引入COS凭证管理器
-    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
-    const COS = require('../../utils/cos-wx-sdk-v5.js');
+    const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
+    const COS = require('../../../utils/cos-wx-sdk-v5.js');
     
     // 获取有效的凭证
     cosCredentialsManager.getValidCredentials().then(credentials => {
@@ -266,7 +278,9 @@ Page({
             title: '衣物不存在',
             icon: 'none'
           });
-          wx.navigateBack();
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
         } else if (res.statusCode === 422) {
           // 专门处理422错误，显示更详细的错误信息
           let errorMsg = '数据验证失败';
@@ -281,13 +295,17 @@ Page({
             title: errorMsg,
             icon: 'none'
           });
-          wx.navigateBack();
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
         } else {
           wx.showToast({
             title: '获取详情失败',
             icon: 'none'
           });
-          wx.navigateBack();
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
         }
       },
       fail: () => {
@@ -295,7 +313,9 @@ Page({
           title: '网络错误',
           icon: 'none'
         });
-        wx.navigateBack();
+        setTimeout(() => {
+          wx.navigateBack();
+        }, 1500);
       }
     });
   }

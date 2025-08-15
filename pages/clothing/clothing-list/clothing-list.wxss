@@ -271,11 +271,12 @@ page {
   width: 90%;
   max-width: 400px;
   max-height: 85vh;
-  overflow-y: auto;
   transform: scale(0.8) translateY(20px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* 更柔和的阴影 */
   opacity: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal.modal-visible .modal-content {
@@ -291,6 +292,10 @@ page {
   border-bottom: 1px solid #f0e8d6;
   background-color: #fdfcf9; /* 更浅的背景色 */
   border-radius: 18px 18px 0 0;
+  flex-shrink: 0; /* 防止标题栏被压缩 */
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .modal-title {
@@ -350,6 +355,12 @@ page {
   transform: translateY(0);
 }
 
+.modal-form-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .modal-form {
   padding: 25px 20px 20px;
 }
@@ -358,6 +369,9 @@ page {
   margin-bottom: 25px;
   padding-bottom: 22px;
   border-bottom: 1px dashed #f0e8d6;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* 增加表单项之间的间距 */
 }
 
 .form-group:last-child {
@@ -367,7 +381,7 @@ page {
 }
 
 .form-item {
-  margin-bottom: 22px;
+  margin-bottom: 0; /* 移除原来的边距 */
 }
 
 .form-item:last-child {
@@ -376,7 +390,7 @@ page {
 
 .label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* 减少标签和输入框之间的间距 */
   font-weight: 600;
   color: #6d5836;
   font-size: 15px;
@@ -389,13 +403,15 @@ page {
 
 .input, .picker {
   width: 100%;
-  padding: 14px 16px;
+  padding: 16px 18px;
   border: 1px solid #e0d6c0;
   border-radius: 12px;
   box-sizing: border-box;
   font-size: 16px;
   background-color: #fcfaf5;
   transition: all 0.2s;
+  min-height: 50px; /* 确保最小高度与clothing-edit页面一致 */
+  line-height: 1.5; /* 确保行高合适 */
 }
 
 .input:focus, .picker:active {
@@ -410,6 +426,7 @@ page {
   align-items: center;
   color: #333;
   position: relative;
+  min-height: 50px; /* 确保最小高度与input一致 */
 }
 
 .picker::after {
@@ -440,6 +457,7 @@ page {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  margin-bottom: 10px; /* 添加底部边距 */
 }
 
 .image-upload:hover {

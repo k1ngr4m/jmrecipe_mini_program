@@ -1,9 +1,0 @@
-<view class="container">
-  <view class="header">
-    <text class="title">随意搭</text>
-  </view>
-  
-  <view class="match-content">
-    <text class="tip">随机搭配功能正在开发中...</text>
-  </view>
-</view>

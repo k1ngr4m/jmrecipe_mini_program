@@ -1,4 +1,4 @@
-const config = require('../../config/api.js');
+const config = require('../../../config/api.js');
 
 Page({
   data: {

@@ -8,13 +8,13 @@ Page({
   
   onLoad() {
     // 检查是否已登录
-    const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
-    if (hasLoggedIn) {
-      return;
-    }
-    else {
-      this.getUserCode()
-    }
+    // const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
+    // if (hasLoggedIn) {
+    //   return;
+    // }
+    // else {
+    this.getUserCode()
+    // }
   },
 
   getUserCode() {
@@ -111,25 +111,8 @@ Page({
 
   goToClothing() {
     wx.navigateTo({
-      url: '/pages/clothing/clothing'
+      url: '/pages/clothing/clothing-list/clothing-list'
     })
   },
 
-  goToFood() {
-    wx.navigateTo({
-      url: '/pages/food/food'
-    })
-  },
-  
-  goToLiving() {
-    wx.navigateTo({
-      url: '/pages/living/living'
-    })
-  },
-  
-  goToTravel() {
-    wx.navigateTo({
-      url: '/pages/travel/travel'
-    })
-  }
 })

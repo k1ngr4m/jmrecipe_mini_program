@@ -107,14 +107,14 @@ Page({
   // 跳转到成员管理页面
   goToMemberManagement() {
     wx.navigateTo({
-      url: '/pages/member/member'
+      url: '/pages/settings/member/member'
     });
   },
   
   // 跳转到品牌管理页面
   goToBrandManagement() {
     wx.navigateTo({
-      url: '/pages/brand/brand'
+      url: '/pages/settings/brand/brand'
     });
   },
   

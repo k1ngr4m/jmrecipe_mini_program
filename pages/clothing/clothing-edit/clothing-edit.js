@@ -1,6 +1,6 @@
-const config = require('../../config/api.js');
-const COS = require('../../utils/cos-wx-sdk-v5.js');
-const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
+const config = require('../../../config/api.js');
+const COS = require('../../../utils/cos-wx-sdk-v5.js');
+const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
 
 Page({
   data: {

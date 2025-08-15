@@ -1,34 +1,12 @@
-const COS = require('../../utils/cos-wx-sdk-v5.js');
-const config = require('../../config/api.js');
+const COS = require('../../../utils/cos-wx-sdk-v5.js');
+const config = require('../../../config/api.js');
 
 Page({
   data: {
     title: '衣橱列表页',
-    showModal: false,
-    showAddOptionsModal: false, // 新增服装选择弹窗
     showSearchModal: false,
-    imageUrl: '',
-    cosImageUrl: '',  // COS图片URL
-    defaultImageUrl: '', // 缺省图片URL（带签名）
-    cosInstance: null, // 共享的COS实例
     clothingList: [],
     filteredClothingList: [],
-    purchaseDate: '',
-    name: '',
-    primaryCategory: '', // 一级分类
-    secondaryCategory: '', // 二级分类
-    color: '',
-    colorIndex: 0,
-    colorOptions: ['红', '橙', '黄', '绿', '蓝', '紫', '黑', '白'],
-    brand: '',
-    brandList: [], // 品牌列表
-    brandIndex: -1, // 品牌选择索引
-    price: '',
-    season: '', // 适用季节
-    seasonIndex: -1, // 季节选择索引
-    seasonOptions: ['春', '夏', '秋', '冬'],
-    searchKeyword: '',
-    searchResults: [],
     currentPrimaryCategory: '总览', // 当前选中的一级分类
     currentSecondaryCategory: 'all', // 当前选中的二级分类
     selectedColor: '', // 当前选中的颜色
@@ -37,10 +15,7 @@ Page({
     // 分类数据
     primaryCategories: [], // 一级分类
     secondaryCategories: [], // 二级分类
-    currentSecondaryCategories: [], // 当前一级分类下的二级分类
-    primaryCategoryIndex: -1, // 一级分类选择索引
-    secondaryCategoryIndex: -1, // 二级分类选择索引
-    secondaryCategoryOptions: [], // 当前一级分类下的二级分类选项
+    currentSecondaryCategories: [], // 当前展示的二级分类（默认显示所有）
     // 按性别区分的一级分类和二级分类
     maleCategories: {
     },
@@ -75,6 +50,37 @@ Page({
       this.initCosInstance(); // 初始化COS实例
       this.getClothingList();
     }
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    console.log('用户下拉刷新');
+    // 显示加载提示
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    });
+    
+    // 重新加载数据
+    this.refreshData();
+  },
+
+  /**
+   * 刷新页面数据
+   */
+  refreshData: function() {
+    console.log('刷新页面数据');
+    // 显示加载提示
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    });
+    // 重新加载数据
+    this.getCategories();
+    this.getBrandList();
+    this.getClothingList();
   },
 
   // 初始化分类数据（根据成员性别）
@@ -143,6 +149,8 @@ Page({
       method: 'POST',
       data: {
         familyid: wx.getStorageSync('familyid') || '',
+        // 添加时间戳防止缓存
+        _t: Date.now()
       },
       success: (res) => {
         if (res.statusCode === 200) {
@@ -152,75 +160,28 @@ Page({
         } else {
           console.log('获取品牌列表失败');
         }
+        // 隐藏加载提示
+        wx.hideLoading();
+        // 停止下拉刷新
+        wx.stopPullDownRefresh();
       },
       fail: () => {
         console.log('获取品牌列表网络错误');
+        // 隐藏加载提示
+        wx.hideLoading();
+        // 停止下拉刷新
+        wx.stopPullDownRefresh();
       }
     });
   },
   
-  // 显示新增服装选择弹窗
+  // 跳转到新增衣物页面
   showAddModal() {
-    this.setData({
-      showAddOptionsModal: true
+    wx.navigateTo({
+      url: '/pages/clothing/clothing-add/clothing-add'
     });
   },
-  
-  // 隐藏新增服装选择弹窗
-  hideAddOptionsModal() {
-    this.setData({
-      showAddOptionsModal: false
-    });
-  },
-  
-  // 显示手动填写表单弹窗
-  showManualAddModal() {
-    this.setData({
-      showAddOptionsModal: false,
-      showModal: true,
-      primaryCategory: '',
-      secondaryCategory: '',
-      primaryCategoryIndex: -1,
-      secondaryCategoryIndex: -1,
-      colorIndex: 0,
-      color: '',
-      season: '',
-      seasonIndex: -1,
-      brand: '',
-      brandIndex: -1
-    });
-  },
-  
-  // 拍照识别功能
-  chooseTakePhoto() {
-    wx.showToast({
-      title: '拍照识别功能正在开发中',
-      icon: 'none'
-    });
-    
-    // 隐藏选择弹窗
-    this.setData({
-      showAddOptionsModal: false
-    });
-  },
-  
-  hideAddModal() {
-    this.setData({
-      showModal: false,
-      imageUrl: '',
-      cosImageUrl: '',  // 清空COS图片URL
-      purchaseDate: '',  // 清空日期选择
-      primaryCategory: '',
-      secondaryCategory: '',
-      colorIndex: 0,
-      color: '',
-      season: '',
-      seasonIndex: -1,
-      brand: '',
-      brandIndex: -1
-    });
-  },
-  
+          
   showSearch() {
     this.setData({
       showSearchModal: true
@@ -589,9 +550,6 @@ Page({
             icon: 'success'
           });
           
-          // 关闭弹窗
-          this.hideAddModal();
-          
           // 刷新列表
           this.getClothingList();
         } else {
@@ -665,6 +623,9 @@ Page({
       requestData.season = this.data.selectedSeason;
     }
     
+    // 添加时间戳防止缓存
+    requestData._t = Date.now();
+    
     wx.request({
       url: config.getFullURL('clothing') + '/list',
       method: 'POST',
@@ -679,18 +640,28 @@ Page({
             icon: 'none'
           });
         }
+        // 隐藏加载提示
+        wx.hideLoading();
+        // 停止下拉刷新
+        wx.stopPullDownRefresh();
       },
       fail: () => {
         wx.showToast({
           title: '网络错误',
           icon: 'none'
         });
+        // 隐藏加载提示
+        wx.hideLoading();
+        // 停止下拉刷新
+        wx.stopPullDownRefresh();
       }
     });
   },
   
   // 处理衣物列表数据（排序和图片URL处理）
   processClothingList: function(clothingList) {
+    console.log('处理衣物列表数据:', clothingList);
+    
     // 确保列表从上方开始显示最新添加的项目
     // 如果后端返回的顺序是从旧到新，我们需要反转列表
     if (clothingList.length > 0) {
@@ -879,7 +850,7 @@ Page({
     
     const bucketWithAppId = match[1]; // jmrecipe-1309147067
     const region = match[2]; // ap-shanghai
-    const key = match[3]; // clothing/1754496891594_6800.png
+    const key = match[3]; // clothing-list/1754496891594_6800.png
     const bucket = bucketWithAppId; // COS SDK可以处理带APPID的bucket名称
     
     // 初始化COS实例
@@ -1031,8 +1002,8 @@ Page({
     }
     
     // 引入COS凭证管理器
-    const cosCredentialsManager = require('../../utils/cos-credentials-manager.js');
-    const COS = require('../../utils/cos-wx-sdk-v5.js');
+    const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
+    const COS = require('../../../utils/cos-wx-sdk-v5.js');
     
     // 获取有效的凭证
     return cosCredentialsManager.getValidCredentials().then(credentials => {
@@ -1104,8 +1075,34 @@ Page({
     }
     
     const clothingId = e.currentTarget.dataset.id;
+    const clothingItem = e.currentTarget.dataset.item;
+    console.log('跳转到详情页，clothingId:', clothingId);
+    console.log('跳转到详情页，clothingItem:', clothingItem);
+    console.log('事件对象e:', e);
+    
+    // 检查ID是否存在，如果不存在则尝试从item中获取
+    let validClothingId = clothingId;
+    if (!validClothingId && clothingItem) {
+      validClothingId = clothingItem.id || clothingItem._id;
+    }
+    
+    if (!validClothingId) {
+      wx.showToast({
+        title: '参数错误',
+        icon: 'none'
+      });
+      return;
+    }
+    
     wx.navigateTo({
-      url: `/pages/clothing-detail/clothing-detail?id=${clothingId}`
+      url: `/pages/clothing/clothing-detail/clothing-detail?id=${validClothingId}`,
+      fail: (err) => {
+        console.error('跳转失败:', err);
+        wx.showToast({
+          title: '跳转失败',
+          icon: 'none'
+        });
+      }
     });
   },
   
@@ -1290,7 +1287,9 @@ Page({
       method: 'POST',
       data: {
         familyid: wx.getStorageSync('familyid') || '',
-        gender: gender
+        gender: gender,
+        // 添加时间戳防止缓存
+        _t: Date.now()
       },
       success: (res) => {
         if (res.statusCode === 200) {
@@ -1298,14 +1297,23 @@ Page({
           const secondary = res.data.filter(c => c.level === 2);
           this.setData({
             primaryCategories: primary,
-            secondaryCategories: secondary
+            secondaryCategories: secondary,
+            currentSecondaryCategories: secondary // 默认显示所有二级分类
           });
         } else {
           console.error('获取分类数据失败', res);
         }
+        // 隐藏加载提示
+        wx.hideLoading();
+        // 停止下拉刷新
+        wx.stopPullDownRefresh();
       },
       fail: (err) => {
         console.error('获取分类数据网络错误', err);
+        // 隐藏加载提示
+        wx.hideLoading();
+        // 停止下拉刷新
+        wx.stopPullDownRefresh();
       }
     });
   }
