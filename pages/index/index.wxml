@@ -1,12 +1,12 @@
 <view class="container">
   <!-- 顶部导航区 -->
   <view class="top-nav">
-    <!-- 搜索栏 -->
-    <view class="search-bar">
-      <text class="search-icon">🔍</text>
-      <input class="search-input" placeholder="搜索功能、内容" />
-      <text class="cancel-btn">取消</text>
-    </view>
+<!--    &lt;!&ndash; 搜索栏 &ndash;&gt;-->
+<!--    <view class="search-bar">-->
+<!--      <text class="search-icon">🔍</text>-->
+<!--      <input class="search-input" placeholder="搜索功能、内容" />-->
+<!--      <text class="cancel-btn">取消</text>-->
+<!--    </view>-->
     
     <!-- 天气模块 -->
     <view class="weather-module">
