@@ -18,14 +18,13 @@ Page({
   
   onLoad() {
     // 检查是否已登录
-    // const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
-    // if (hasLoggedIn) {
-    //   return;
-    // }
-    // else {
-    this.getUserCode()
-    // }
-    
+    const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
+    if (hasLoggedIn) {
+      return;
+    }
+    else {
+      this.getUserCode()
+    }
     // 获取天气数据
     this.getWeatherData();
   },
@@ -205,26 +204,6 @@ Page({
     };
     return iconMap[code] || '❓'; // 默认问号图标
   },
-  
-  // 根据温度给出穿搭建议
-  getClothesSuggestion(temperature) {
-    const temp = parseInt(temperature);
-    if (temp < 0) {
-      return '建议穿搭：羽绒服+保暖内衣+手套';
-    } else if (temp < 10) {
-      return '建议穿搭：厚外套+毛衣+围巾';
-    } else if (temp < 15) {
-      return '建议穿搭：薄外套+长袖衬衫';
-    } else if (temp < 20) {
-      return '建议穿搭：薄外套+长袖T恤';
-    } else if (temp < 25) {
-      return '建议穿搭：短袖+薄外套';
-    } else if (temp < 30) {
-      return '建议穿搭：短袖+短裤';
-    } else {
-      return '建议穿搭：短袖+短裤+遮阳帽';
-    }
-  },
 
   getUserCode() {
     // 直接调用wx.login获取code
@@ -316,7 +295,6 @@ Page({
       }
     });
   },
-
 
   goToClothing() {
     wx.navigateTo({
