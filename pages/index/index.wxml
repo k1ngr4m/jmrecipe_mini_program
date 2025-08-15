@@ -11,11 +11,11 @@
     <!-- 天气模块 -->
     <view class="weather-module">
       <view class="weather-info">
-        <text class="weather-icon">☀️</text>
-        <view class="temperature">25°C</view>
-        <view class="weather-desc">晴天</view>
+        <text class="weather-icon">{{weather.icon}}</text>
+        <view class="temperature">{{weather.temperature}}°C</view>
+        <view class="weather-desc">{{weather.text}}</view>
       </view>
-      <view class="clothes-suggestion">建议穿搭：短袖+短裤</view>
+      <view class="clothes-suggestion">{{clothesSuggestion}}</view>
     </view>
   </view>
   
