@@ -28,6 +28,11 @@
         <text class="value">{{clothing.color}}</text>
       </view>
       
+      <view class="info-item" wx:if="{{clothing.season}}">
+        <text class="label">适用季节：</text>
+        <text class="value">{{clothing.season}}</text>
+      </view>
+      
       <view class="info-item" wx:if="{{clothing.brand}}">
         <text class="label">品牌：</text>
         <text class="value">{{clothing.brand}}</text>

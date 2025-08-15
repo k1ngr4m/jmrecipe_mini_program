@@ -1,65 +1,78 @@
+page {
+  background-color: #f9f5e6; /* 米黄色背景 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 .container {
-  padding: 20px;
-  background-color: #f5f5f5;
+  padding: 20rpx;
+  background-color: #f9f5e6;
   min-height: 100vh;
 }
 
 .clothing-detail {
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background-color: #fff;
+  border-radius: 18rpx;
+  padding: 30rpx;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  margin-bottom: 20rpx;
 }
 
 .image-section {
   text-align: center;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 20px;
+  margin-bottom: 30rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx dashed #f0e8d6;
 }
 
 .clothing-image {
   width: 100%;
-  height: 300px;
-  border-radius: 8px;
+  height: 300rpx;
+  border-radius: 12rpx;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .no-image {
   width: 100%;
-  height: 300px;
+  height: 300rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f0f0;
-  color: #999;
-  font-size: 16px;
-  border-radius: 8px;
+  background-color: #fcfaf5;
+  color: #a68d63;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+  border: 2rpx dashed #e0d6c0;
 }
 
 .info-section {
-  padding: 10px 0;
+  padding: 10rpx 0;
 }
 
 .info-item {
   display: flex;
-  margin-bottom: 15px;
-  padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20rpx;
+  padding: 15rpx 0;
+  border-bottom: 1rpx dashed #f0e8d6;
 }
 
 .info-item:last-child {
   border-bottom: none;
+  margin-bottom: 10rpx;
 }
 
 .label {
-  font-weight: bold;
-  color: #333;
-  width: 100px;
+  font-weight: 600;
+  color: #6d5836;
+  width: 160rpx;
+  font-size: 28rpx;
 }
 
 .value {
   flex: 1;
-  color: #666;
+  color: #333;
+  font-size: 28rpx;
+  line-height: 1.5;
 }
 
 .tags-container {
@@ -69,48 +82,77 @@
 }
 
 .tag {
-  background-color: #f0f0f0;
-  color: #666;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-right: 8px;
-  margin-bottom: 8px;
+  background-color: #f9f5e6;
+  color: #8b6e41;
+  font-size: 24rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+  margin-right: 12rpx;
+  margin-bottom: 12rpx;
+  border: 1rpx solid #e0d6c0;
 }
 
 .loading {
   text-align: center;
-  padding: 50px 0;
-  font-size: 16px;
-  color: #999;
+  padding: 100rpx 0;
+  font-size: 32rpx;
+  color: #a68d63;
 }
 
 /* 操作按钮 */
 .action-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  margin-top: 40rpx;
+  padding-top: 30rpx;
+  border-top: 1rpx dashed #f0e8d6;
+  gap: 20rpx;
 }
 
 .edit-btn, .delete-btn {
   flex: 1;
-  padding: 12px 20px;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  font-weight: 600;
   border: none;
+  transition: all 0.3s;
+  letter-spacing: 1rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .edit-btn {
-  background-color: #8B5A2B;
+  background-color: #d8b95f;
   color: white;
-  margin-right: 10px;
+  box-shadow: 0 4rpx 15rpx rgba(216, 185, 95, 0.3);
+}
+
+.edit-btn:hover {
+  background-color: #c7a84a;
+  box-shadow: 0 6rpx 20rpx rgba(216, 185, 95, 0.4);
+  transform: translateY(-2rpx);
+}
+
+.edit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2rpx 10rpx rgba(216, 185, 95, 0.3);
 }
 
 .delete-btn {
-  background-color: #F44336;
+  background-color: #e74c3c;
   color: white;
-  margin-left: 10px;
+  box-shadow: 0 4rpx 15rpx rgba(231, 76, 60, 0.3);
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+  box-shadow: 0 6rpx 20rpx rgba(231, 76, 60, 0.4);
+  transform: translateY(-2rpx);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2rpx 10rpx rgba(231, 76, 60, 0.3);
 }
