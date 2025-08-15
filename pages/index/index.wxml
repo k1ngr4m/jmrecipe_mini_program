@@ -3,7 +3,7 @@
   <view class="top-nav">
     <!-- 搜索栏 -->
     <view class="search-bar">
-      <text class="search-icon"></text>
+      <text class="search-icon">🔍</text>
       <input class="search-input" placeholder="搜索功能、内容" />
       <text class="cancel-btn">取消</text>
     </view>
@@ -53,12 +53,15 @@
       </view>
       <scroll-view class="recommend-content" scroll-x>
         <view class="recommend-card">
+          <view class="card-image"></view>
           <text class="card-title">夏日穿搭指南</text>
         </view>
         <view class="recommend-card">
+          <view class="card-image"></view>
           <text class="card-title">健康饮食计划</text>
         </view>
         <view class="recommend-card">
+          <view class="card-image"></view>
           <text class="card-title">家居布置灵感</text>
         </view>
       </scroll-view>

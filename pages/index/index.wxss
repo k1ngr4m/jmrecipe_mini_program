@@ -1,16 +1,22 @@
+page {
+  background-color: #f9f5e6; /* 米黄色背景，与服装页面一致 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 .container {
   padding: 0;
-  background-color: #f5f5f5;
+  background-color: #f9f5e6;
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 /* 顶部导航区 */
 .top-nav {
-  background-color: white;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #f3e7c9; /* 更温暖的背景色 */
+  padding: 16px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -20,32 +26,35 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin-bottom: 15px;
+  background-color: #fcfaf5; /* 更浅的背景色 */
+  border-radius: 12px; /* 更大的圆角 */
+  padding: 12px 16px;
+  margin-bottom: 20px;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* 添加轻微阴影 */
 }
 
 .search-icon {
-  font-size: 16px;
-  color: #c0c0c0;
-  margin-right: 8px;
+  font-size: 18px;
+  color: #a68d63; /* 更温暖的图标颜色 */
+  margin-right: 12px;
 }
 
 .search-input {
   flex: 1;
-  font-size: 14px;
+  font-size: 16px;
   background: transparent;
   border: none;
   outline: none;
+  color: #6d5836; /* 主要文字颜色 */
 }
 
 .cancel-btn {
-  font-size: 14px;
-  color: #666;
-  margin-left: 8px;
+  font-size: 16px;
+  color: #8b6e41; /* 取消按钮颜色 */
+  margin-left: 12px;
+  font-weight: 500;
 }
 
 /* 天气模块 */
@@ -53,7 +62,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 15px 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -64,47 +73,69 @@
 }
 
 .weather-icon {
-  font-size: 24px;
-  margin-right: 10px;
+  font-size: 28px;
+  margin-right: 12px;
 }
 
 .temperature {
-  font-size: 20px;
-  font-weight: bold;
-  margin-right: 10px;
+  font-size: 24px;
+  font-weight: 600; /* 更粗的字体 */
+  margin-right: 12px;
+  color: #6d5836; /* 主要文字颜色 */
 }
 
 .weather-desc {
-  font-size: 14px;
-  color: #666;
+  font-size: 16px;
+  color: #8b6e41; /* 描述文字颜色 */
+  font-weight: 500;
 }
 
 .clothes-suggestion {
-  font-size: 12px;
-  color: #999;
+  font-size: 14px;
+  color: #a68d63; /* 建议文字颜色 */
+  background-color: #fdfcf9; /* 背景色 */
+  padding: 6px 12px;
+  border-radius: 12px; /* 圆角 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 阴影 */
 }
 
 /* 登录提示 */
 .login-prompt {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #fffbe6;
-  border-radius: 8px;
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #fffbe6; /* 温暖的背景色 */
+  border-radius: 12px; /* 更大的圆角 */
   text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 .login-btn {
-  background-color: #007aff;
+  background-color: #d8b95f; /* 与服装页面一致的主题色 */
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 12px; /* 更大的圆角 */
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(216, 185, 95, 0.3); /* 阴影 */
+  transition: all 0.3s; /* 过渡效果 */
+  letter-spacing: 1px; /* 字母间距 */
+}
+
+.login-btn:hover {
+  background-color: #c7a84a; /* 悬停颜色 */
+  box-shadow: 0 6px 20px rgba(216, 185, 95, 0.4); /* 更强的阴影 */
+  transform: translateY(-2px); /* 上移效果 */
+}
+
+.login-btn:active {
+  transform: translateY(0); /* 按下效果 */
+  box-shadow: 0 2px 10px rgba(216, 185, 95, 0.3);
 }
 
 /* 中间功能区 */
 .main-content {
-  padding: 15px;
+  padding: 20px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -113,74 +144,86 @@
 .grid-modules {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 20px; /* 更大的间距 */
+  margin-bottom: 25px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .module-item {
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px 10px;
+  background-color: #fff; /* 白色背景 */
+  border-radius: 18px; /* 更大的圆角 */
+  padding: 25px 15px; /* 更大的内边距 */
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 更柔和的阴影 */
+  transition: all 0.3s ease; /* 更平滑的过渡 */
+  border: 1px solid #f0e8d6; /* 边框 */
+}
+
+.module-item:hover {
+  transform: translateY(-5px); /* 上移效果 */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12); /* 更强的阴影 */
+  border-color: #d8b95f; /* 边框颜色 */
 }
 
 .module-item:active {
-  transform: scale(0.98);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transform: scale(0.95); /* 按下效果 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .module-icon {
-  font-size: 36px;
+  font-size: 42px; /* 更大的图标 */
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 12px; /* 更大的间距 */
 }
 
 .module-title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px; /* 更大的标题 */
+  font-weight: 600; /* 更粗的字体 */
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  color: #6d5836; /* 标题颜色 */
 }
 
 .module-subtitle {
-  font-size: 12px;
-  color: #999;
+  font-size: 14px; /* 更大的副标题 */
+  color: #8b6e41; /* 副标题颜色 */
+  font-weight: 500;
 }
 
 /* 智能推荐模块 */
 .recommend-section {
-  background-color: white;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background-color: #fff;
+  border-radius: 18px; /* 更大的圆角 */
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 更柔和的阴影 */
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid #f0e8d6; /* 边框 */
 }
 
 .recommend-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .recommend-title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 600;
+  color: #6d5836; /* 标题颜色 */
 }
 
 .more-btn {
-  font-size: 14px;
-  color: #999;
+  font-size: 16px;
+  color: #a68d63; /* 更多按钮颜色 */
+  font-weight: 500;
 }
 
 .recommend-content {
   white-space: nowrap;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
   overflow-x: auto;
@@ -188,21 +231,36 @@
 
 .recommend-card {
   display: inline-block;
-  width: 140px;
-  margin-right: 15px;
+  width: 150px;
+  margin-right: 20px;
   vertical-align: top;
   box-sizing: border-box;
+  background-color: #fcfaf5; /* 卡片背景色 */
+  border-radius: 14px; /* 圆角 */
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* 阴影 */
+  transition: all 0.2s; /* 过渡效果 */
+  border: 1px solid #f0e8d6; /* 边框 */
+}
+
+.recommend-card:hover {
+  transform: translateY(-3px); /* 上移效果 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 更强的阴影 */
+  border-color: #d8b95f; /* 边框颜色 */
 }
 
 .card-image {
   width: 100%;
-  height: 100px;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  height: 110px;
+  border-radius: 10px; /* 圆角 */
+  margin-bottom: 12px;
+  background-color: #f0e8d6; /* 占位背景色 */
 }
 
 .card-title {
-  font-size: 14px;
+  font-size: 15px;
   display: block;
   text-align: center;
+  color: #6d5836; /* 文字颜色 */
+  font-weight: 500;
 }
