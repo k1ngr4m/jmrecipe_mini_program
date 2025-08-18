@@ -7,7 +7,9 @@
     "pages/clothing/clothing-edit/clothing-edit",
     "pages/clothing/clothing-list/clothing-list",
     "pages/settings/profile/profile",
-    "pages/settings/member/member",
+    "pages/settings/member/member-list/member-list",
+    "pages/settings/member/member-add/member-add",
+    "pages/settings/member/member-edit/member-edit",
     "pages/settings/brand/brand"
   ],
   "window": {

@@ -1,4 +1,4 @@
-/* pages/member/member.wxss */
+/* pages/member/member-list.wxss */
 .container {
   padding: 0;
   background-color: #f5f5f5;
@@ -129,17 +129,40 @@
   color: #999;
 }
 
+/* 成员操作按钮样式 */
 .member-actions {
-  width: 30px;
-  height: 30px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: 8px;
 }
 
-.edit-icon {
-  font-size: 16px;
-  color: #999;
+.icon-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  user-select: none;
+}
+
+.icon-btn.edit {
+  background: rgba(24, 144, 255, 0.1);
+  color: #1890ff;
+}
+.icon-btn.edit:active {
+  background: rgba(24, 144, 255, 0.2);
+  transform: scale(0.96);
+}
+
+.icon-btn.delete {
+  background: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+}
+.icon-btn.delete:active {
+  background: rgba(255, 77, 79, 0.2);
+  transform: scale(0.96);
 }
 
 /* 空状态 */

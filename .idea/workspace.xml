@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改成员性别和生日">
+    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改index搜索栏">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index/index.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.wxss" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +67,7 @@
       <recent name="$PROJECT_DIR$/images/index" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/settings/member/member-list" />
       <recent name="$PROJECT_DIR$/pages/settings" />
       <recent name="$PROJECT_DIR$/pages/clothing" />
       <recent name="$PROJECT_DIR$" />
@@ -153,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755252035727</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="feat: 修改index搜索栏">
+      <option name="closed" value="true" />
+      <created>1755268121669</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1755268121669</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,6 +186,7 @@
     <MESSAGE value="feat: 修改添加衣服为新界面" />
     <MESSAGE value="feat: 修改登录逻辑" />
     <MESSAGE value="feat: 修改成员性别和生日" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改成员性别和生日" />
+    <MESSAGE value="feat: 修改index搜索栏" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改index搜索栏" />
   </component>
 </project>

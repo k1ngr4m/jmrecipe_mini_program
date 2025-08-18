@@ -107,7 +107,7 @@ Page({
   // 跳转到成员管理页面
   goToMemberManagement() {
     wx.navigateTo({
-      url: '/pages/settings/member/member'
+      url: '/pages/settings/member/member-list/member-list'
     });
   },
   

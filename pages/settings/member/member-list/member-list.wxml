@@ -1,0 +1,42 @@
+<!--pages/member/member-list.wxml-->
+<view class="container">
+  <!-- 主内容区 -->
+  <view class="main-content">
+    <!-- 成员列表 -->
+    <view class="members-container">
+      <view class="members-list" wx:if="{{members.length > 0}}">
+        <view class="member-item {{selectedMemberId === item.memberid ? 'selected' : ''}}" wx:for="{{members}}" wx:key="memberid">
+          <view class="member-info" bindtap="selectMember" data-id="{{item.memberid}}">
+            <text class="member-name">{{item.name}}</text>
+            <text class="member-detail">{{item.gender === 1 ? '男' : item.gender === 2 ? '女' : item.gender}} | {{item.formattedBirthday}}<text wx:if="{{item.age !== ''}}"> ({{item.age}}岁)</text></text>
+          </view>
+          <view class="member-actions">
+            <view class="icon-btn edit" bindtap="goToEditMember" data-member="{{item}}">
+              ✏️ 编辑
+            </view>
+            <view class="icon-btn delete" bindtap="deleteMember" data-member="{{item}}">
+              🗑 删除
+            </view>
+          </view>
+          <view class="member-selected-icon" wx:if="{{selectedMemberId === item.memberid}}">
+            <text class="selected-icon">✓</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{members.length === 0}}">
+        <view class="empty-content">
+          <image class="empty-illustration" src="/images/empty-members.png" mode="aspectFit"></image>
+          <text class="empty-text">还没有添加家庭成员</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 悬浮按钮 -->
+  <view class="fab-btn" bindtap="goToAddMember">
+    <text class="fab-icon">+</text>
+  </view>
+  
+</view>

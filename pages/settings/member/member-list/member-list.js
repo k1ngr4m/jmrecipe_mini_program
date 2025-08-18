@@ -1,11 +1,10 @@
-// pages/member/member.js
-const config = require('../../../config/api.js');
+// pages/member/member-list.js
+const config = require('../../../../config/api.js');
 
 Page({
   data: {
     members: [],
     selectedMemberId: null, // 选中的成员ID
-    showModal: false,
     name: '',
     gender: '',
     genderIndex: 0,
@@ -241,22 +240,76 @@ Page({
     }
   },
 
-  // 显示新增成员弹窗
-  showAddModal() {
-    this.setData({
-      showModal: true,
-      editingMember: null,
-      name: '',
-      gender: '',
-      genderIndex: 0,
-      birthday: '',
+  // 跳转到新增成员页面
+  goToAddMember() {
+    wx.navigateTo({
+      url: '/pages/settings/member/member-add/member-add'
     });
   },
 
-  // 隐藏弹窗
-  hideAddModal() {
-    this.setData({
-      showModal: false
+  // 跳转到编辑成员页面
+  goToEditMember(e) {
+    const member = e.currentTarget.dataset.member;
+    wx.navigateTo({
+      url: '/pages/settings/member/member-edit/member-edit?member=' + encodeURIComponent(JSON.stringify(member))
+    });
+  },
+
+  // 删除成员
+  deleteMember(e) {
+    const member = e.currentTarget.dataset.member;
+    const userid = wx.getStorageSync('userid') || '';
+    const familyid = wx.getStorageSync('familyid') || '';
+    
+    if (!userid) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    wx.showModal({
+      title: '确认删除',
+      content: `确定要删除成员"${member.name}"吗？`,
+      success: (res) => {
+        if (res.confirm) {
+          wx.request({
+            url: config.getFullURL('family') + '/members/delete',
+            method: 'POST',
+            data: {
+              userid: userid,
+              familyid: familyid,
+              memberid: member.memberid
+            },
+            header: {
+              'Content-Type': 'application/json'
+            },
+            success: (res) => {
+              if (res.statusCode === 200) {
+                wx.showToast({
+                  title: '删除成功',
+                  icon: 'success'
+                });
+                
+                // 刷新列表
+                this.getMemberList();
+              } else {
+                wx.showToast({
+                  title: '删除失败',
+                  icon: 'none'
+                });
+              }
+            },
+            fail: () => {
+              wx.showToast({
+                title: '网络错误',
+                icon: 'none'
+              });
+            }
+          });
+        }
+      }
     });
   },
 
