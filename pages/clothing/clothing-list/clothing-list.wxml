@@ -155,6 +155,26 @@
     <text>＋</text>
   </view>
   
+  <!-- 添加选项弹窗 -->
+  <view class="modal" wx:if="{{showAddOptionsModal}}">
+    <view class="modal-content add-options-modal">
+      <view class="modal-header">
+        <text class="modal-title">添加衣物</text>
+        <text class="close-btn" bindtap="hideAddOptionsModal">×</text>
+      </view>
+      <view class="modal-body">
+        <view class="add-option-item" bindtap="chooseImageRecognition">
+          <text class="option-icon">📸</text>
+          <text class="option-text">图片识别</text>
+        </view>
+        <view class="add-option-item" bindtap="chooseManualAdd">
+          <text class="option-icon">✍️</text>
+          <text class="option-text">手动添加</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
 
 
   <!-- 搜索弹窗 -->

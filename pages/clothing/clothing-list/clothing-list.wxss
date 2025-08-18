@@ -463,8 +463,45 @@ page {
   border: 1px solid #e0d6c0;
   background-color: #fcfaf5;
   color: #6d5836;
-  transition: all 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* 添加选项弹窗样式 */
+.add-options-modal {
+  width: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.add-option-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #fcfaf5;
+  border: 1px solid #e0d6c0;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-option-item:last-child {
+  margin-bottom: 0;
+}
+
+.add-option-item:active {
+  background-color: #f9f5e6;
+  transform: scale(0.98);
+}
+
+.option-icon {
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.option-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #6d5836;
 }
 
 .option-btn:hover {

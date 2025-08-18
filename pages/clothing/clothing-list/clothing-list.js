@@ -5,6 +5,7 @@ Page({
   data: {
     title: '衣橱列表页',
     showSearchModal: false,
+    showAddOptionsModal: false, // 显示添加选项弹窗
     clothingList: [],
     filteredClothingList: [],
     currentPrimaryCategory: '总览', // 当前选中的一级分类
@@ -239,7 +240,32 @@ Page({
   },
   
   // 跳转到新增衣物页面
+  // 显示添加选项弹窗
   showAddModal() {
+    this.setData({
+      showAddOptionsModal: true
+    });
+  },
+
+  // 隐藏添加选项弹窗
+  hideAddOptionsModal() {
+    this.setData({
+      showAddOptionsModal: false
+    });
+  },
+
+  // 选择图片识别添加
+  chooseImageRecognition() {
+    this.hideAddOptionsModal();
+    wx.showToast({
+      title: '图片识别功能待实现',
+      icon: 'none'
+    });
+  },
+
+  // 选择手动添加
+  chooseManualAdd() {
+    this.hideAddOptionsModal();
     wx.navigateTo({
       url: '/pages/clothing/clothing-add/clothing-add'
     });
