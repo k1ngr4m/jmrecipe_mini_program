@@ -1,4 +1,37 @@
 <view class="container">
+  
+  <!-- 成员选择按钮 - 悬浮在右上角 -->
+  <view class="member-float-btn" bindtap="toggleMemberDropdown">
+    <image 
+      class="member-avatar" 
+      src="{{getSelectedMemberAvatar()}}" 
+      mode="aspectFill"
+      wx:if="{{getSelectedMemberAvatar()}}"
+    ></image>
+    <view class="member-avatar placeholder" wx:else>
+      <text class="avatar-text">?</text>
+    </view>
+  </view>
+  
+  <!-- 成员下拉菜单 -->
+  <view class="member-dropdown" wx:if="{{showMemberDropdown}}">
+    <view class="dropdown-item" wx:for="{{members}}" wx:key="memberid" bindtap="switchMember" data-id="{{item.memberid}}">
+      <image 
+        class="dropdown-member-avatar" 
+        src="{{item.avatar_url}}" 
+        mode="aspectFill"
+        wx:if="{{item.avatar_url}}"
+      ></image>
+      <view class="dropdown-member-avatar placeholder" wx:else>
+        <text class="avatar-text">?</text>
+      </view>
+      <view class="member-info">
+        <text class="member-item-name">{{item.name}}</text>
+        <text class="member-item-info">{{item.gender === 1 ? '男' : item.gender === 2 ? '女' : item.gender}} | {{item.ageGroup}}</text>
+      </view>
+    </view>
+  </view>
+  
   <!-- 一级分类导航 -->
   <scroll-view class="primary-categories" scroll-x>
     <view 

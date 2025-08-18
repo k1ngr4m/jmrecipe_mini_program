@@ -26,7 +26,11 @@ Page({
     // 当前用户的分类（根据成员性别确定）
     currentCategories: {},
     isBatchMode: false, // 是否为批量选择模式
-    selectedClothingIds: [] // 已选择的衣物ID数组
+    selectedClothingIds: [], // 已选择的衣物ID数组
+    // 成员相关数据
+    members: [], // 成员列表
+    selectedMemberId: null, // 选中的成员ID
+    showMemberDropdown: false // 是否显示成员下拉菜单
   },
   
   onLoad() {
@@ -45,12 +49,28 @@ Page({
         }
       })
     } else {
+      // 获取成员列表和选中的成员
+      this.loadMembers();
+      
       // 如果用户已登录，初始化分类数据并加载衣物列表
       // this.initCategories();
       this.getCategories(); // 获取分类数据
       this.getBrandList(); // 获取品牌列表
       this.initCosInstance(); // 初始化COS实例
       this.getClothingList();
+    }
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onShow() {
+    // 页面显示时重新加载成员数据
+    this.loadMembers();
+    
+    // 如果已经加载过数据，则刷新页面
+    if (this.data.primaryCategories.length > 0) {
+      this.refreshData();
     }
   },
 
@@ -69,20 +89,55 @@ Page({
     this.refreshData();
   },
 
-  /**
-   * 刷新页面数据
-   */
-  refreshData: function() {
-    console.log('刷新页面数据');
-    // 显示加载提示
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
+  // 加载成员列表
+  loadMembers: function() {
+    // 从本地存储获取成员列表
+    const members = wx.getStorageSync('members') || [];
+    const selectedMemberId = wx.getStorageSync('selectedMemberId');
+    
+    this.setData({
+      members: members,
+      selectedMemberId: selectedMemberId
     });
-    // 重新加载数据
-    this.getCategories();
-    this.getBrandList();
-    this.getClothingList();
+  },
+
+  // 切换选中的成员
+  switchMember: function(e) {
+    const memberId = e.currentTarget.dataset.id;
+    const member = this.data.members.find(m => m.memberid === memberId);
+    
+    if (member) {
+      // 更新选中的成员ID
+      this.setData({
+        selectedMemberId: memberId,
+        showMemberDropdown: false // 隐藏下拉菜单
+      });
+      
+      // 保存选中的成员ID到本地存储
+      wx.setStorageSync('selectedMemberId', memberId);
+      
+      // 重新加载数据
+      this.refreshData();
+    }
+  },
+
+  // 显示/隐藏成员下拉菜单
+  toggleMemberDropdown: function() {
+    this.setData({
+      showMemberDropdown: !this.data.showMemberDropdown
+    });
+  },
+
+  // 获取选中成员的姓名
+  getSelectedMemberName: function() {
+    const selectedMember = this.data.members.find(m => m.memberid === this.data.selectedMemberId);
+    return selectedMember ? selectedMember.name : '请选择成员';
+  },
+
+  // 获取选中成员的头像URL
+  getSelectedMemberAvatar: function() {
+    const selectedMember = this.data.members.find(m => m.memberid === this.data.selectedMemberId);
+    return selectedMember && selectedMember.avatar_url ? selectedMember.avatar_url : null;
   },
 
   // 初始化分类数据（根据成员性别）

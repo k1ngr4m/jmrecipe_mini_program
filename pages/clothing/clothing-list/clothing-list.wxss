@@ -12,6 +12,7 @@ page {
 }
 
 .top-nav {
+  position: relative;
   padding: 16px 12px;
   text-align: center;
   font-size: 18px;
@@ -19,6 +20,107 @@ page {
   background-color: #f3e7c9;
   color: #8b6e41;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+/* 悬浮成员按钮样式 */
+.member-float-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #fff3d4;
+  border: 2px solid #d8b95f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.member-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.member-avatar.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3e7c9;
+}
+
+.avatar-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: #8b6e41;
+}
+
+/* 成员下拉菜单样式 */
+.member-dropdown {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  width: 250px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.dropdown-member-avatar.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3e7c9;
+  margin-right: 12px;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-item-name {
+  display: block;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.member-item-info {
+  font-size: 14px;
+  color: #888;
+}
+
+.dropdown-item:active {
+  background-color: #f9f5e6;
 }
 
 /* 分类和筛选区域 */
