@@ -258,9 +258,8 @@ Page({
   // 选择图片识别添加
   chooseImageRecognition() {
     this.hideAddOptionsModal();
-    wx.showToast({
-      title: '图片识别功能待实现',
-      icon: 'none'
+    wx.navigateTo({
+      url: '/pages/clothing/clothing-ai-recognize/clothing-ai-recognize'
     });
   },
 

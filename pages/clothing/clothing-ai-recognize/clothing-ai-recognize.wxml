@@ -1,0 +1,99 @@
+<view class="container">
+  <scroll-view class="modal-form-wrapper" scroll-y>
+    <form class="modal-form" bindsubmit="handleSubmit">
+      <!-- 图片上传区域 -->
+      <view class="form-group">
+        <view class="form-item">
+          <text class="label">图片</text>
+          <view class="image-upload" bindtap="chooseImage">
+            <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image"></image>
+            <view wx:else class="upload-placeholder">
+              <icon class="upload-icon" type="camera" size="24"></icon>
+              <text class="upload-text">上传图片</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- AI识别按钮 -->
+      <view class="form-group">
+        <button class="recognize-btn" bindtap="recognizeImage" wx:if="{{imageUrl}}">AI识别</button>
+      </view>
+
+      <!-- 识别结果区域 -->
+      <view class="form-group" wx:if="{{isRecognized}}">
+        <view class="form-item">
+          <text class="label">识别结果</text>
+          <view class="result-item">
+            <text class="result-label">名称：</text>
+            <input class="input result-input" value="{{name}}" bindinput="onNameInput" placeholder="请输入衣物名称" />
+          </view>
+
+          <view class="form-item">
+            <text class="result-label">一级分类：</text>
+            <picker mode="selector" range="{{primaryCategories}}" range-key="name" value="{{primaryCategoryIndex}}" bindchange="onPrimaryCategoryChange">
+              <view class="picker">
+                {{primaryCategoryIndex >= 0 ? primaryCategories[primaryCategoryIndex].name : '请选择一级分类'}}
+              </view>
+            </picker>
+          </view>
+
+          <view class="form-item">
+            <text class="result-label">二级分类：</text>
+            <picker mode="selector" range="{{secondaryCategoryOptions}}" range-key="name" value="{{secondaryCategoryIndex}}" bindchange="onSecondaryCategoryChange">
+              <view class="picker">
+                {{secondaryCategoryIndex >= 0 ? secondaryCategoryOptions[secondaryCategoryIndex].name : '请选择二级分类'}}
+              </view>
+            </picker>
+          </view>
+
+          <view class="form-item">
+            <text class="result-label">颜色：</text>
+            <picker mode="selector" range="{{colorOptions}}" value="{{colorIndex}}" bindchange="onColorChange">
+              <view class="picker">
+                {{colorIndex >= 0 ? colorOptions[colorIndex] : '请选择颜色'}}
+              </view>
+            </picker>
+          </view>
+
+          <view class="form-item">
+            <text class="result-label">适用季节：</text>
+            <picker mode="selector" range="{{seasonOptions}}" value="{{seasonIndex}}" bindchange="onSeasonChange">
+              <view class="picker">
+                {{seasonIndex >= 0 ? seasonOptions[seasonIndex] : '请选择季节'}}
+              </view>
+            </picker>
+          </view>
+        </view>
+      </view>
+
+      <!-- 手动填写区域 -->
+      <view class="form-group" wx:if="{{isRecognized}}">
+        <view class="form-item">
+          <text class="label">品牌</text>
+          <picker mode="selector" range="{{brandList}}" range-key="name" value="{{brandIndex}}" bindchange="onBrandChange">
+            <view class="picker">
+              {{brandIndex >= 0 ? brandList[brandIndex].name : '请选择品牌'}}
+            </view>
+          </picker>
+        </view>
+
+        <view class="form-item">
+          <text class="label">价格</text>
+          <input class="input" type="digit" name="price" value="{{price}}" bindinput="onPriceInput" placeholder="请输入价格" />
+        </view>
+
+        <view class="form-item">
+          <text class="label">购买日期</text>
+          <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
+            <view class="picker">
+              {{purchaseDate ? purchaseDate : '请选择日期'}}
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <button class="submit-btn" form-type="submit" wx:if="{{isRecognized}}">确定</button>
+    </form>
+  </scroll-view>
+</view>
