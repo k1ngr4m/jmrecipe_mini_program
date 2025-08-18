@@ -70,7 +70,9 @@ Page({
     
     // 如果已经加载过数据，则刷新页面
     if (this.data.primaryCategories.length > 0) {
-      this.refreshData();
+      this.getCategories();
+      this.getBrandList();
+      this.getClothingList();
     }
   },
 
@@ -86,7 +88,9 @@ Page({
     });
     
     // 重新加载数据
-    this.refreshData();
+    this.getCategories();
+    this.getBrandList();
+    this.getClothingList();
   },
 
   // 加载成员列表
@@ -117,7 +121,9 @@ Page({
       wx.setStorageSync('selectedMemberId', memberId);
       
       // 重新加载数据
-      this.refreshData();
+      this.getCategories();
+      this.getBrandList();
+      this.getClothingList();
     }
   },
 
