@@ -40,11 +40,12 @@ Page({
   },
   
   // 处理生日时间戳，转换为日期格式并计算年龄
-  processBirthday(birthdayTimestamp) {
+  processBirthday(birthdayTimestamp, gender) {
     if (!birthdayTimestamp) {
       return {
         formattedBirthday: '',
-        age: ''
+        age: '',
+        ageGroup: ''
       };
     }
     
@@ -65,7 +66,8 @@ Page({
     if (isNaN(birthdayDate.getTime())) {
       return {
         formattedBirthday: birthdayTimestamp,
-        age: ''
+        age: '',
+        ageGroup: ''
       };
     }
     
@@ -85,10 +87,79 @@ Page({
       age--;
     }
     
+    // 根据年龄和性别获取传统称谓
+    const ageGroup = this.getAgeGroup(age, gender);
+    
     return {
       formattedBirthday: formattedBirthday,
-      age: age
+      age: age,
+      ageGroup: ageGroup
     };
+  },
+
+  // 根据年龄和性别获取传统称谓
+  getAgeGroup(age, gender) {
+    if (age === '' || age < 0) {
+      return '';
+    }
+    
+    // 性别标识：1-男，2-女
+    const isMale = gender === 1;
+    const isFemale = gender === 2;
+    
+    // 婴幼儿时期
+    if (age >= 0 && age < 1) {
+      return '襁褓';
+    } else if (age >= 1 && age <= 3) {
+      return '孩提';
+    } else if (age >= 4 && age <= 6) {
+      return '垂髫';
+    }
+    
+    // 少年时期
+    else if (isFemale && age >= 13 && age <= 14) {
+      return '豆蔻';
+    } else if (isFemale && age === 15) {
+      return '及笄';
+    } else if (isMale && age === 15) {
+      return '束发';
+    } else if (age >= 7 && age <= 14) {
+      return '总角';
+    }
+
+    // 青年时期
+    else if (isMale && age === 20) {
+      return '弱冠';
+    } else if (age >= 16 && age <= 29) {
+      return '青年';
+    } else if (age === 30) {
+      return '而立';
+    }
+    
+    // 中年时期
+    else if (age === 40) {
+      return '不惑';
+    } else if (age === 50) {
+      return '知命';
+    } else if (age === 60) {
+      return '花甲';
+    } else if (age >= 31 && age <= 59) {
+      return '中年';
+    }
+    
+    // 老年时期
+    else if (age === 70) {
+      return '古稀之年';
+    } else if (age >= 80 && age <= 90) {
+      return '耄耋之年';
+    } else if (age === 100) {
+      return '期颐之年';
+    } else if (age >= 61) {
+      return '老年';
+    }
+    
+    // 默认返回
+    return '未知';
   },
   
   // 检查并创建默认成员
@@ -184,7 +255,7 @@ Page({
           const processedMembers = res.data.map(member => {
             return {
               ...member,
-              ...this.processBirthday(member.birthday)
+              ...this.processBirthday(member.birthday, member.gender)
             };
           });
           
@@ -192,6 +263,9 @@ Page({
             members: processedMembers,
             hasLoadedMembers: true
           });
+          
+          // 将成员列表存储到本地，供其他页面使用
+          wx.setStorageSync('members', processedMembers);
           
           // 如果成员列表为空，创建默认成员
           if (shouldCreateDefault && (!res.data || res.data.length === 0) && !this.data.hasAttemptedToCreateDefaultMember) {

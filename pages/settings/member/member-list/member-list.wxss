@@ -66,6 +66,7 @@
 
 /* 主内容区 */
 .main-content {
+  width: 95%;
   padding: 15px;
   /* 新增 flex 布局，让子元素垂直排列 */
   display: flex;
@@ -75,6 +76,10 @@
 }
 
 .members-container {
+  width: 100%;
+}
+
+.members-list{
   width: 100%;
 }
 
@@ -92,6 +97,17 @@
 .member-item.selected {
   border: 2px solid #8B5A2B;
   background-color: #fff9f5;
+}
+
+.member-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.member-info {
+  flex: 1;
 }
 
 .member-selected-icon {

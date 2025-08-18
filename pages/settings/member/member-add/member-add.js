@@ -91,11 +91,19 @@ Page({
       birthdayTimestamp = Math.floor(date.getTime() / 1000);
     }
     
+    // 将性别字符串转换为整数
+    let genderValue = formData.gender;
+    if (formData.gender === '男') {
+      genderValue = 1;
+    } else if (formData.gender === '女') {
+      genderValue = 2;
+    }
+    
     const requestData = {
       userid: userid,
       familyid: familyid,
       name: formData.name,
-      gender: formData.gender,
+      gender: genderValue,
       birthday: birthdayTimestamp,
     };
     

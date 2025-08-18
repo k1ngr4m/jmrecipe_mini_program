@@ -6,16 +6,18 @@
     <view class="members-container">
       <view class="members-list" wx:if="{{members.length > 0}}">
         <view class="member-item {{selectedMemberId === item.memberid ? 'selected' : ''}}" wx:for="{{members}}" wx:key="memberid">
-          <view class="member-info" bindtap="selectMember" data-id="{{item.memberid}}">
-            <text class="member-name">{{item.name}}</text>
-            <text class="member-detail">{{item.gender === 1 ? '男' : item.gender === 2 ? '女' : item.gender}} | {{item.formattedBirthday}}<text wx:if="{{item.age !== ''}}"> ({{item.age}}岁)</text></text>
-          </view>
-          <view class="member-actions">
-            <view class="icon-btn edit" bindtap="goToEditMember" data-member="{{item}}">
-              ✏️ 编辑
+          <view class="member-content" bindtap="selectMember" data-id="{{item.memberid}}">
+            <view class="member-info">
+              <text class="member-name">{{item.name}}</text>
+              <text class="member-detail">{{item.gender === 1 ? '男' : item.gender === 2 ? '女' : item.gender}} | {{item.ageGroup}}</text>
             </view>
-            <view class="icon-btn delete" bindtap="deleteMember" data-member="{{item}}">
-              🗑 删除
+            <view class="member-actions">
+              <view class="icon-btn edit" bindtap="goToEditMember" data-member="{{item}}">
+                ✏️ 编辑
+              </view>
+              <view class="icon-btn delete" bindtap="deleteMember" data-member="{{item}}">
+                🗑 删除
+              </view>
             </view>
           </view>
           <view class="member-selected-icon" wx:if="{{selectedMemberId === item.memberid}}">
