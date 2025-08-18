@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改index搜索栏">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/member/member.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/member/member-list/member-list.wxss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.wxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/my/my.wxss" beforeDir="false" />
-    </list>
+    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改成员列表" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,25 +29,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Node.js.index.js.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "hotfix/v1.1.1",
-    "last_opened_file_path": "/Users/linyiming/Projects/WeChatProjects/jmrecipe/libs",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true",
-    "wxn.project": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.index.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;hotfix/v1.1.1&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/linyiming/Projects/WeChatProjects/jmrecipe/libs&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;wxn.project&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/libs" />
@@ -99,6 +86,7 @@
       <workItem from="1755002598018" duration="8377000" />
       <workItem from="1755067074659" duration="35584000" />
       <workItem from="1755170198722" duration="879000" />
+      <workItem from="1755483908397" duration="310000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 不重复登录">
       <option name="closed" value="true" />
@@ -172,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755268121669</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat: 修改成员列表">
+      <option name="closed" value="true" />
+      <created>1755484184717</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1755484184717</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -187,6 +183,7 @@
     <MESSAGE value="feat: 修改登录逻辑" />
     <MESSAGE value="feat: 修改成员性别和生日" />
     <MESSAGE value="feat: 修改index搜索栏" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改index搜索栏" />
+    <MESSAGE value="feat: 修改成员列表" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改成员列表" />
   </component>
 </project>
