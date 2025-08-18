@@ -242,6 +242,7 @@ Page({
   // 跳转到新增衣物页面
   // 显示添加选项弹窗
   showAddModal() {
+    console.log('点击了添加按钮');
     this.setData({
       showAddOptionsModal: true
     });

@@ -156,7 +156,7 @@
   </view>
   
   <!-- 添加选项弹窗 -->
-  <view class="modal" wx:if="{{showAddOptionsModal}}">
+  <view class="modal modal-visible" wx:if="{{showAddOptionsModal}}">
     <view class="modal-content add-options-modal">
       <view class="modal-header">
         <text class="modal-title">添加衣物</text>
