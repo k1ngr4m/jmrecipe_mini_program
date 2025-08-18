@@ -184,42 +184,85 @@ Page({
           if (res.statusCode === 200 && res.data.success) {
             const result = res.data.data;
               
-            // 根据识别结果更新页面数据
-            this.setData({
-              isRecognized: true,
-              name: result.name || '',
-              primaryCategory: result.primary_category || '',
-              secondaryCategory: result.secondary_category || '',
-              color: result.color || '',
-              season: result.season || '',
-              // 获取分类名称
-              primaryCategoryName: this.getCategoryNameById(result.primary_category, this.data.primaryCategories),
-              secondaryCategoryName: this.getCategoryNameById(result.secondary_category, this.data.secondaryCategories)
-            });
-            
-            // 设置分类索引以便在选择器中正确显示
-            const primaryCategoryIndex = this.data.primaryCategories.findIndex(c => String(c.id) === String(result.primary_category));
-            const secondaryCategoryOptions = this.getCurrentSecondaryCategories(result.primary_category);
-            const secondaryCategoryIndex = secondaryCategoryOptions.findIndex(c => String(c.id) === String(result.secondary_category));
-            
-            // 设置颜色索引
-            const colorIndex = this.data.colorOptions.indexOf(result.color);
-            
-            // 设置季节索引
-            const seasonIndex = this.data.seasonOptions.indexOf(result.season);
-            
-            this.setData({
-              primaryCategoryIndex: primaryCategoryIndex >= 0 ? primaryCategoryIndex : -1,
-              secondaryCategoryIndex: secondaryCategoryIndex >= 0 ? secondaryCategoryIndex : -1,
-              secondaryCategoryOptions: secondaryCategoryOptions,
-              colorIndex: colorIndex >= 0 ? colorIndex : -1,
-              seasonIndex: seasonIndex >= 0 ? seasonIndex : -1
-            });
+            // 如果返回了新的image_url，则下载并上传到COS替换之前的图片
+            if (result.image_url) {
+              this.downloadAndUploadImage(result.image_url, (newCosUrl) => {
+                // 更新页面数据
+                this.setData({
+                  isRecognized: true,
+                  name: result.name || '',
+                  primaryCategory: result.primary_category || '',
+                  secondaryCategory: result.secondary_category || '',
+                  color: result.color || '',
+                  season: result.season || '',
+                  cosImageUrl: newCosUrl, // 使用新上传的图片URL
+                  // 获取分类名称
+                  primaryCategoryName: this.getCategoryNameById(result.primary_category, this.data.primaryCategories),
+                  secondaryCategoryName: this.getCategoryNameById(result.secondary_category, this.data.secondaryCategories)
+                });
+                
+                // 设置分类索引以便在选择器中正确显示
+                const primaryCategoryIndex = this.data.primaryCategories.findIndex(c => String(c.id) === String(result.primary_category));
+                const secondaryCategoryOptions = this.getCurrentSecondaryCategories(result.primary_category);
+                const secondaryCategoryIndex = secondaryCategoryOptions.findIndex(c => String(c.id) === String(result.secondary_category));
+                
+                // 设置颜色索引
+                const colorIndex = this.data.colorOptions.indexOf(result.color);
+                
+                // 设置季节索引
+                const seasonIndex = this.data.seasonOptions.indexOf(result.season);
+                
+                this.setData({
+                  primaryCategoryIndex: primaryCategoryIndex >= 0 ? primaryCategoryIndex : -1,
+                  secondaryCategoryIndex: secondaryCategoryIndex >= 0 ? secondaryCategoryIndex : -1,
+                  secondaryCategoryOptions: secondaryCategoryOptions,
+                  colorIndex: colorIndex >= 0 ? colorIndex : -1,
+                  seasonIndex: seasonIndex >= 0 ? seasonIndex : -1
+                });
+                
+                wx.showToast({
+                  title: '识别成功',
+                  icon: 'success'
+                });
+              });
+            } else {
+              // 根据识别结果更新页面数据
+              this.setData({
+                isRecognized: true,
+                name: result.name || '',
+                primaryCategory: result.primary_category || '',
+                secondaryCategory: result.secondary_category || '',
+                color: result.color || '',
+                season: result.season || '',
+                // 获取分类名称
+                primaryCategoryName: this.getCategoryNameById(result.primary_category, this.data.primaryCategories),
+                secondaryCategoryName: this.getCategoryNameById(result.secondary_category, this.data.secondaryCategories)
+              });
               
-            wx.showToast({
-              title: '识别成功',
-              icon: 'success'
-            });
+              // 设置分类索引以便在选择器中正确显示
+              const primaryCategoryIndex = this.data.primaryCategories.findIndex(c => String(c.id) === String(result.primary_category));
+              const secondaryCategoryOptions = this.getCurrentSecondaryCategories(result.primary_category);
+              const secondaryCategoryIndex = secondaryCategoryOptions.findIndex(c => String(c.id) === String(result.secondary_category));
+              
+              // 设置颜色索引
+              const colorIndex = this.data.colorOptions.indexOf(result.color);
+              
+              // 设置季节索引
+              const seasonIndex = this.data.seasonOptions.indexOf(result.season);
+              
+              this.setData({
+                primaryCategoryIndex: primaryCategoryIndex >= 0 ? primaryCategoryIndex : -1,
+                secondaryCategoryIndex: secondaryCategoryIndex >= 0 ? secondaryCategoryIndex : -1,
+                secondaryCategoryOptions: secondaryCategoryOptions,
+                colorIndex: colorIndex >= 0 ? colorIndex : -1,
+                seasonIndex: seasonIndex >= 0 ? seasonIndex : -1
+              });
+              
+              wx.showToast({
+                title: '识别成功',
+                icon: 'success'
+              });
+            }
           } else {
             wx.showToast({
               title: res.data.message || '识别失败',
@@ -701,5 +744,30 @@ Page({
     
     const category = categories.find(c => String(c.id) === String(categoryId));
     return category ? category.name : '';
+  },
+  
+  // 下载图片并上传到COS
+  downloadAndUploadImage: function(imageUrl, callback) {
+    wx.downloadFile({
+      url: imageUrl,
+      success: (res) => {
+        if (res.statusCode === 200) {
+          const tempFilePath = res.tempFilePath;
+          // 上传到COS
+          this.uploadImageToCOS(tempFilePath, (cosUrl) => {
+            callback(cosUrl);
+          });
+        } else {
+          console.error('下载图片失败:', res);
+          // 如果下载失败，使用原始URL
+          callback(imageUrl);
+        }
+      },
+      fail: (err) => {
+        console.error('下载图片失败:', err);
+        // 如果下载失败，使用原始URL
+        callback(imageUrl);
+      }
+    });
   }
 })

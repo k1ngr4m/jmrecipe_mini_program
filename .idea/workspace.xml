@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改成员列表">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +90,7 @@
       <workItem from="1755067074659" duration="35584000" />
       <workItem from="1755170198722" duration="879000" />
       <workItem from="1755483908397" duration="11941000" />
-      <workItem from="1755504733164" duration="4454000" />
+      <workItem from="1755504733164" duration="5417000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 不重复登录">
       <option name="closed" value="true" />
