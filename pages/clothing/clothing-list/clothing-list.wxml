@@ -15,7 +15,7 @@
   
   <!-- 成员下拉菜单 -->
   <view class="member-dropdown" wx:if="{{showMemberDropdown}}">
-    <view class="dropdown-item" wx:for="{{members}}" wx:key="memberid" bindtap="switchMember" data-id="{{item.memberid}}">
+    <view class="dropdown-item {{item.memberid === selectedMemberId ? 'selected' : ''}}" wx:for="{{members}}" wx:key="memberid" bindtap="switchMember" data-id="{{item.memberid}}">
       <image 
         class="dropdown-member-avatar" 
         src="{{item.avatar_url}}" 
@@ -28,6 +28,9 @@
       <view class="member-info">
         <text class="member-item-name">{{item.name}}</text>
         <text class="member-item-info">{{item.gender === 1 ? '男' : item.gender === 2 ? '女' : item.gender}} | {{item.ageGroup}}</text>
+      </view>
+      <view class="selected-indicator" wx:if="{{item.memberid === selectedMemberId}}">
+        <text class="selected-icon">✓</text>
       </view>
     </view>
   </view>
