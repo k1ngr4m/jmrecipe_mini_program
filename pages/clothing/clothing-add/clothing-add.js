@@ -634,13 +634,32 @@ Page({
   getCategories() {
     const selectedMemberId = wx.getStorageSync('selectedMemberId');
     const members = wx.getStorageSync('members') || [];
-    const selectedMember = members.find(m => m.id === selectedMemberId);
-    const gender = selectedMember && selectedMember.gender === '女' ? 'female' : 'male';
+    const selectedMember = members.find(m => m.memberid === selectedMemberId);
+    
+    // 根据成员性别设置参数，1表示男，2表示女
+    let genderParam = 1; // 默认为男
+    if (selectedMember) {
+      // 注意：这里需要根据实际的性别字段进行调整
+      // 如果gender字段是数字类型（1男/2女）
+      if (selectedMember.gender === 2 || selectedMember.gender === '2') {
+        genderParam = 2;
+      } else if (selectedMember.gender === 1 || selectedMember.gender === '1') {
+        genderParam = 1;
+      }
+      // 如果gender字段是字符串类型（"男"/"女"）
+      else if (selectedMember.gender === '女') {
+        genderParam = 2;
+      } else if (selectedMember.gender === '男') {
+        genderParam = 1;
+      }
+    }
 
     console.log('获取分类数据', {
       selectedMemberId,
+      selectedMember,
+      members,
       familyid: wx.getStorageSync('familyid') || '',
-      gender
+      gender: genderParam
     });
 
     wx.request({
@@ -648,7 +667,7 @@ Page({
       method: 'POST',
       data: {
         familyid: wx.getStorageSync('familyid') || '',
-        gender: gender,
+        gender: genderParam, // 传递性别参数，1男/2女
         // 添加时间戳防止缓存
         _t: Date.now()
       },
