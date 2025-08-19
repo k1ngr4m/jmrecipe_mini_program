@@ -193,6 +193,11 @@ Page({
               });
             }
           }
+          
+          // 设置默认品牌（如果品牌列表已加载）
+          if (clothing.brand) {
+            this.setDefaultBrand(clothing.brand);
+          }
         } else if (res.statusCode === 404) {
           wx.showToast({
             title: '衣物不存在',
@@ -453,6 +458,21 @@ Page({
     });
   },
   
+  // 设置默认品牌
+  setDefaultBrand: function(brandName) {
+    if (!brandName || this.data.brandList.length === 0) {
+      return;
+    }
+    
+    const brandIndex = this.data.brandList.findIndex(b => b.name === brandName);
+    if (brandIndex !== -1) {
+      this.setData({
+        brandIndex: brandIndex,
+        defaultBrand: this.data.brandList[brandIndex]
+      });
+    }
+  },
+  
   // 获取品牌列表
   getBrandList: function() {
     wx.request({
@@ -468,6 +488,11 @@ Page({
           this.setData({
             brandList: res.data.result || []
           });
+          
+          // 如果已经有品牌数据但尚未设置默认品牌，则重新尝试设置
+          if (this.data.brand && !this.data.defaultBrand) {
+            this.setDefaultBrand(this.data.brand);
+          }
         } else {
           console.log('获取品牌列表失败');
         }
