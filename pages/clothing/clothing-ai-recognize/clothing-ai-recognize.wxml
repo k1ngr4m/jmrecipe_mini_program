@@ -46,6 +46,17 @@
               </view>
             </picker>
           </view>
+
+          <view class="form-item">
+            <text class="label">品牌</text>
+            <brand-search
+                    brand-list="{{brandList}}"
+                    bind:select="onBrandSelect"
+                    bind:clear="onBrandClear"
+                    placeholder="请输入品牌名称">
+            </brand-search>
+          </view>
+
         </view>
 
         <!-- 属性信息组 -->
@@ -74,15 +85,6 @@
       <view class="form-group" wx:if="{{isRecognized}}">
         <!-- 详细信息组 -->
         <view class="form-group">
-          <view class="form-item">
-            <text class="label">品牌</text>
-            <brand-search 
-              brand-list="{{brandList}}" 
-              bind:select="onBrandSelect"
-              bind:clear="onBrandClear"
-              placeholder="请输入品牌名称">
-            </brand-search>
-          </view>
 
           <view class="form-item">
             <text class="label">尺码</text>
