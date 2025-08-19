@@ -8,7 +8,17 @@ Component({
     // 默认选中的品牌
     defaultBrand: {
       type: Object,
-      value: null
+      value: null,
+      observer: function(newVal) {
+        // 当defaultBrand属性更新时，更新组件内部状态
+        if (newVal) {
+          this.setData({
+            selectedBrand: newVal,
+            selectedBrandId: newVal.id,
+            searchText: newVal.name
+          });
+        }
+      }
     },
     // 占位符文本
     placeholder: {
