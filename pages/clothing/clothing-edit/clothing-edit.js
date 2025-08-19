@@ -103,6 +103,9 @@ Page({
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
           const clothing = res.data.result;
           
+          console.log('获取到的衣物详情:', clothing);
+          console.log('品牌信息:', clothing.brand);
+          
           // 设置表单数据
           this.setData({
             name: clothing.name || '',
@@ -196,7 +199,10 @@ Page({
           
           // 设置默认品牌（如果品牌列表已加载）
           if (clothing.brand) {
-            this.setDefaultBrand(clothing.brand);
+            // 等待一段时间确保品牌列表已加载，然后再设置默认品牌
+            setTimeout(() => {
+              this.setDefaultBrand(clothing.brand);
+            }, 100);
           }
         } else if (res.statusCode === 404) {
           wx.showToast({
@@ -460,16 +466,30 @@ Page({
   
   // 设置默认品牌
   setDefaultBrand: function(brandName) {
-    if (!brandName || this.data.brandList.length === 0) {
+    console.log('设置默认品牌:', brandName);
+    console.log('当前品牌列表:', this.data.brandList);
+    
+    if (!brandName) {
+      console.log('品牌名称为空，无法设置默认品牌');
+      return;
+    }
+    
+    if (this.data.brandList.length === 0) {
+      console.log('品牌列表为空，无法设置默认品牌');
       return;
     }
     
     const brandIndex = this.data.brandList.findIndex(b => b.name === brandName);
+    console.log('找到的品牌索引:', brandIndex);
+    
     if (brandIndex !== -1) {
+      console.log('设置默认品牌为:', this.data.brandList[brandIndex]);
       this.setData({
         brandIndex: brandIndex,
         defaultBrand: this.data.brandList[brandIndex]
       });
+    } else {
+      console.log('在品牌列表中未找到匹配的品牌');
     }
   },
   
@@ -491,7 +511,9 @@ Page({
           
           // 如果已经有品牌数据但尚未设置默认品牌，则重新尝试设置
           if (this.data.brand && !this.data.defaultBrand) {
-            this.setDefaultBrand(this.data.brand);
+            setTimeout(() => {
+              this.setDefaultBrand(this.data.brand);
+            }, 100);
           }
         } else {
           console.log('获取品牌列表失败');
