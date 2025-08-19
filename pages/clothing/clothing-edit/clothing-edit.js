@@ -98,8 +98,8 @@ Page({
         'Content-Type': 'application/json'
       },
       success: (res) => {
-        if (res.statusCode === 200) {
-          const clothing = res.data;
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
+          const clothing = res.data.result;
           
           // 设置表单数据
           this.setData({
@@ -362,6 +362,13 @@ Page({
     });
   },
   
+  // 价格输入处理函数
+  onPriceInput: function(e) {
+    this.setData({
+      price: e.detail.value
+    });
+  },
+  
   onPrimaryCategoryChange: function(e) {
     const primaryCategoryIndex = e.detail.value;
     const primaryCategory = this.data.primaryCategories[primaryCategoryIndex];
@@ -394,6 +401,13 @@ Page({
     this.setData({
       brandIndex: brandIndex,
       brand: brand ? brand.name : ''
+    });
+  },
+  
+  // 名称输入处理函数
+  onNameInput: function(e) {
+    this.setData({
+      name: e.detail.value
     });
   },
   
@@ -556,14 +570,24 @@ Page({
         'Content-Type': 'application/json'
       },
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           wx.showToast({
             title: '更新成功',
             icon: 'success'
           });
           
-          // 返回上一页
+          // 返回上一页并刷新详情页数据
           setTimeout(() => {
+            // 获取页面栈
+            const pages = getCurrentPages();
+            if (pages.length > 1) {
+              // 获取上一个页面实例（详情页）
+              const prevPage = pages[pages.length - 2];
+              // 如果上一个页面是详情页，则调用其刷新方法
+              if (prevPage && typeof prevPage.getClothingDetail === 'function') {
+                prevPage.getClothingDetail(clothingId);
+              }
+            }
             wx.navigateBack();
           }, 1500);
         } else {

@@ -182,7 +182,7 @@ Page({
       purchase_date: formData.purchase_date || '',
       price: formData.price ? parseFloat(formData.price) : 0,
       image_url: formData.image_url || '',
-      tags: []
+      tags: ""
     };
     
     // 确保数据类型正确
@@ -634,7 +634,7 @@ Page({
       success: (res) => {
         console.log('请求成功:', res);
         
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           wx.showToast({
             title: '创建成功',
             icon: 'success'
@@ -721,8 +721,8 @@ Page({
       method: 'POST',
       data: requestData,
       success: (res) => {
-        if (res.statusCode === 200) {
-          let clothingList = res.data;
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
+          let clothingList = res.data.result || [];
           this.processClothingList(clothingList);
         } else {
           wx.showToast({
@@ -1267,7 +1267,7 @@ Page({
         clothing_ids: clothingIds
       },
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           wx.showToast({
             title: '删除成功',
             icon: 'success'

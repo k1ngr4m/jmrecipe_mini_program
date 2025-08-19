@@ -148,7 +148,7 @@ Page({
         clothing_id: clothingId
       },
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           wx.showToast({
             title: '删除成功',
             icon: 'success'
@@ -265,8 +265,8 @@ Page({
         'Content-Type': 'application/json'
       },
       success: (res) => {
-        if (res.statusCode === 200) {
-          const clothing = res.data;
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
+          const clothing = res.data.result;
           
           // 将时间戳转换为日期格式
           if (clothing.purchase_date) {
@@ -355,6 +355,14 @@ Page({
         current: imageUrl,
         urls: [imageUrl]
       });
+    }
+  },
+
+  // 页面显示时刷新数据
+  onShow: function() {
+    // 如果已经有衣物数据，则刷新数据
+    if (this.data.clothing && this.data.clothing.id) {
+      this.getClothingDetail(this.data.clothing.id);
     }
   }
 });

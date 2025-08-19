@@ -23,7 +23,7 @@ Page({
     //   return;
     // }
     // else {
-    this.getUserCode()
+    // this.getUserCode()
     // }
     // 获取天气数据
     this.getWeatherData();
