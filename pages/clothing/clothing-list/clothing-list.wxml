@@ -128,6 +128,7 @@
               <text wx:if="{{item.color}}">{{item.color}}</text>
               <text wx:if="{{item.season}}"> | {{item.season}}</text>
               <text wx:if="{{item.brand}}"> | {{item.brand}}</text>
+              <text wx:if="{{item.size}}"> | {{item.size}}</text>
             </view>
           </view>
         </view>

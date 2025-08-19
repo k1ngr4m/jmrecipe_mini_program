@@ -38,6 +38,11 @@
         <text class="value">{{clothing.brand}}</text>
       </view>
       
+      <view class="info-item" wx:if="{{clothing.size}}">
+        <text class="label">尺码：</text>
+        <text class="value">{{clothing.size}}</text>
+      </view>
+      
       <view class="info-item" wx:if="{{clothing.purchase_date}}">
         <text class="label">购买日期：</text>
         <text class="value">{{clothing.purchase_date}}</text>

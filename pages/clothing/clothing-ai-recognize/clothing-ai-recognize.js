@@ -15,6 +15,7 @@ Page({
     color: '',
     season: '',
     brand: '',
+    size: '', // 尺码
     brandList: [], // 品牌列表
     brandIndex: -1, // 品牌选择索引
     price: '',
@@ -129,6 +130,7 @@ Page({
           color: '',
           season: '',
           brand: '',
+          size: '',
           brandIndex: -1,
           price: '',
           purchaseDate: ''
@@ -547,6 +549,12 @@ Page({
     });
   },
   
+  onSizeInput: function(e) {
+    this.setData({
+      size: e.detail.value
+    });
+  },
+  
   // 提交表单
   handleSubmit() {
     console.log('提交事件触发');
@@ -575,6 +583,7 @@ Page({
       secondary_category: this.data.secondaryCategory,
       color: this.data.color || '',
       brand: this.data.brand || '',
+      size: this.data.size || '',
       season: this.data.season || '',
       price: this.data.price || '',
       purchase_date: this.data.purchaseDate || '',
@@ -596,6 +605,7 @@ Page({
       secondary_category: formData.secondary_category, // 二级分类
       color: formData.color || '',
       brand: formData.brand || '',
+      size: formData.size || '', // 尺码
       season: formData.season || '', // 适用季节
       purchase_date: formData.purchase_date || '',
       price: formData.price ? parseFloat(formData.price) : 0,

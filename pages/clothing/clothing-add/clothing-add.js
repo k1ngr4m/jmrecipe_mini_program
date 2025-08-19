@@ -22,6 +22,7 @@ Page({
     season: '', // 适用季节
     seasonIndex: -1, // 季节选择索引
     seasonOptions: ['春', '夏', '秋', '冬'],
+    size: '', // 尺码
     // 分类数据
     primaryCategories: [], // 一级分类
     secondaryCategories: [], // 二级分类
@@ -70,6 +71,7 @@ Page({
       color: formData.color || '',
       brand: formData.brand || '',
       season: formData.season || '', // 适用季节
+      size: formData.size || '', // 尺码
       purchase_date: formData.purchase_date || '',
       price: formData.price ? parseFloat(formData.price) : 0,
       image_url: formData.image_url || '',
@@ -238,6 +240,12 @@ Page({
     });
   },
   
+  onSizeInput: function(e) {
+    this.setData({
+      size: e.detail.value
+    });
+  },
+  
   onPriceInput: function(e) {
     this.setData({
       price: e.detail.value
@@ -255,6 +263,7 @@ Page({
       color: this.data.color || '',
       brand: this.data.brand || '',
       season: this.data.season || '',
+      size: this.data.size || '',
       price: this.data.price || '',
       purchase_date: this.data.purchaseDate || '',
       image_url: this.data.imageUrl || ''
@@ -412,6 +421,7 @@ Page({
     formData.color = this.data.color || '';
     formData.brand = this.data.brand || '';
     formData.season = this.data.season || '';
+    formData.size = this.data.size || '';
     formData.purchase_date = this.data.purchaseDate || '';
     formData.price = this.data.price || '';
     formData.image_url = this.data.imageUrl || '';

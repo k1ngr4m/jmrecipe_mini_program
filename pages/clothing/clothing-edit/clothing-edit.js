@@ -22,6 +22,7 @@ Page({
     season: '', // 适用季节
     seasonIndex: -1, // 季节选择索引
     seasonOptions: ['春', '夏', '秋', '冬'],
+    size: '', // 尺码
     purchaseDate: '',
     // 分类数据
     primaryCategories: [], // 一级分类
@@ -108,6 +109,7 @@ Page({
             color: clothing.color || '',
             brand: clothing.brand || '',
             season: clothing.season || '',
+            size: clothing.size || '',
             price: clothing.price || '',
             purchaseDate: clothing.purchase_date ? this.formatTimestampToDate(clothing.purchase_date) : ''
           });
@@ -335,6 +337,12 @@ Page({
       purchaseDate: e.detail.value
     });
   },
+  
+  onSizeInput: function(e) {
+    this.setData({
+      size: e.detail.value
+    });
+  },
 
   onColorChange: function(e) {
     const colorIndex = e.detail.value;
@@ -517,6 +525,7 @@ Page({
       color: this.data.color || '',
       brand: this.data.brand || '',
       season: this.data.season || '',
+      size: this.data.size || '',
       price: this.data.price || '',
       purchase_date: this.data.purchaseDate ? this.formatDateToTimestamp(this.data.purchaseDate) : '',
       image_url: this.data.cosImageUrl || ''

@@ -79,6 +79,11 @@
         </view>
 
         <view class="form-item">
+          <text class="label">尺码</text>
+          <input class="input" name="size" value="{{size}}" bindinput="onSizeInput" placeholder="请输入尺码" />
+        </view>
+
+        <view class="form-item">
           <text class="label">价格</text>
           <input class="input" type="digit" name="price" value="{{price}}" bindinput="onPriceInput" placeholder="请输入价格" />
         </view>
