@@ -23,16 +23,13 @@ Page({
     primaryCategories: [], // 一级分类
     secondaryCategories: [], // 二级分类
     // 颜色和季节选项
-    colorOptions: ['红', '橙', '黄', '绿', '蓝', '紫', '黑', '白'],
+    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色'],
     seasonOptions: ['春', '夏', '秋', '冬'],
     colorIndex: -1, // 颜色选择索引
     seasonIndex: -1, // 季节选择索引
     // 成员相关数据
     selectedMemberId: null,
     memberGender: 1, // 成员性别，1男/2女
-    // COS凭证缓存
-    cosCredentials: null,
-    cosCredentialsExpiry: 0,
     // COS实例
     cosInstance: null
   },
@@ -396,33 +393,19 @@ Page({
     console.log('开始上传图片到COS（使用SDK）:', filePath);
     const that = this;
     
-    // 检查缓存的COS凭证是否有效
-    const now = Date.now() / 1000; // 转换为秒
-    if (this.data.cosCredentials && this.data.cosCredentialsExpiry > now + 1800) { // 提前30分钟刷新
-      console.log('使用缓存的COS凭证');
-      this.performUpload(filePath, this.data.cosCredentials, callback);
-      return;
-    }
+    // 引入COS凭证管理器
+    const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
     
-    // 获取新的COS凭证
-    console.log('获取新的COS凭证');
-    wx.request({
-      url: config.getFullURL('cosCredentials'),
-      method: 'GET',
-      success: (res) => {
-        if (res.statusCode === 200 && res.data.tmp_secret_id) {
-          const credentials = res.data;
-          
-          // 执行上传
-          this.performUpload(filePath, credentials, callback);
-        } else {
-          console.error('获取临时密钥失败:', res);
-          wx.showToast({
-            title: '获取上传凭证失败',
-            icon: 'none'
-          });
-        }
-      },
+    // 获取有效的凭证（会自动检查缓存，避免重复调用）
+    cosCredentialsManager.getValidCredentials().then(credentials => {
+      // 执行上传
+      this.performUpload(filePath, credentials, callback);
+    }).catch(error => {
+      console.error('获取COS凭证失败:', error);
+      wx.showToast({
+        title: '获取上传凭证失败',
+        icon: 'none'
+      });
     });
   },
   

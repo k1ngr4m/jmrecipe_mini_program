@@ -14,7 +14,7 @@ Page({
     secondaryCategory: '', // 二级分类
     color: '',
     colorIndex: 0,
-    colorOptions: ['红', '橙', '黄', '绿', '蓝', '紫', '黑', '白'],
+    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色'],
     brand: '',
     brandList: [], // 品牌列表
     brandIndex: -1, // 品牌选择索引

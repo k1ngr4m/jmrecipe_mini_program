@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改成员列表">
+    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: downloadAndUploadImage">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +94,7 @@
       <workItem from="1755067074659" duration="35584000" />
       <workItem from="1755170198722" duration="879000" />
       <workItem from="1755483908397" duration="11941000" />
-      <workItem from="1755504733164" duration="5417000" />
+      <workItem from="1755504733164" duration="10025000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 不重复登录">
       <option name="closed" value="true" />
@@ -180,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755484291844</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="feat: downloadAndUploadImage">
+      <option name="closed" value="true" />
+      <created>1755510487193</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1755510487193</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,6 +208,7 @@
     <MESSAGE value="feat: 修改成员性别和生日" />
     <MESSAGE value="feat: 修改index搜索栏" />
     <MESSAGE value="feat: 修改成员列表" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改成员列表" />
+    <MESSAGE value="feat: downloadAndUploadImage" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: downloadAndUploadImage" />
   </component>
 </project>

@@ -18,13 +18,13 @@ Page({
   
   onLoad() {
     // 检查是否已登录
-    const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
-    if (hasLoggedIn) {
-      return;
-    }
-    else {
-      this.getUserCode()
-    }
+    // const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
+    // if (hasLoggedIn) {
+    //   return;
+    // }
+    // else {
+    this.getUserCode()
+    // }
     // 获取天气数据
     this.getWeatherData();
   },
@@ -110,7 +110,7 @@ Page({
       '6': '🌫️', // 雾
       '7': '🌫️', // 雾（夜间）
       '8': '飑', // 飑
-      '9': '飑', // 飑（夜间）
+      '9': '☁️', // 阴
       '10': '沙', // 沙尘暴
       '11': '沙', // 沙尘暴（夜间）
       '12': '🌧️', // 雷阵雨

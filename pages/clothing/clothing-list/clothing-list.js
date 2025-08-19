@@ -13,7 +13,7 @@ Page({
     selectedColor: '', // 当前选中的颜色
     selectedSeason: '', // 当前选中的季节
     totalCount: 0, // 总件数
-    colorOptions: ['红', '橙', '黄', '绿', '蓝', '紫', '黑', '白'], // 颜色选项
+    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色'], // 颜色选项
     seasonOptions: ['春', '夏', '秋', '冬'], // 季节选项
     // 分类数据
     primaryCategories: [], // 一级分类
