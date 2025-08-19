@@ -23,7 +23,7 @@ Page({
     primaryCategories: [], // 一级分类
     secondaryCategories: [], // 二级分类
     // 颜色和季节选项
-    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色'],
+    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色','粉色','棕色'],
     seasonOptions: ['春', '夏', '秋', '冬'],
     colorIndex: -1, // 颜色选择索引
     seasonIndex: -1, // 季节选择索引

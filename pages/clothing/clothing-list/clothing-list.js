@@ -13,7 +13,7 @@ Page({
     selectedColor: '', // 当前选中的颜色
     selectedSeason: '', // 当前选中的季节
     totalCount: 0, // 总件数
-    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色'], // 颜色选项
+    colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色','粉色','棕色'], // 颜色选项
     seasonOptions: ['春', '夏', '秋', '冬'], // 季节选项
     // 分类数据
     primaryCategories: [], // 一级分类
@@ -97,40 +97,6 @@ Page({
 
   // 加载成员列表
   loadMembers: function() {
-    const userid = wx.getStorageSync('userid') || '';
-    const familyid = wx.getStorageSync('familyid') || '';
-    if (!userid) {
-      wx.showToast({
-        title: '请先登录',
-        icon: 'none'
-      });
-      return;
-    }
-
-    wx.request({
-      url: config.getFullURL('family') + '/members/list',
-      method: 'POST',
-      data: {
-        userid: userid,
-        familyid: familyid
-      },
-      header: {
-        'Content-Type': 'application/json'
-      },
-      success: (res) => {
-        if (res.statusCode === 200) {
-          this.setData({
-            members: res.data,
-            hasLoadedMembers: true
-          });
-
-          // 将成员列表存储到本地，供其他页面使用
-          wx.setStorageSync('members', members);
-        }
-      }
-    }
-    );
-
     // 从本地存储获取成员列表
     const members = wx.getStorageSync('members') || [];
     const selectedMemberId = wx.getStorageSync('selectedMemberId');
