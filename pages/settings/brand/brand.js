@@ -25,10 +25,10 @@ Page({
         familyid: familyid
       },
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           this.setData({
-            brands: res.data || [],
-            filteredBrands: res.data || [] // 初始化筛选列表
+            brands: res.data.result || [],
+            filteredBrands: res.data.result || [] // 初始化筛选列表
           });
         } else {
           wx.showToast({

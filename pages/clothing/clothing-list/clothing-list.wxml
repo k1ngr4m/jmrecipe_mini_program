@@ -130,6 +130,7 @@
               <text wx:if="{{item.brand}}"> | {{item.brand}}</text>
               <text wx:if="{{item.size}}"> | {{item.size}}</text>
             </view>
+            <view class="clothing-price" wx:if="{{item.price}}">¥{{item.price}}</view>
           </view>
         </view>
       </block>

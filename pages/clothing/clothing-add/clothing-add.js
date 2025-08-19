@@ -111,9 +111,9 @@ Page({
         _t: Date.now()
       },
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           this.setData({
-            brandList: res.data || []
+            brandList: res.data.result || []
           });
         } else {
           console.log('获取品牌列表失败');
@@ -682,9 +682,11 @@ Page({
         _t: Date.now()
       },
       success: (res) => {
-        if (res.statusCode === 200) {
-          const primary = res.data.filter(c => c.level === 1);
-          const secondary = res.data.filter(c => c.level === 2);
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
+          // 根据新的数据结构处理分类数据
+          const categories = res.data.result || [];
+          const primary = categories.filter(c => c.level === 1);
+          const secondary = categories.filter(c => c.level === 2);
           this.setData({
             primaryCategories: primary,
             secondaryCategories: secondary

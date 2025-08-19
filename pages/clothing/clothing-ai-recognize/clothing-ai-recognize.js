@@ -97,9 +97,9 @@ Page({
         _t: Date.now()
       },
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           this.setData({
-            brandList: res.data || []
+            brandList: res.data.result || []
           });
         } else {
           console.log('获取品牌列表失败');

@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改支持size字段">
+    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改以适应新的接口返回数据格式">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PRD.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-detail/clothing-detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-detail/clothing-detail.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.wxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/brand/brand.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/brand/brand.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,7 +219,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755585669430</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="feat: 修改以适应新的接口返回数据格式">
+      <option name="closed" value="true" />
+      <created>1755590721376</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1755590721376</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -239,6 +246,7 @@
     <MESSAGE value="feat: downloadAndUploadImage" />
     <MESSAGE value="feat: 修改图片比例" />
     <MESSAGE value="feat: 修改支持size字段" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改支持size字段" />
+    <MESSAGE value="feat: 修改以适应新的接口返回数据格式" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改以适应新的接口返回数据格式" />
   </component>
 </project>
