@@ -16,6 +16,7 @@ Page({
     colorIndex: 0,
     colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色','粉色','棕色'],
     brand: '',
+    brandId: null,
     brandList: [], // 品牌列表
     brandIndex: -1, // 品牌选择索引
     price: '',
@@ -99,7 +100,7 @@ Page({
     
     return requestData;
   },
-  
+
   // 获取品牌列表
   getBrandList: function() {
     wx.request({
@@ -230,13 +231,20 @@ Page({
     });
   },
   
-  // 品牌选择改变事件
-  onBrandChange: function(e) {
-    const brandIndex = e.detail.value;
-    const brand = this.data.brandList[brandIndex];
+  // 品牌选择事件
+  onBrandSelect: function(e) {
+    const brand = e.detail.brand;
     this.setData({
-      brandIndex: brandIndex,
-      brand: brand ? brand.name : ''
+      brand: brand.name,
+      brandId: brand.id
+    });
+  },
+  
+  // 品牌清空事件
+  onBrandClear: function() {
+    this.setData({
+      brand: '',
+      brandId: null
     });
   },
   

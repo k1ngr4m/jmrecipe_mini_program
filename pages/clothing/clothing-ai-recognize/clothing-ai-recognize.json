@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "AI识别添加衣物",
-  "usingComponents": {}
+  "usingComponents": {
+    "brand-search": "/components/brand-search/brand-search"
+  }
 }

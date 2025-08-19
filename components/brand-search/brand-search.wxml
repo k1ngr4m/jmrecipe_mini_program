@@ -1,0 +1,35 @@
+<view class="brand-search-container">
+  <!-- 搜索输入框 -->
+  <view class="search-input-container">
+    <input 
+      class="search-input" 
+      placeholder="{{placeholder || '请输入品牌名称'}}" 
+      value="{{searchText}}" 
+      bindinput="onSearchInput" 
+      bindfocus="onSearchFocus"
+      bindblur="onSearchBlur"
+      confirm-type="search"
+    />
+    <icon wx:if="{{searchText}}" class="clear-icon" type="clear" bindtap="clearSearch" />
+  </view>
+  
+  <!-- 下拉列表 -->
+  <view class="dropdown-list" wx:if="{{showDropdown && filteredBrands.length > 0}}">
+    <scroll-view class="dropdown-scroll" scroll-y>
+      <block wx:for="{{filteredBrands}}" wx:key="id">
+        <view 
+          class="dropdown-item {{item.id === selectedBrandId ? 'selected' : ''}}" 
+          bindtap="selectBrand"
+          data-brand="{{item}}"
+        >
+          {{item.name}}
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+  
+  <!-- 选中的品牌显示 -->
+  <view class="selected-brand" wx:if="{{selectedBrand && !showDropdown}}">
+    {{selectedBrand.name}}
+  </view>
+</view>

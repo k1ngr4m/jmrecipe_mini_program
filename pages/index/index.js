@@ -18,13 +18,14 @@ Page({
   
   onLoad() {
     // 检查是否已登录
-    // const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
-    // if (hasLoggedIn) {
-    //   return;
-    // }
-    // else {
-    // this.getUserCode()
-    // }
+    const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
+    console.log("hasLoggedIn+", hasLoggedIn);
+    if (hasLoggedIn) {
+      this.getWeatherData()
+    }
+    else {
+    this.getUserCode()
+    }
     // 获取天气数据
     this.getWeatherData();
   },

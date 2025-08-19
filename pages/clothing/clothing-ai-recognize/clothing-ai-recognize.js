@@ -15,6 +15,7 @@ Page({
     color: '',
     season: '',
     brand: '',
+    brandId: null,
     size: '', // 尺码
     brandList: [], // 品牌列表
     brandIndex: -1, // 品牌选择索引
@@ -488,13 +489,20 @@ Page({
     });
   },
 
-  // 品牌选择改变事件
-  onBrandChange: function(e) {
-    const brandIndex = e.detail.value;
-    const brand = this.data.brandList[brandIndex];
+  // 品牌选择事件
+  onBrandSelect: function(e) {
+    const brand = e.detail.brand;
     this.setData({
-      brandIndex: brandIndex,
-      brand: brand ? brand.name : ''
+      brand: brand.name,
+      brandId: brand.id
+    });
+  },
+  
+  // 品牌清空事件
+  onBrandClear: function() {
+    this.setData({
+      brand: '',
+      brandId: null
     });
   },
 

@@ -5,14 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改以适应新的接口返回数据格式">
+      <change afterPath="$PROJECT_DIR$/components/brand-search/brand-search.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/brand-search/brand-search.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/brand-search/brand-search.wxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/brand-search/brand-search.wxss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.wxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.wxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.wxss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/brand/brand.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/brand/brand.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.json" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755590721376</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="feat: 修改以适应新的接口返回数据格式">
+      <option name="closed" value="true" />
+      <created>1755591885966</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1755591885966</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

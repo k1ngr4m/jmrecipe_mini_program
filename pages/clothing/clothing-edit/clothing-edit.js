@@ -16,8 +16,10 @@ Page({
     colorIndex: 0,
     colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色','粉色','棕色'],
     brand: '',
+    brandId: null,
     brandList: [], // 品牌列表
     brandIndex: -1, // 品牌选择索引
+    defaultBrand: null, // 默认选中的品牌
     price: '',
     season: '', // 适用季节
     seasonIndex: -1, // 季节选择索引
@@ -155,12 +157,13 @@ Page({
             }
           }
           
-          // 设置品牌索引
+          // 设置品牌索引和默认品牌
           if (clothing.brand && this.data.brandList.length > 0) {
             const brandIndex = this.data.brandList.findIndex(b => b.name === clothing.brand);
             if (brandIndex !== -1) {
               this.setData({
-                brandIndex: brandIndex
+                brandIndex: brandIndex,
+                defaultBrand: this.data.brandList[brandIndex]
               });
             }
           }
@@ -395,12 +398,20 @@ Page({
     });
   },
   
-  onBrandChange: function(e) {
-    const brandIndex = e.detail.value;
-    const brand = this.data.brandList[brandIndex];
+  // 品牌选择事件
+  onBrandSelect: function(e) {
+    const brand = e.detail.brand;
     this.setData({
-      brandIndex: brandIndex,
-      brand: brand ? brand.name : ''
+      brand: brand.name,
+      brandId: brand.id
+    });
+  },
+  
+  // 品牌清空事件
+  onBrandClear: function() {
+    this.setData({
+      brand: '',
+      brandId: null
     });
   },
   
