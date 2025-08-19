@@ -188,6 +188,9 @@ Page({
             if (result.image_url) {
               this.downloadAndUploadImage(result.image_url, (newCosUrl) => {
                 // 更新页面数据
+                const primaryCategoryName = this.getCategoryNameById(result.primary_category, this.data.primaryCategories);
+                const secondaryCategoryName = this.getCategoryNameById(result.secondary_category, this.data.secondaryCategories);
+                
                 this.setData({
                   isRecognized: true,
                   name: result.name || '',
@@ -197,8 +200,8 @@ Page({
                   season: result.season || '',
                   cosImageUrl: newCosUrl, // 使用新上传的图片URL
                   // 获取分类名称
-                  primaryCategoryName: this.getCategoryNameById(result.primary_category, this.data.primaryCategories),
-                  secondaryCategoryName: this.getCategoryNameById(result.secondary_category, this.data.secondaryCategories)
+                  primaryCategoryName: primaryCategoryName,
+                  secondaryCategoryName: secondaryCategoryName
                 });
                 
                 // 设置分类索引以便在选择器中正确显示
@@ -227,6 +230,9 @@ Page({
               });
             } else {
               // 根据识别结果更新页面数据
+              const primaryCategoryName = this.getCategoryNameById(result.primary_category, this.data.primaryCategories);
+              const secondaryCategoryName = this.getCategoryNameById(result.secondary_category, this.data.secondaryCategories);
+              
               this.setData({
                 isRecognized: true,
                 name: result.name || '',
@@ -235,8 +241,8 @@ Page({
                 color: result.color || '',
                 season: result.season || '',
                 // 获取分类名称
-                primaryCategoryName: this.getCategoryNameById(result.primary_category, this.data.primaryCategories),
-                secondaryCategoryName: this.getCategoryNameById(result.secondary_category, this.data.secondaryCategories)
+                primaryCategoryName: primaryCategoryName,
+                secondaryCategoryName: secondaryCategoryName
               });
               
               // 设置分类索引以便在选择器中正确显示
