@@ -19,12 +19,11 @@ Page({
   onLoad() {
     // 检查是否已登录
     const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
-    console.log("hasLoggedIn+", hasLoggedIn);
     if (hasLoggedIn) {
-      this.getWeatherData()
+      console.log("hasLoggedIn+", hasLoggedIn);
     }
     else {
-    this.getUserCode()
+      this.getUserCode()
     }
     // 获取天气数据
     this.getWeatherData();
