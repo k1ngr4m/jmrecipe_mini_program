@@ -79,7 +79,7 @@
         <view class="form-item">
           <text class="label">图片</text>
           <view class="image-upload" bindtap="chooseImage">
-            <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image"></image>
+            <image wx:if="{{imageUrl}}" src="{{imageUrl}}" class="preview-image" mode="aspectFit"></image>
             <view wx:else class="upload-placeholder">
               <icon class="upload-icon" type="camera" size="24"></icon>
               <text class="upload-text">上传图片</text>

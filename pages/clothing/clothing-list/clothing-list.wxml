@@ -5,7 +5,7 @@
     <image 
       class="member-avatar" 
       src="{{getSelectedMemberAvatar()}}" 
-      mode="aspectFill"
+      mode="aspectFit"
       wx:if="{{getSelectedMemberAvatar()}}"
     ></image>
     <view class="member-avatar placeholder" wx:else>
@@ -19,7 +19,7 @@
       <image 
         class="dropdown-member-avatar" 
         src="{{item.avatar_url}}" 
-        mode="aspectFill"
+        mode="aspectFit"
         wx:if="{{item.avatar_url}}"
       ></image>
       <view class="dropdown-member-avatar placeholder" wx:else>
@@ -120,7 +120,7 @@
     <view wx:if="{{filteredClothingList.length > 0}}" class="clothing-list-container">
       <block wx:for="{{filteredClothingList}}" wx:key="id">
         <view class="clothing-card" bindtap="goToDetail" data-id="{{item.id || item._id}}" data-item="{{item}}" bindlongpress="onLongPressClothing">
-          <image class="clothing-img" src="{{item.image_url}}" mode="aspectFill"></image>
+          <image class="clothing-img" src="{{item.image_url}}" mode="aspectFit"></image>
           <view class="clothing-info">
             <view class="clothing-name">{{item.name}}</view>
             <view class="clothing-category">{{item.primary_category}} - {{item.secondary_category}}</view>

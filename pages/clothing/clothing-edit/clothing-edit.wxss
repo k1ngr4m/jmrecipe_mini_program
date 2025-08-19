@@ -110,7 +110,7 @@ page {
 /* 图片上传区域 */
 .image-upload {
   width: 100%;
-  height: 200rpx;
+  height: 600rpx;
   border: 2rpx dashed #e0d6c0;
   border-radius: 14rpx;
   display: flex;

@@ -92,19 +92,54 @@ Page({
     this.getCategories();
     this.getBrandList();
     this.getClothingList();
+    this.loadMembers();
   },
 
   // 加载成员列表
   loadMembers: function() {
+    const userid = wx.getStorageSync('userid') || '';
+    const familyid = wx.getStorageSync('familyid') || '';
+    if (!userid) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.request({
+      url: config.getFullURL('family') + '/members/list',
+      method: 'POST',
+      data: {
+        userid: userid,
+        familyid: familyid
+      },
+      header: {
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          this.setData({
+            members: res.data,
+            hasLoadedMembers: true
+          });
+
+          // 将成员列表存储到本地，供其他页面使用
+          wx.setStorageSync('members', members);
+        }
+      }
+    }
+    );
+
     // 从本地存储获取成员列表
     const members = wx.getStorageSync('members') || [];
     const selectedMemberId = wx.getStorageSync('selectedMemberId');
-    
+
     this.setData({
       members: members,
       selectedMemberId: selectedMemberId
     });
-  },
+    },
 
   // 切换选中的成员
   switchMember: function(e) {
