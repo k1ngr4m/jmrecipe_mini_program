@@ -22,15 +22,15 @@
 
       <!-- 识别结果区域 -->
       <view class="form-group" wx:if="{{isRecognized}}">
-        <view class="form-item">
-          <text class="label">识别结果</text>
-          <view class="result-item">
-            <text class="result-label">名称：</text>
-            <input class="input result-input" value="{{name}}" bindinput="onNameInput" placeholder="请输入衣物名称" />
+        <!-- 基本信息组 -->
+        <view class="form-group">
+          <view class="form-item">
+            <text class="label">名称 *</text>
+            <input class="input" name="name" value="{{name}}" bindinput="onNameInput" placeholder="请输入衣物名称" />
           </view>
 
           <view class="form-item">
-            <text class="result-label">一级分类：</text>
+            <text class="label">一级分类 *</text>
             <picker mode="selector" range="{{primaryCategories}}" range-key="name" value="{{primaryCategoryIndex}}" bindchange="onPrimaryCategoryChange">
               <view class="picker">
                 {{primaryCategoryIndex >= 0 ? primaryCategories[primaryCategoryIndex].name : '请选择一级分类'}}
@@ -39,16 +39,19 @@
           </view>
 
           <view class="form-item">
-            <text class="result-label">二级分类：</text>
+            <text class="label">二级分类</text>
             <picker mode="selector" range="{{secondaryCategoryOptions}}" range-key="name" value="{{secondaryCategoryIndex}}" bindchange="onSecondaryCategoryChange">
               <view class="picker">
                 {{secondaryCategoryIndex >= 0 ? secondaryCategoryOptions[secondaryCategoryIndex].name : '请选择二级分类'}}
               </view>
             </picker>
           </view>
+        </view>
 
+        <!-- 属性信息组 -->
+        <view class="form-group">
           <view class="form-item">
-            <text class="result-label">颜色：</text>
+            <text class="label">颜色</text>
             <picker mode="selector" range="{{colorOptions}}" value="{{colorIndex}}" bindchange="onColorChange">
               <view class="picker">
                 {{colorIndex >= 0 ? colorOptions[colorIndex] : '请选择颜色'}}
@@ -57,7 +60,7 @@
           </view>
 
           <view class="form-item">
-            <text class="result-label">适用季节：</text>
+            <text class="label">适用季节</text>
             <picker mode="selector" range="{{seasonOptions}}" value="{{seasonIndex}}" bindchange="onSeasonChange">
               <view class="picker">
                 {{seasonIndex >= 0 ? seasonOptions[seasonIndex] : '请选择季节'}}
@@ -69,33 +72,36 @@
 
       <!-- 手动填写区域 -->
       <view class="form-group" wx:if="{{isRecognized}}">
-        <view class="form-item">
-          <text class="label">品牌</text>
-          <brand-search 
-            brand-list="{{brandList}}" 
-            bind:select="onBrandSelect"
-            bind:clear="onBrandClear"
-            placeholder="请输入品牌名称">
-          </brand-search>
-        </view>
+        <!-- 详细信息组 -->
+        <view class="form-group">
+          <view class="form-item">
+            <text class="label">品牌</text>
+            <brand-search 
+              brand-list="{{brandList}}" 
+              bind:select="onBrandSelect"
+              bind:clear="onBrandClear"
+              placeholder="请输入品牌名称">
+            </brand-search>
+          </view>
 
-        <view class="form-item">
-          <text class="label">尺码</text>
-          <input class="input" name="size" value="{{size}}" bindinput="onSizeInput" placeholder="请输入尺码" />
-        </view>
+          <view class="form-item">
+            <text class="label">尺码</text>
+            <input class="input" name="size" value="{{size}}" bindinput="onSizeInput" placeholder="请输入尺码" />
+          </view>
 
-        <view class="form-item">
-          <text class="label">价格</text>
-          <input class="input" type="digit" name="price" value="{{price}}" bindinput="onPriceInput" placeholder="请输入价格" />
-        </view>
+          <view class="form-item">
+            <text class="label">价格</text>
+            <input class="input" type="digit" name="price" value="{{price}}" bindinput="onPriceInput" placeholder="请输入价格" />
+          </view>
 
-        <view class="form-item">
-          <text class="label">购买日期</text>
-          <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
-            <view class="picker">
-              {{purchaseDate ? purchaseDate : '请选择日期'}}
-            </view>
-          </picker>
+          <view class="form-item">
+            <text class="label">购买日期</text>
+            <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
+              <view class="picker">
+                {{purchaseDate ? purchaseDate : '请选择日期'}}
+              </view>
+            </picker>
+          </view>
         </view>
       </view>
 
