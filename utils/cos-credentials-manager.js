@@ -180,7 +180,7 @@ class COSCredentialsManager {
       console.error('获取COS凭证失败:', error);
       callback(error, null);
     });
-  }
+  },
 
   // 上传头像到腾讯云COS
   uploadAvatarToCOS(filePath, userid, callback) {
@@ -212,7 +212,7 @@ class COSCredentialsManager {
     });
     
     return cos;
-  }
+  },
 }
 
 // 创建单例实例
