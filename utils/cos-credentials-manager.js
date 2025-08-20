@@ -180,7 +180,7 @@ class COSCredentialsManager {
       console.error('获取COS凭证失败:', error);
       callback(error, null);
     });
-  },
+  }
 
   // 上传头像到腾讯云COS
   uploadAvatarToCOS(filePath, userid, callback) {
@@ -193,10 +193,10 @@ class COSCredentialsManager {
     
     // 调用通用上传函数
     this.uploadFileToCOS(filePath, key, callback);
-  },
+  }
 
   // 初始化COS实例
-  initCosInstance: function(credentials, COS) {
+  initCosInstance(credentials, COS) {
     // 初始化COS实例
     const cos = new COS({
       getAuthorization: function (options, callback) {
@@ -212,7 +212,7 @@ class COSCredentialsManager {
     });
     
     return cos;
-  },
+  }
 }
 
 // 创建单例实例
