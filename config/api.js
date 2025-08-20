@@ -2,10 +2,11 @@
 const config = {
   // 开发环境配置
   dev: {
-    // baseURL: 'http://localhost:8088',
-    baseURL: 'http://192.168.70.169:8088',
+    baseURL: 'http://localhost:8088',
+    // baseURL: 'http://192.168.70.169:8088',
     api: {
       user: '/api/users',
+      userDetail: '/api/users/detail',
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口
@@ -20,6 +21,7 @@ const config = {
     baseURL: 'https://www.jmrecipe.top', // 请替换为实际的生产环境域名
     api: {
       user: 'api/users',
+      userDetail: '/api/users/detail',
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口

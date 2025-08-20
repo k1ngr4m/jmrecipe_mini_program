@@ -1,10 +1,12 @@
 const app = getApp();
+const config = require('../../config/api.js');
 
 Page({
   data: {
     title: '我的',
     userInfo: null,
     familyName: null,
+    userDetail: null, // 用户详细信息
   },
 
   onLoad() {
@@ -16,6 +18,8 @@ Page({
     // 页面显示时重新加载用户信息
     this.loadStoredUserInfo()
     this.loadFamilyInfo()
+    // 获取用户详细信息
+    this.getUserDetail()
   },
 
   // 加载family信息
@@ -45,6 +49,36 @@ Page({
         })
       }
     }
+  },
+  
+  // 获取用户详细信息
+  getUserDetail() {
+    const userid = wx.getStorageSync('userid')
+    if (!userid) {
+      console.log('用户未登录，无法获取详细信息')
+      return
+    }
+    
+    wx.request({
+      url: config.getFullURL('userDetail'),
+      method: 'GET',
+      data: {
+        userid: userid
+      },
+      success: (res) => {
+        if (res.statusCode === 200 && res.data.code === 1) {
+          console.log('获取用户详细信息成功:', res.data.result)
+          this.setData({
+            userDetail: res.data.result
+          })
+        } else {
+          console.error('获取用户详细信息失败:', res)
+        }
+      },
+      fail: (err) => {
+        console.error('获取用户详细信息网络错误:', err)
+      }
+    })
   },
 
   // 用户点击登录按钮时触发
