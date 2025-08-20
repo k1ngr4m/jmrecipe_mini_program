@@ -1,7 +1,8 @@
-// pages/profile/profile.js
+const app = getApp();
+
 Page({
   data: {
-    userInfo: null
+    userInfo: null,
   },
 
   onLoad() {
@@ -14,17 +15,24 @@ Page({
 
   getUserInfo() {
     const app = getApp()
-    app.getUserInfo((userInfo) => {
-      if (userInfo) {
-        this.setData({
-          userInfo: userInfo
-        })
-      } else {
-        // 用户未登录，跳转到"我的"页面
-        wx.redirectTo({
-          url: '/pages/my/my'
-        })
-      }
+    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
+    
+    if (userInfo) {
+      this.setData({
+        userInfo: userInfo
+      })
+    }
+  },
+
+  goBack() {
+    wx.navigateBack({
+      delta: 1
+    })
+  },
+
+  goToEditProfile() {
+    wx.navigateTo({
+      url: '/pages/settings/profile-edit/profile-edit'
     })
   },
 

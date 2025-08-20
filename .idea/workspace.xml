@@ -4,10 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修复品牌名称显示逻辑">
+    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改brand的显示的位置">
+      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.wxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.wxss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/profile/profile.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/profile/profile.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.wxss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +49,7 @@
     "Node.js.index.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "hotfix/v1.1.2",
+    "git-widget-placeholder": "hotfix/v1.1.3",
     "last_opened_file_path": "/Users/linyiming/Projects/WeChatProjects/jmrecipe/libs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -246,11 +256,30 @@
       <option name="project" value="LOCAL" />
       <updated>1755595432357</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="feat: 修改brand的显示的位置">
+      <option name="closed" value="true" />
+      <created>1755596044434</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1755596044434</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: 不重复登录" />
@@ -268,6 +297,7 @@
     <MESSAGE value="feat: 修改以适应新的接口返回数据格式" />
     <MESSAGE value="feat: 更改品牌下拉框" />
     <MESSAGE value="feat: 修复品牌名称显示逻辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 修复品牌名称显示逻辑" />
+    <MESSAGE value="feat: 修改brand的显示的位置" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 修改brand的显示的位置" />
   </component>
 </project>

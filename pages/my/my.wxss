@@ -1,176 +1,240 @@
-/* pages/my/my.wxss */
-.my-container {
-  background-color: #f5f5f5;
-  min-height: 100vh;
-  padding: 20rpx;
+page {
+  background-color: #f9f5e6; /* 米黄色背景 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.header {
-  background-color: white;
-  border-radius: 20rpx;
-  padding: 40rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+.container {
+  padding: 0;
+  background-color: #f9f5e6;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* 顶部导航 */
+.top-nav {
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  z-index: 999;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* 主内容区 */
+.main-content {
+  flex: 1;
+  margin-top: 5px;
+  padding: 15px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* 用户卡片 */
+.user-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+}
+
+.user-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
 }
 
 .user-info {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .avatar {
-  width: 120rpx;
-  height: 120rpx;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  margin-right: 30rpx;
+  margin-right: 15px;
+  border: 2px solid #f0e8d6;
 }
 
 .user-text {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }
 
 .nickname {
-  font-size: 36rpx;
-  font-weight: bold;
-  margin-bottom: 10rpx;
-}
-
-.family-name {
-  font-size: 28rpx;
-  color: #666;
-  margin-bottom: 10rpx;
-}
-
-.view-profile {
-  font-size: 24rpx;
-  color: #999;
-}
-
-.login-prompt {
-  text-align: center;
-  padding: 40rpx 0;
-}
-
-.login-btn {
-  background-color: #07c160;
-  color: white;
-  border: none;
-  border-radius: 10rpx;
-  padding: 20rpx 40rpx;
-  font-size: 32rpx;
-  margin-top: 20rpx;
-}
-
-/* 引导用户完善资料样式 */
-.profile-guide {
-  width: 100%;
-  background-color: white;
-  border-radius: 20rpx;
-  padding: 40rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
-}
-
-.guide-title {
-  font-size: 36rpx;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20rpx;
-}
-
-.guide-desc {
-  font-size: 28rpx;
-  color: #666;
-  text-align: center;
-  margin-bottom: 40rpx;
-}
-
-.avatar-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: none;
-  border: none;
-  margin-bottom: 40rpx;
-}
-
-.avatar-preview {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 50%;
-  margin-bottom: 20rpx;
-}
-
-.change-avatar-text {
-  font-size: 28rpx;
-  color: #07c160;
-}
-
-.nickname-input-wrapper {
-  margin-bottom: 40rpx;
-}
-
-.input-label {
-  font-size: 32rpx;
-  margin-bottom: 20rpx;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
   display: block;
 }
 
-.nickname-input {
-  width: 100%;
-  height: 80rpx;
-  border: 2rpx solid #e0e0e0;
-  border-radius: 10rpx;
-  padding: 0 20rpx;
-  font-size: 30rpx;
+.family-name {
+  font-size: 14px;
+  color: #8b6e41;
+  display: block;
 }
 
-.save-btn {
-  width: 100%;
-  background-color: #07c160;
-  color: white;
+.arrow-icon {
+  font-size: 18px;
+  color: #a68d63;
+}
+
+/* 登录提示 */
+.login-prompt {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.login-text {
+  display: block;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.login-btn {
+  background: linear-gradient(135deg, #ff8a00, #ff6600);
+  color: #fff;
   border: none;
-  border-radius: 10rpx;
-  padding: 20rpx 0;
-  font-size: 32rpx;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(255, 102, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.login-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.3);
+}
+
+/* 菜单区域 */
+.menu-section {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 15px;
+}
+
+.section-title {
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fdfcf9;
 }
 
 .menu-list {
-  width: 100%;
-  background-color: white;
-  border-radius: 20rpx;
-  overflow: hidden;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  padding: 0;
 }
 
 .menu-item {
-  padding: 30rpx 40rpx;
-  border-bottom: 2rpx solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .menu-item:last-child {
   border-bottom: none;
 }
 
+.menu-item:active {
+  background: #f9f5e6;
+}
+
+.menu-icon {
+  font-size: 20px;
+  margin-right: 15px;
+  width: 24px;
+  text-align: center;
+}
+
+.menu-content {
+  flex: 1;
+}
+
 .menu-text {
-  font-size: 32rpx;
+  font-size: 16px;
   color: #333;
+  font-weight: 500;
 }
 
-/* 调试信息样式 */
-.debug-info {
-  width: 100%;
-  background-color: #fff3cd;
-  border: 2rpx solid #ffeaa7;
-  border-radius: 10rpx;
-  padding: 20rpx;
-  margin-bottom: 20rpx;
-  font-size: 24rpx;
-  color: #856404;
+/* 退出登录区域 */
+.logout-section {
+  padding: 20px 0;
+  text-align: center;
 }
 
-.debug-info text {
-  display: block;
-  margin-bottom: 10rpx;
+.logout-btn {
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(255, 77, 79, 0.3);
+  transition: all 0.2s ease;
+}
+
+.logout-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(255, 77, 79, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 350px) {
+  .main-content {
+    padding: 10px;
+  }
+  
+  .user-card, .menu-section {
+    border-radius: 10px;
+  }
+  
+  .menu-item {
+    padding: 12px 15px;
+  }
+}
+
+@media (min-width: 400px) {
+  .main-content {
+    padding: 20px;
+    max-width: 450px;
+    margin: 0 auto;
+  }
 }

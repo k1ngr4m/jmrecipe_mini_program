@@ -8,6 +8,7 @@
     "pages/clothing/clothing-list/clothing-list",
     "pages/clothing/clothing-ai-recognize/clothing-ai-recognize",
     "pages/settings/profile/profile",
+    "pages/settings/profile-edit/profile-edit",
     "pages/settings/member/member-list/member-list",
     "pages/settings/member/member-add/member-add",
     "pages/settings/member/member-edit/member-edit",

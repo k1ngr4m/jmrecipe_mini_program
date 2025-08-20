@@ -1,39 +1,65 @@
 <!--pages/my/my.wxml-->
-<view class="my-container">
-  <view class="header">
-    <view wx:if="{{userInfo}}" class="user-info" bindtap="goToProfile">
-      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
-      <view class="user-text">
-        <text class="nickname">{{userInfo.nickName}}</text>
-        <text class="family-name">{{familyName || '我的家庭'}}</text>
-        <text class="view-profile">查看个人资料</text>
+<view class="container">
+  
+  <scroll-view class="main-content" scroll-y>
+    <!-- 用户信息卡片 -->
+    <view class="user-card">
+      <view wx:if="{{userInfo}}" class="user-info" bindtap="goToProfile">
+        <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+        <view class="user-text">
+          <text class="nickname">{{userInfo.nickName}}</text>
+          <text class="family-name">{{familyName || '我的家庭'}}</text>
+        </view>
+        <view class="arrow-icon">></view>
+      </view>
+      
+      <view wx:else class="login-prompt">
+        <text class="login-text">未登录</text>
+        <button class="login-btn" bindtap="onLoginTap">点击登录</button>
       </view>
     </view>
     
-    <view wx:else class="login-prompt">
-      <text>未登录</text>
-      <navigator url="/pages/login/login" class="login-btn">点击登录</navigator>
-    </view>
-  </view>
-  <view class="menu-list">
-    <view class="menu-item" bindtap="goToProfile">
-      <text class="menu-text">个人资料</text>
+    <!-- 功能菜单列表 -->
+    <view class="menu-section">
+      <view class="section-title">设置与管理</view>
+      <view class="menu-list">
+        <view class="menu-item" bindtap="goToProfile">
+          <view class="menu-icon">👤</view>
+          <view class="menu-content">
+            <text class="menu-text">个人资料</text>
+          </view>
+          <view class="arrow-icon">></view>
+        </view>
+        
+        <view class="menu-item" bindtap="goToMemberManagement">
+          <view class="menu-icon">👨‍👩‍👧‍👦</view>
+          <view class="menu-content">
+            <text class="menu-text">成员管理</text>
+          </view>
+          <view class="arrow-icon">></view>
+        </view>
+        
+        <view class="menu-item" bindtap="goToBrandManagement">
+          <view class="menu-icon">🏷️</view>
+          <view class="menu-content">
+            <text class="menu-text">品牌管理</text>
+          </view>
+          <view class="arrow-icon">></view>
+        </view>
+        
+        <view class="menu-item" bindtap="goToCategoryManagement">
+          <view class="menu-icon">📂</view>
+          <view class="menu-content">
+            <text class="menu-text">分类管理</text>
+          </view>
+          <view class="arrow-icon">></view>
+        </view>
+      </view>
     </view>
     
-    <view class="menu-item" bindtap="goToMemberManagement">
-      <text class="menu-text">成员管理</text>
+    <!-- 退出登录按钮 -->
+    <view class="logout-section" wx:if="{{userInfo}}">
+      <button class="logout-btn" bindtap="logout">退出登录</button>
     </view>
-    
-    <view class="menu-item" bindtap="goToBrandManagement">
-      <text class="menu-text">品牌管理</text>
-    </view>
-    
-    <view class="menu-item" bindtap="goToCategoryManagement">
-      <text class="menu-text">分类管理</text>
-    </view>
-    
-    <view class="menu-item" bindtap="logout" wx:if="{{userInfo}}">
-      <text class="menu-text">退出登录</text>
-    </view>
-  </view>
+  </scroll-view>
 </view>
