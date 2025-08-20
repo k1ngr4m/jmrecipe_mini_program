@@ -51,7 +51,7 @@ Page({
       
       // 处理头像URL，如果有的话需要验签
       if (userInfo.avatarUrl) {
-        this.getSignedCosUrl(userInfo.avatarUrl, (signedUrl) => {
+        cosCredentialsManager.getSignedCosUrl(userInfo.avatarUrl, (signedUrl) => {
           // 更新用户信息，使用验签后的URL
           const updatedUserInfo = {
             ...userInfo,
@@ -92,70 +92,7 @@ Page({
     });
   },
 
-  // 获取COS签名URL
-  getSignedCosUrl: function(cosUrl, callback) {
-    // 如果URL已经包含签名信息，则直接返回
-    if (cosUrl && cosUrl.includes('q-sign-algorithm')) {
-      callback(cosUrl);
-      return;
-    }
-    
-    // 从URL中提取Bucket、Region和Key信息
-    // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/jmrecipe/clothing/1754496891594_6800.png
-    const urlPattern = /^https:\/\/([^\/]+)\.cos\.([^\/]+)\.myqcloud\.com\/(.+)$/;
-    const match = cosUrl.match(urlPattern);
-    
-    if (!match) {
-      console.error('无效的COS URL格式:', cosUrl);
-      callback(cosUrl);
-      return;
-    }
-    
-    const bucketWithAppId = match[1]; // jmrecipe-1309147067
-    const region = match[2]; // ap-shanghai
-    const key = match[3]; // clothing-list/1754496891594_6800.png
-    const bucket = bucketWithAppId; // COS SDK可以处理带APPID的bucket名称
-    
-    // 引入COS SDK和凭证管理器
-    const COS = require('../../../utils/cos-wx-sdk-v5.js');
-    const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
-    
-    // 获取有效的凭证
-    cosCredentialsManager.getValidCredentials().then(credentials => {
-      // 初始化COS实例
-      const cos = new COS({
-        getAuthorization: function (options, callback) {
-          callback({
-            TmpSecretId: credentials.tmp_secret_id,
-            TmpSecretKey: credentials.tmp_secret_key,
-            SecurityToken: credentials.token,
-            StartTime: credentials.start_time,
-            ExpiredTime: credentials.expired_time
-          });
-        },
-        SimpleUploadMethod: 'putObject'
-      });
-      
-      // 获取带签名的URL
-      cos.getObjectUrl({
-        Bucket: bucket,
-        Region: region,
-        Key: key,
-        Sign: true
-      }, function(err, data) {
-        if (err) {
-          console.error('获取签名URL失败:', err);
-          callback(cosUrl); // 如果获取失败，返回原始URL
-        } else {
-          callback(data.Url);
-        }
-      });
-    }).catch(error => {
-      console.error('获取COS凭证失败:', error);
-      callback(cosUrl); // 如果获取失败，返回原始URL
-    });
-  },
-
+  
   chooseAvatar() {
     wx.chooseImage({
       count: 1,
@@ -173,12 +110,25 @@ Page({
           icon: 'loading'
         });
         
-        this.uploadAvatarToCOS(tempFilePath, (cosUrl) => {
-          console.log('头像上传完成:', cosUrl);
-          wx.showToast({
-            title: '头像上传成功',
-            icon: 'success'
-          });
+        const userid = this.data.userInfo.userid || wx.getStorageSync('userid') || 'unknown';
+        cosCredentialsManager.uploadAvatarToCOS(tempFilePath, userid, (err, cosUrl) => {
+          if (err) {
+            console.error('头像上传失败:', err);
+            wx.showToast({
+              title: '上传失败',
+              icon: 'none'
+            });
+          } else {
+            console.log('头像上传完成:', cosUrl);
+            // 更新头像URL
+            this.setData({
+              tempAvatarUrl: cosUrl
+            });
+            wx.showToast({
+              title: '头像上传成功',
+              icon: 'success'
+            });
+          }
         });
       },
       fail: (err) => {
@@ -188,74 +138,6 @@ Page({
           icon: 'none'
         });
       }
-    });
-  },
-  
-  // 上传头像到腾讯云COS（带回调）
-  uploadAvatarToCOS(filePath, callback) {
-    console.log('开始上传头像到COS:', filePath);
-    const that = this;
-    const userid = this.data.userInfo.userid || wx.getStorageSync('userid') || 'unknown';
-    
-    // 获取有效的凭证
-    cosCredentialsManager.getValidCredentials().then(credentials => {
-      // 初始化COS实例
-      const cos = new COS({
-        getAuthorization: function (options, callback) {
-          callback({
-            TmpSecretId: credentials.tmp_secret_id,
-            TmpSecretKey: credentials.tmp_secret_key,
-            SecurityToken: credentials.token,
-            StartTime: credentials.start_time,
-            ExpiredTime: credentials.expired_time
-          });
-        },
-        SimpleUploadMethod: 'putObject'
-      });
-      
-      // 生成唯一文件名
-      const fileName = filePath.split('/').pop();
-      const timestamp = Date.now();
-      const random = Math.floor(Math.random() * 10000);
-      const ext = fileName.split('.').pop();
-      const key = `jmrecipe/avatar/${userid}_${timestamp}_${random}.${ext}`;
-      
-      // 使用SDK上传
-      cos.uploadFile({
-        Bucket: 'jmrecipe-1309147067',
-        Region: 'ap-shanghai',
-        Key: key,
-        FilePath: filePath,
-        onProgress: function(info) {
-          console.log('上传进度:', JSON.stringify(info));
-        }
-      }, function(err, data) {
-        if (err) {
-          console.error('上传失败:', err);
-          wx.showToast({
-            title: '上传失败',
-            icon: 'none'
-          });
-        } else {
-          console.log('上传成功', data);
-          const cosUrl = `https://${data.Location}`;
-          
-          // 更新头像URL
-          that.setData({
-            tempAvatarUrl: cosUrl
-          });
-          
-          if (callback && typeof callback === 'function') {
-            callback(cosUrl);
-          }
-        }
-      });
-    }).catch(error => {
-      console.error('获取COS凭证失败:', error);
-      wx.showToast({
-        title: '获取上传凭证失败',
-        icon: 'none'
-      });
     });
   },
 

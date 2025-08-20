@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改brand的显示的位置">
-      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.wxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/settings/profile-edit/profile-edit.wxss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/my/my.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/my/my.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/profile/profile.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/profile/profile.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/pages/settings/profile/profile.wxss" afterDir="false" />
-    </list>
+    <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改brand的显示的位置" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
