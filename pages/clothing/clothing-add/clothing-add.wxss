@@ -187,3 +187,29 @@ page {
   transform: translateY(0);
   box-shadow: 0 2rpx 10rpx rgba(216, 185, 95, 0.3);
 }
+
+/* 日期选择器容器 */
+.date-picker-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.date-picker{
+  width: 90%;
+}
+/* 清除日期按钮 */
+.clear-date {
+  width: 10%;
+  margin-left: 20rpx;
+  padding: 8rpx 16rpx;
+  background-color: #f0f0f0;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  color: #666;
+  cursor: pointer;
+}
+
+.clear-date:active {
+  background-color: #e0e0e0;
+}

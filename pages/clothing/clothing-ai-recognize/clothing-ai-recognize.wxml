@@ -51,6 +51,7 @@
             <text class="label">品牌</text>
             <brand-search
                     brand-list="{{brandList}}"
+                    default-brand="{{defaultBrand}}"
                     bind:select="onBrandSelect"
                     bind:clear="onBrandClear"
                     placeholder="请输入品牌名称">
@@ -98,11 +99,14 @@
 
           <view class="form-item">
             <text class="label">购买日期</text>
-            <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
-              <view class="picker">
-                {{purchaseDate ? purchaseDate : '请选择日期'}}
-              </view>
-            </picker>
+            <view class="date-picker-container">
+              <picker mode="date" value="{{purchaseDate}}" bindchange="bindDateChange">
+                <view class="picker">
+                  {{purchaseDate ? purchaseDate : '请选择日期'}}
+                </view>
+              </picker>
+              <view class="clear-date" wx:if="{{purchaseDate}}" bindtap="clearPurchaseDate">清除</view>
+            </view>
           </view>
         </view>
       </view>

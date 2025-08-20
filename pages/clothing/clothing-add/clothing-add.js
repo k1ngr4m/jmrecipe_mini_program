@@ -15,9 +15,10 @@ Page({
     color: '',
     colorIndex: 0,
     colorOptions: ['红色', '橙色', '黄色', '绿色', '蓝色', '紫色', '黑色', '白色','卡其色','米色','粉色','棕色'],
-    brand: '',
+    brand: '其他',
     brandId: null,
     brandList: [], // 品牌列表
+    defaultBrand: null, // 默认选中的品牌
     brandIndex: -1, // 品牌选择索引
     price: '',
     season: '', // 适用季节
@@ -37,6 +38,15 @@ Page({
     },
     // 当前用户的分类（根据成员性别确定）
     currentCategories: {}
+  },
+
+  // 获取当天日期的函数
+  getTodayDate: function() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   },
 
   onLoad() {
@@ -59,6 +69,11 @@ Page({
       this.getCategories(); // 获取分类数据
       this.getBrandList(); // 获取品牌列表
       this.initCosInstance(); // 初始化COS实例
+      
+      // 设置默认购买日期为当天
+      this.setData({
+        purchaseDate: this.getTodayDate()
+      });
     }
   },
 
@@ -93,9 +108,12 @@ Page({
         requestData.purchase_date = Math.floor(date.getTime() / 1000); // 转换为秒级时间戳
         console.log('转换后的时间戳:', requestData.purchase_date);
       } else {
-        // 如果转换失败，删除该字段
-        delete requestData.purchase_date;
+        // 如果转换失败，设置为-1
+        requestData.purchase_date = -1;
       }
+    } else {
+      // 如果purchase_date为空，设置为-1
+      requestData.purchase_date = -1;
     }
     
     return requestData;
@@ -113,9 +131,22 @@ Page({
       },
       success: (res) => {
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
-          this.setData({
-            brandList: res.data.result || []
-          });
+          const brandList = res.data.result || [];
+          
+          // 查找"其他"品牌
+          const otherBrand = brandList.find(brand => brand.name === '其他');
+          
+          // 更新数据
+          const updateData = {
+            brandList: brandList
+          };
+          
+          // 如果找到"其他"品牌，设置为默认选中
+          if (otherBrand) {
+            updateData.defaultBrand = otherBrand;
+          }
+          
+          this.setData(updateData);
         } else {
           console.log('获取品牌列表失败');
         }
@@ -172,6 +203,13 @@ Page({
   bindDateChange: function(e) {
     this.setData({
       purchaseDate: e.detail.value
+    });
+  },
+  
+  // 清除购买日期
+  clearPurchaseDate: function() {
+    this.setData({
+      purchaseDate: ''
     });
   },
   

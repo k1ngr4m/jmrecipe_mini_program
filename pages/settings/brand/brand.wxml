@@ -15,15 +15,18 @@
     <!-- 品牌列表 -->
     <block wx:if="{{filteredBrands.length}}">
       <block wx:for="{{filteredBrands}}" wx:key="id">
-        <view class="brand-item">
+        <view class="brand-item {{item.isSystem ? 'system-brand' : ''}}">
           <text class="brand-name">{{item.name}}</text>
-          <view class="brand-actions">
+          <view class="brand-actions" wx:if="{{!item.isSystem}}">
             <view class="icon-btn edit" bindtap="showBrandModal" data-brand="{{item}}">
               ✏️ 编辑
             </view>
             <view class="icon-btn delete" bindtap="deleteBrand" data-brand="{{item}}">
               🗑 删除
             </view>
+          </view>
+          <view class="brand-actions system-brand-tag" wx:else>
+            <text class="system-tag">系统品牌</text>
           </view>
         </view>
       </block>

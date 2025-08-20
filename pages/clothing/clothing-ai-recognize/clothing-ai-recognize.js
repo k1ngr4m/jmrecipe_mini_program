@@ -14,10 +14,11 @@ Page({
     secondaryCategoryName: '', // 二级分类名称
     color: '',
     season: '',
-    brand: '',
+    brand: '其他',
     brandId: null,
     size: '', // 尺码
     brandList: [], // 品牌列表
+    defaultBrand: null, // 默认选中的品牌
     brandIndex: -1, // 品牌选择索引
     price: '',
     purchaseDate: '',
@@ -34,6 +35,15 @@ Page({
     memberGender: 1, // 成员性别，1男/2女
     // COS实例
     cosInstance: null
+  },
+
+  // 获取当天日期的函数
+  getTodayDate: function() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   },
 
   onLoad() {
@@ -58,6 +68,11 @@ Page({
       // 获取分类数据和品牌列表
       this.getCategories();
       this.getBrandList();
+      
+      // 设置默认购买日期为当天
+      this.setData({
+        purchaseDate: this.getTodayDate()
+      });
     }
   },
 
@@ -99,9 +114,22 @@ Page({
       },
       success: (res) => {
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
-          this.setData({
-            brandList: res.data.result || []
-          });
+          const brandList = res.data.result || [];
+          
+          // 查找"其他"品牌
+          const otherBrand = brandList.find(brand => brand.name === '其他');
+          
+          // 更新数据
+          const updateData = {
+            brandList: brandList
+          };
+          
+          // 如果找到"其他"品牌，设置为默认选中
+          if (otherBrand) {
+            updateData.defaultBrand = otherBrand;
+          }
+          
+          this.setData(updateData);
         } else {
           console.log('获取品牌列表失败');
         }
@@ -130,7 +158,7 @@ Page({
           secondaryCategoryName: '',
           color: '',
           season: '',
-          brand: '',
+          brand: '其他',
           size: '',
           brandIndex: -1,
           price: '',
@@ -496,6 +524,13 @@ Page({
       purchaseDate: e.detail.value
     });
   },
+  
+  // 清除购买日期
+  clearPurchaseDate: function() {
+    this.setData({
+      purchaseDate: ''
+    });
+  },
 
   // 品牌选择事件
   onBrandSelect: function(e) {
@@ -643,9 +678,12 @@ Page({
         requestData.purchase_date = Math.floor(date.getTime() / 1000); // 转换为秒级时间戳
         console.log('转换后的时间戳:', requestData.purchase_date);
       } else {
-        // 如果转换失败，删除该字段
-        delete requestData.purchase_date;
+        // 如果转换失败，设置为-1
+        requestData.purchase_date = -1;
       }
+    } else {
+      // 如果purchase_date为空，设置为-1
+      requestData.purchase_date = -1;
     }
     
     return requestData;

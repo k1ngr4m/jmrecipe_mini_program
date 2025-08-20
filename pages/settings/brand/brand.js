@@ -26,9 +26,34 @@ Page({
       },
       success: (res) => {
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
+          // 确保"其他"品牌始终存在且在第一个位置
+          let brands = res.data.result || [];
+          const hasOtherBrand = brands.some(brand => brand.name === '其他');
+          
+          // 如果没有"其他"品牌，则添加一个到第一个位置
+          if (!hasOtherBrand) {
+            brands.unshift({
+              id: 'other',
+              name: '其他',
+              isSystem: true // 标记为系统品牌，不可编辑删除
+            });
+          } else {
+            // 如果有"其他"品牌，确保它在第一个位置
+            const otherBrandIndex = brands.findIndex(brand => brand.name === '其他');
+            if (otherBrandIndex > 0) {
+              // 将"其他"品牌移动到第一个位置
+              const otherBrand = brands.splice(otherBrandIndex, 1)[0];
+              otherBrand.isSystem = true;
+              brands.unshift(otherBrand);
+            } else if (otherBrandIndex === 0) {
+              // 如果已经在第一个位置，标记为系统品牌
+              brands[0].isSystem = true;
+            }
+          }
+          
           this.setData({
-            brands: res.data.result || [],
-            filteredBrands: res.data.result || [] // 初始化筛选列表
+            brands: brands,
+            filteredBrands: brands // 初始化筛选列表
           });
         } else {
           wx.showToast({
@@ -163,7 +188,9 @@ Page({
 
   // 保存品牌
   saveBrand() {
-    if (!this.data.name.trim()) {
+    const name = this.data.name.trim();
+    
+    if (!name) {
       wx.showToast({
         title: '请输入品牌名称',
         icon: 'none'
@@ -171,10 +198,29 @@ Page({
       return;
     }
 
+    // 检查是否尝试创建或编辑为"其他"品牌（除了系统默认的）
+    if (name === '其他' && (!this.data.isEditing || !this.data.currentBrand.isSystem)) {
+      wx.showToast({
+        title: '不能创建或修改为"其他"品牌',
+        icon: 'none'
+      });
+      return;
+    }
+
     // 创建品牌
     if (!this.data.isEditing) {
+      // 检查是否已存在同名品牌
+      const existingBrand = this.data.brands.find(brand => brand.name === name);
+      if (existingBrand && !existingBrand.isSystem) {
+        wx.showToast({
+          title: '品牌已存在',
+          icon: 'none'
+        });
+        return;
+      }
+      
       const requestData = {
-        name: this.data.name.trim(),
+        name: name,
         familyid: wx.getStorageSync('familyid') || '',
         logo_url: ''
       };
@@ -214,10 +260,29 @@ Page({
       });
     } else {
       // 更新品牌
+      // 如果是系统品牌"其他"，不允许更新
+      if (this.data.currentBrand.isSystem) {
+        wx.showToast({
+          title: '系统品牌不能修改',
+          icon: 'none'
+        });
+        return;
+      }
+      
+      // 检查是否已存在同名品牌
+      const existingBrand = this.data.brands.find(brand => brand.name === name && brand.id !== this.data.currentBrand.id);
+      if (existingBrand) {
+        wx.showToast({
+          title: '品牌已存在',
+          icon: 'none'
+        });
+        return;
+      }
+      
       const requestData = {
         brand_id: this.data.currentBrand.id,
         brand_update: {
-          name: this.data.name.trim()
+          name: name
         },
         familyid: wx.getStorageSync('familyid') || '',
       };
@@ -261,6 +326,15 @@ Page({
   // 删除品牌
   deleteBrand(e) {
     const brand = e.currentTarget.dataset.brand;
+    
+    // 如果是系统品牌"其他"，不允许删除
+    if (brand.isSystem) {
+      wx.showToast({
+        title: '系统品牌不能删除',
+        icon: 'none'
+      });
+      return;
+    }
     
     wx.showModal({
       title: '确认删除',
