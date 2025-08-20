@@ -1,4 +1,5 @@
 const config = require('../config/api.js');
+const imageCacheManager = require('./image-cache-manager.js');
 
 class COSCredentialsManager {
   constructor() {
@@ -79,6 +80,13 @@ class COSCredentialsManager {
       return;
     }
     
+    // 检查缓存中是否已有签名URL
+    const cachedUrl = imageCacheManager.getCachedImageUrl(cosUrl);
+    if (cachedUrl) {
+      callback(cachedUrl);
+      return;
+    }
+    
     // 从URL中提取Bucket、Region和Key信息
     // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/jmrecipe/clothing/1754496891594_6800.png
     const urlPattern = /^https:\/\/([^\/]+)\.cos\.([^\/]+)\.myqcloud\.com\/(.+)$/;
@@ -120,11 +128,13 @@ class COSCredentialsManager {
         Region: region,
         Key: key,
         Sign: true
-      }, function(err, data) {
+      }, (err, data) => {
         if (err) {
           console.error('获取签名URL失败:', err);
           callback(cosUrl); // 如果获取失败，返回原始URL
         } else {
+          // 将签名URL存入缓存
+          imageCacheManager.setCachedImageUrl(cosUrl, data.Url);
           callback(data.Url);
         }
       });

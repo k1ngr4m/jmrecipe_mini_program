@@ -1,0 +1,25 @@
+// my.wxs - 用于处理用户页面的工具函数
+
+// 格式化时间戳为日期字符串
+var formatBirthday = function(timestamp) {
+  if (!timestamp) {
+    return '未设置';
+  }
+  
+  try {
+    // 使用 WXS 的 getDate 函数替代 JavaScript 的 Date
+    var date = getDate(timestamp * 1000);
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    
+    return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+  } catch (e) {
+    return '未设置';
+  }
+};
+
+// 导出函数
+module.exports = {
+  formatBirthday: formatBirthday
+};

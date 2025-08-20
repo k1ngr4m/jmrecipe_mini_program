@@ -6,7 +6,6 @@ const config = {
     // baseURL: 'http://192.168.70.169:8088',
     api: {
       user: '/api/users',
-      userDetail: '/api/users/detail',
       clothing: '/api/wardrobe/clothing',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口

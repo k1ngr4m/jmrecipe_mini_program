@@ -943,42 +943,13 @@ Page({
 
   // 获取缺省图片的带签名URL
   getDefaultImageSignedUrl: function(callback) {
-    // 如果已经有缓存的签名URL且未过期，则直接使用
-    if (this.data.defaultImageUrl) {
-      callback(this.data.defaultImageUrl);
-      return;
-    }
-    
     // 缺省图片的COS路径
     const defaultImagePath = 'jmrecipe/Index/设计缺省页.png';
-    const bucket = 'jmrecipe-1309147067';
-    const region = 'ap-shanghai';
-    const key = defaultImagePath;
+    const defaultImageUrl = `https://${'jmrecipe-1309147067'}.cos.${'ap-shanghai'}.myqcloud.com/${defaultImagePath}`;
     
-    // 获取有效的凭证并初始化COS实例
-    cosCredentialsManager.getValidCredentials().then(credentials => {
-      const cos = cosCredentialsManager.initCosInstance(credentials, COS);
-      // 获取带签名的URL
-      cos.getObjectUrl({
-        Bucket: bucket,
-        Region: region,
-        Key: key,
-        Sign: true
-      }, (err, data) => {
-        if (err) {
-          console.error('获取缺省图片签名URL失败:', err);
-          callback(''); // 如果获取失败，返回空字符串
-        } else {
-          // 缓存签名URL
-          this.setData({
-            defaultImageUrl: data.Url
-          });
-          callback(data.Url);
-        }
-      });
-    }).catch(error => {
-      console.error('初始化COS实例失败:', error);
-      callback(''); // 如果获取失败，返回空字符串
+    // 使用统一的签名URL获取方法（已包含缓存机制）
+    cosCredentialsManager.getSignedCosUrl(defaultImageUrl, (signedUrl) => {
+      callback(signedUrl);
     });
   },
 

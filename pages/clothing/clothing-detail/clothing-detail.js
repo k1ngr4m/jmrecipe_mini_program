@@ -187,7 +187,7 @@ Page({
     });
   },
 
-  // 获取带签名的COS图片URL
+  // 获取带签名的COS图片URL (已通过cosCredentialsManager集成缓存功能)
   
   // 获取服装详情
   getClothingDetail: function (clothingId) {

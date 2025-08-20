@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0d48cd7d-c43c-4a7c-958d-621e0dbbf4f1" name="更改" comment="feat: 修改brand的显示的位置">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-add/clothing-add.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-ai-recognize/clothing-ai-recognize.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-edit/clothing-edit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/clothing/clothing-list/clothing-list.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/cos-credentials-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/cos-credentials-manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my/my.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/pages/my/my.wxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
