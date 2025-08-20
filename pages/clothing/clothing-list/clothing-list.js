@@ -58,8 +58,7 @@ Page({
       // this.initCategories();
       this.getCategories(); // 获取分类数据
       this.getBrandList(); // 获取品牌列表
-      this.initCosInstance(); // 初始化COS实例
-      this.getClothingList();
+            this.getClothingList();
     }
   },
 
@@ -1014,8 +1013,9 @@ Page({
     const region = 'ap-shanghai';
     const key = defaultImagePath;
     
-    // 初始化COS实例
-    this.initCosInstance().then(cos => {
+    // 获取有效的凭证并初始化COS实例
+    cosCredentialsManager.getValidCredentials().then(credentials => {
+      const cos = cosCredentialsManager.initCosInstance(credentials, COS);
       // 获取带签名的URL
       cos.getObjectUrl({
         Bucket: bucket,
@@ -1041,41 +1041,7 @@ Page({
   },
 
   // 初始化COS实例
-  initCosInstance: function() {
-    // 如果已经有COS实例，则直接返回
-    if (this.data.cosInstance) {
-      return Promise.resolve(this.data.cosInstance);
-    }
     
-    // 引入COS凭证管理器
-    const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
-    const COS = require('../../../utils/cos-wx-sdk-v5.js');
-    
-    // 获取有效的凭证
-    return cosCredentialsManager.getValidCredentials().then(credentials => {
-      // 初始化COS实例
-      const cos = new COS({
-        getAuthorization: function (options, callback) {
-          callback({
-            TmpSecretId: credentials.tmp_secret_id,
-            TmpSecretKey: credentials.tmp_secret_key,
-            SecurityToken: credentials.token,
-            StartTime: credentials.start_time,
-            ExpiredTime: credentials.expired_time
-          });
-        },
-        SimpleUploadMethod: 'putObject'
-      });
-      
-      // 缓存COS实例
-      this.setData({
-        cosInstance: cos
-      });
-      
-      return cos;
-    });
-  },
-  
   // 清理衣物
   cleanClothing: function() {
     wx.showModal({

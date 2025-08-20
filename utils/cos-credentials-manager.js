@@ -193,6 +193,25 @@ class COSCredentialsManager {
     
     // 调用通用上传函数
     this.uploadFileToCOS(filePath, key, callback);
+  },
+
+  // 初始化COS实例
+  initCosInstance: function(credentials, COS) {
+    // 初始化COS实例
+    const cos = new COS({
+      getAuthorization: function (options, callback) {
+        callback({
+          TmpSecretId: credentials.tmp_secret_id,
+          TmpSecretKey: credentials.tmp_secret_key,
+          SecurityToken: credentials.token,
+          StartTime: credentials.start_time,
+          ExpiredTime: credentials.expired_time
+        });
+      },
+      SimpleUploadMethod: 'putObject'
+    });
+    
+    return cos;
   }
 }
 
