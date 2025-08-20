@@ -1,0 +1,74 @@
+<!--pages/settings/profile-edit/profile-edit.wxml-->
+<view class="container">
+  
+  <scroll-view class="main-content" scroll-y>
+    <form bindsubmit="saveProfile">
+      <!-- 头像区域 -->
+      <view class="avatar-section">
+        <view class="avatar-container" bindtap="chooseAvatar">
+          <image class="avatar" src="{{tempAvatarUrl || userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+          <view class="camera-icon">📷</view>
+        </view>
+        <text class="change-avatar-text">点击更换头像</text>
+      </view>
+      
+      <!-- 表单区域 -->
+      <view class="form-section">
+        <!-- 昵称 -->
+        <view class="form-item">
+          <text class="label">昵称</text>
+          <input class="input" name="nickname" value="{{tempNickname !== undefined ? tempNickname : userInfo.nickName}}" bindinput="onNicknameInput" placeholder="请输入昵称" />
+        </view>
+        
+        <!-- 性别 -->
+        <view class="form-item">
+          <text class="label">性别</text>
+          <picker mode="selector" range="{{genderOptions}}" value="{{genderIndex}}" bindchange="onGenderChange">
+            <view class="picker">
+              {{genderOptions[genderIndex]}}
+            </view>
+          </picker>
+        </view>
+        
+        <!-- 城市 -->
+        <view class="form-item">
+          <text class="label">城市</text>
+          <input class="input" name="city" value="{{tempCity || userInfo.city}}" bindinput="onCityInput" placeholder="请输入城市" />
+        </view>
+        
+        <!-- 省份 -->
+        <view class="form-item">
+          <text class="label">省份</text>
+          <input class="input" name="province" value="{{tempProvince || userInfo.province}}" bindinput="onProvinceInput" placeholder="请输入省份" />
+        </view>
+        
+        <!-- 国家 -->
+        <view class="form-item">
+          <text class="label">国家</text>
+          <input class="input" name="country" value="{{tempCountry || userInfo.country}}" bindinput="onCountryInput" placeholder="请输入国家" />
+        </view>
+        
+        <!-- 生日 -->
+        <view class="form-item">
+          <text class="label">生日</text>
+          <picker mode="date" value="{{birthdayDisplay}}" start="1900-01-01" end="2030-12-31" bindchange="onBirthdayChange">
+            <view class="picker">
+              {{birthdayDisplay || "请选择生日"}}
+            </view>
+          </picker>
+        </view>
+        
+        <!-- 手机号 -->
+        <view class="form-item">
+          <text class="label">手机号</text>
+          <input class="input" name="phone" value="{{tempPhone || userInfo.phone}}" bindinput="onPhoneInput" placeholder="请输入手机号" />
+        </view>
+      </view>
+      
+      <!-- 保存按钮 -->
+      <view class="button-section">
+        <button class="save-btn" form-type="submit">保存</button>
+      </view>
+    </form>
+  </scroll-view>
+</view>
