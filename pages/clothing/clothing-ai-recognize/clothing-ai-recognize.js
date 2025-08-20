@@ -1,5 +1,6 @@
 const COS = require('../../../utils/cos-wx-sdk-v5.js');
 const config = require('../../../config/api.js');
+const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
 
 Page({
   data: {
@@ -199,7 +200,7 @@ Page({
   callAIRecognizeAPI(imageUrl) {
     console.log('callAIRecognizeAPI function called', imageUrl);
     // 获取带签名的COS图片URL
-    this.getSignedCosUrl(imageUrl, (signedImageUrl) => {
+    cosCredentialsManager.getSignedCosUrl(imageUrl, (signedImageUrl) => {
       wx.request({
         url: config.getFullURL('clothing') + '/analyze',
         method: 'POST',
@@ -314,52 +315,7 @@ Page({
       });
     });
   },
-  // 获取带签名的COS图片URL
-  getSignedCosUrl: function(cosUrl, callback) {
-    // 如果URL已经包含签名信息，则直接返回
-    if (cosUrl && cosUrl.includes('q-sign-algorithm')) {
-      callback(cosUrl);
-      return;
-    }
     
-    // 从URL中提取Bucket、Region和Key信息
-    // URL格式: https://jmrecipe-1309147067.cos.ap-shanghai.myqcloud.com/jmrecipe/clothing/1754496891594_6800.png
-    const urlPattern = /^https:\/\/([^\/]+)\.cos\.([^\/]+)\.myqcloud\.com\/(.+)$/;
-    const match = cosUrl.match(urlPattern);
-    
-    if (!match) {
-      console.error('无效的COS URL格式:', cosUrl);
-      callback(cosUrl);
-      return;
-    }
-    
-    const bucketWithAppId = match[1]; // jmrecipe-1309147067
-    const region = match[2]; // ap-shanghai
-    const key = match[3]; // clothing-list/1754496891594_6800.png
-    const bucket = bucketWithAppId; // COS SDK可以处理带APPID的bucket名称
-    
-    // 初始化COS实例
-    this.initCosInstance().then(cos => {
-      // 获取带签名的URL
-      cos.getObjectUrl({
-        Bucket: bucket,
-        Region: region,
-        Key: key,
-        Sign: true
-      }, function(err, data) {
-        if (err) {
-          console.error('获取签名URL失败:', err);
-          callback(cosUrl); // 如果获取失败，返回原始URL
-        } else {
-          callback(data.Url);
-        }
-      });
-    }).catch(error => {
-      console.error('初始化COS实例失败:', error);
-      callback(cosUrl); // 如果获取失败，返回原始URL
-    });
-  },
-  
   // 初始化COS实例
   initCosInstance: function() {
     // 如果已经有COS实例，则直接返回
