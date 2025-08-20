@@ -189,10 +189,25 @@ Page({
     
     // 先上传图片到COS获取URL
     console.log('开始上传图片到COS');
-    this.uploadImageToCOS(this.data.imageUrl, (cosUrl) => {
-      console.log('图片上传完成，开始调用AI识别接口', cosUrl);
-      // 调用AI识别接口
-      this.callAIRecognizeAPI(cosUrl);
+    // 生成唯一文件名
+    const fileName = this.data.imageUrl.split('/').pop();
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 10000);
+    const ext = fileName.split('.').pop();
+    const key = `jmrecipe/clothing/${timestamp}_${random}.${ext}`;
+    
+    cosCredentialsManager.uploadImageToCOS(this.data.imageUrl, key, (err, cosUrl) => {
+      if (err) {
+        console.error('图片上传失败:', err);
+        wx.showToast({
+          title: '上传失败',
+          icon: 'none'
+        });
+      } else {
+        console.log('图片上传完成，开始调用AI识别接口', cosUrl);
+        // 调用AI识别接口
+        this.callAIRecognizeAPI(cosUrl);
+      }
     });
   },
 
@@ -349,26 +364,7 @@ Page({
   },
 
   // 上传图片到腾讯云COS（带回调）
-  uploadImageToCOS(filePath, callback) {
-    console.log('开始上传图片到COS（使用SDK）:', filePath);
-    const that = this;
     
-    // 引入COS凭证管理器
-    const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
-    
-    // 获取有效的凭证（会自动检查缓存，避免重复调用）
-    cosCredentialsManager.getValidCredentials().then(credentials => {
-      // 执行上传
-      this.performUpload(filePath, credentials, callback);
-    }).catch(error => {
-      console.error('获取COS凭证失败:', error);
-      wx.showToast({
-        title: '获取上传凭证失败',
-        icon: 'none'
-      });
-    });
-  },
-  
   // 执行图片上传到COS
   performUpload(filePath, credentials, callback) {
     const that = this;
@@ -722,8 +718,20 @@ Page({
         if (res.statusCode === 200) {
           const tempFilePath = res.tempFilePath;
           // 上传到COS
-          this.uploadImageToCOS(tempFilePath, (cosUrl) => {
-            callback(cosUrl);
+          // 生成唯一文件名
+          const fileName = tempFilePath.split('/').pop();
+          const timestamp = Date.now();
+          const random = Math.floor(Math.random() * 10000);
+          const ext = fileName.split('.').pop();
+          const key = `jmrecipe/clothing/${timestamp}_${random}.${ext}`;
+          
+          cosCredentialsManager.uploadImageToCOS(tempFilePath, key, (err, cosUrl) => {
+            if (err) {
+              console.error('图片上传失败:', err);
+              callback(imageUrl);
+            } else {
+              callback(cosUrl);
+            }
           });
         } else {
           console.error('下载图片失败:', res);

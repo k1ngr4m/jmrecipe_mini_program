@@ -306,7 +306,7 @@ Page({
   chooseAndUploadImage() {
     wx.chooseImage({
       count: 1,
-    sizeType: ['original', 'compressed'],
+      sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
       success: (res) => {
         const tempFilePaths = res.tempFilePaths;
@@ -322,8 +322,30 @@ Page({
           icon: 'loading'
         });
         
-        this.uploadImageToCOS(tempFilePaths[0], (cosUrl) => {
-          console.log('图片上传完成:', cosUrl);
+        // 生成唯一文件名
+        const fileName = tempFilePaths[0].split('/').pop();
+        const timestamp = Date.now();
+        const random = Math.floor(Math.random() * 10000);
+        const ext = fileName.split('.').pop();
+        const key = `jmrecipe/clothing/${timestamp}_${random}.${ext}`;
+        
+        cosCredentialsManager.uploadImageToCOS(tempFilePaths[0], key, (err, cosUrl) => {
+          if (err) {
+            console.error('图片上传失败:', err);
+            wx.showToast({
+              title: '上传失败',
+              icon: 'none'
+            });
+          } else {
+            console.log('图片上传完成:', cosUrl);
+            this.setData({
+              cosImageUrl: cosUrl
+            });
+            wx.showToast({
+              title: '图片上传成功',
+              icon: 'success'
+            });
+          }
         });
       }
     });
@@ -482,87 +504,7 @@ Page({
   },
   
   // 上传图片到腾讯云COS（带回调）
-  uploadImageToCOS(filePath, callback) {
-    console.log('开始上传图片到COS（使用SDK）:', filePath);
-    const that = this;
     
-    wx.request({
-      url: config.getFullURL('cosCredentials'),
-      method: 'GET',
-      success: (res) => {
-        if (res.statusCode === 200 && res.data.tmp_secret_id) {
-          const credentials = res.data;
-          
-          // 初始化COS实例
-          const cos = new COS({
-            getAuthorization: function (options, callback) {
-              callback({
-                TmpSecretId: credentials.tmp_secret_id,
-                TmpSecretKey: credentials.tmp_secret_key,
-                SecurityToken: credentials.token,
-                StartTime: credentials.start_time,
-                ExpiredTime: credentials.expired_time
-              });
-            },
-            SimpleUploadMethod: 'putObject'
-          });
-          
-          // 生成唯一文件名
-          const fileName = filePath.split('/').pop();
-          const timestamp = Date.now();
-          const random = Math.floor(Math.random() * 10000);
-          const ext = fileName.split('.').pop();
-          const key = `jmrecipe/clothing/${timestamp}_${random}.${ext}`;
-          
-          // 使用SDK上传
-          cos.uploadFile({
-            Bucket: credentials.bucket,
-            Region: credentials.region,
-            Key: key,
-            FilePath: filePath,
-            onProgress: function(info) {
-              console.log('上传进度:', JSON.stringify(info));
-            }
-          }, function(err, data) {
-            if (err) {
-              console.error('上传失败:', err);
-              wx.showToast({
-                title: '上传失败',
-                icon: 'none'
-              });
-            } else {
-              console.log('上传成功', data);
-              const cosUrl = `https://${data.Location}`;
-              that.setData({
-                cosImageUrl: cosUrl
-              });
-              wx.showToast({
-                title: '图片上传成功',
-                icon: 'success'
-              });
-              if (callback && typeof callback === 'function') {
-                callback(cosUrl);
-              }
-            }
-          });
-        } else {
-          console.error('获取临时密钥失败:', res);
-          wx.showToast({
-            title: '获取上传凭证失败',
-            icon: 'none'
-          });
-        }
-      },
-      fail: (err) => {
-        console.error('获取临时密钥失败:', err);
-        wx.showToast({
-          title: '网络错误',
-          icon: 'none'
-        });
-      }
-    });
-  },
-  
   addClothing(e) {
     console.log('表单提交事件触发');
     
