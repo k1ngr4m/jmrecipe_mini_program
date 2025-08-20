@@ -134,28 +134,36 @@ class COSCredentialsManager {
     });
   }
 
+  // 初始化COS实例
+  initCosInstance(credentials) {
+    // 引入COS SDK
+    const COS = require('./cos-wx-sdk-v5.js');
+    
+    // 初始化COS实例
+    const cos = new COS({
+      getAuthorization: function (options, callback) {
+        callback({
+          TmpSecretId: credentials.tmp_secret_id,
+          TmpSecretKey: credentials.tmp_secret_key,
+          SecurityToken: credentials.token,
+          StartTime: credentials.start_time,
+          ExpiredTime: credentials.expired_time
+        });
+      },
+      SimpleUploadMethod: 'putObject'
+    });
+    
+    return cos;
+  }
+
   // 上传文件到腾讯云COS
   uploadFileToCOS(filePath, key, callback) {
     console.log('开始上传文件到COS:', filePath);
     
-    // 引入COS SDK
-    const COS = require('./cos-wx-sdk-v5.js');
-    
     // 获取有效的凭证
     this.getValidCredentials().then(credentials => {
       // 初始化COS实例
-      const cos = new COS({
-        getAuthorization: function (options, callback) {
-          callback({
-            TmpSecretId: credentials.tmp_secret_id,
-            TmpSecretKey: credentials.tmp_secret_key,
-            SecurityToken: credentials.token,
-            StartTime: credentials.start_time,
-            ExpiredTime: credentials.expired_time
-          });
-        },
-        SimpleUploadMethod: 'putObject'
-      });
+      const cos = this.initCosInstance(credentials);
       
       // 使用SDK上传
       cos.uploadFile({
@@ -182,6 +190,12 @@ class COSCredentialsManager {
     });
   }
 
+  // 上传图片到腾讯云COS
+  uploadImageToCOS(filePath, key, callback) {
+    // 上传图片和上传文件使用相同的方法
+    this.uploadFileToCOS(filePath, key, callback);
+  }
+
   // 上传头像到腾讯云COS
   uploadAvatarToCOS(filePath, userid, callback) {
     // 生成唯一文件名
@@ -193,25 +207,6 @@ class COSCredentialsManager {
     
     // 调用通用上传函数
     this.uploadFileToCOS(filePath, key, callback);
-  }
-
-  // 初始化COS实例
-  initCosInstance(credentials, COS) {
-    // 初始化COS实例
-    const cos = new COS({
-      getAuthorization: function (options, callback) {
-        callback({
-          TmpSecretId: credentials.tmp_secret_id,
-          TmpSecretKey: credentials.tmp_secret_key,
-          SecurityToken: credentials.token,
-          StartTime: credentials.start_time,
-          ExpiredTime: credentials.expired_time
-        });
-      },
-      SimpleUploadMethod: 'putObject'
-    });
-    
-    return cos;
   }
 }
 
