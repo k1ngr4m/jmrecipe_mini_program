@@ -19,6 +19,33 @@
       </view>
     </view>
     
+    <!-- 用户详细信息 -->
+    <view wx:if="{{userDetail}}" class="user-detail-card">
+      <view class="section-title">个人详情</view>
+      <view class="detail-list">
+        <view class="detail-item">
+          <text class="detail-label">昵称:</text>
+          <text class="detail-value">{{userDetail.nickname}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">性别:</text>
+          <text class="detail-value">{{userDetail.gender == 1 ? '男' : userDetail.gender == 2 ? '女' : '未知'}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">手机号:</text>
+          <text class="detail-value">{{userDetail.phone || '未设置'}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">城市:</text>
+          <text class="detail-value">{{userDetail.city || ''}} {{userDetail.province || ''}} {{userDetail.country || ''}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">生日:</text>
+          <text class="detail-value">{{userDetail.birthday ? (new Date(userDetail.birthday * 1000).toLocaleDateString()) : '未设置'}}</text>
+        </view>
+      </view>
+    </view>
+    
     <!-- 功能菜单列表 -->
     <view class="menu-section">
       <view class="section-title">设置与管理</view>

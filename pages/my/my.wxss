@@ -70,6 +70,43 @@ page {
   transform: translateY(-2px);
 }
 
+/* 用户详细信息卡片 */
+.user-detail-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.detail-list {
+  padding: 0 20px 15px;
+}
+
+.detail-item {
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 14px;
+  color: #888;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  font-size: 15px;
+  color: #333;
+  flex: 1;
+  word-break: break-all;
+}
+
 .user-info {
   display: flex;
   align-items: center;
