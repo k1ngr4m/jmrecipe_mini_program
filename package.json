@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "ccusage": "^15.9.5"
+    "ccusage": "^15.9.5",
+    "crypto-js": "^4.2.0"
   }
 }
