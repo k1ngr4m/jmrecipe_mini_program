@@ -16,7 +16,8 @@ Page({
     tempPhone: '',
     birthdayDisplay: '', // 用于显示的日期字符串
     genderIndex: 0,
-    genderOptions: ['未知', '男', '女']
+    genderOptions: ['未知', '男', '女'],
+    saveAvatarUrl: ''
   },
 
   onLoad() {
@@ -26,7 +27,6 @@ Page({
   loadUserInfo() {
     const app = getApp();
     const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo');
-    
     if (userInfo) {
       // 如果生日是时间戳，直接使用；如果是日期字符串，转换为时间戳
       let birthdayValue = '';
@@ -121,13 +121,16 @@ Page({
             });
           } else {
             console.log('头像上传完成:', cosUrl);
-            // 更新头像URL
-            this.setData({
-              tempAvatarUrl: cosUrl
-            });
-            wx.showToast({
-              title: '头像上传成功',
-              icon: 'success'
+            cosCredentialsManager.getSignedCosUrl(cosUrl, (signedUrl) => {
+              // 更新头像URL
+              this.setData({
+                tempAvatarUrl: signedUrl,
+                saveAvatarUrl: cosUrl
+              });
+              wx.showToast({
+                title: '头像上传成功',
+                icon: 'success'
+              });
             });
           }
         });
@@ -189,29 +192,30 @@ Page({
   },
 
   saveProfile() {
-    const { tempAvatarUrl, tempNickname, tempCity, tempProvince, tempCountry, tempBirthday, tempPhone, genderIndex, userInfo } = this.data;
+    const { saveAvatarUrl, tempNickname, tempCity, tempProvince, tempCountry, tempBirthday, tempPhone, genderIndex, userInfo } = this.data;
     const app = getApp();
     const config = require('../../../config/api.js');
     
     // 如果有新头像且是本地文件路径，需要先上传到COS
-    if (tempAvatarUrl && (tempAvatarUrl.startsWith('http://tmp') || tempAvatarUrl.startsWith('/'))) {
+    if (saveAvatarUrl && (saveAvatarUrl.startsWith('http://tmp') || saveAvatarUrl.startsWith('/'))) {
       wx.showToast({
         title: '正在上传头像...',
         icon: 'loading'
       });
-      
-      this.uploadAvatarToCOS(tempAvatarUrl, (cosUrl) => {
+      this.uploadAvatarToCOS(saveAvatarUrl, (cosUrl) => {
         // 上传完成后更新头像URL并提交用户信息
-        this.setData({
-          tempAvatarUrl: cosUrl
-        });
+        cosCredentialsManager.getSignedCosUrl(cosUrl, (signedUrl) => {
+          this.setData({
+            tempAvatarUrl: signedUrl
+          });
+        })
         
         // 调用提交用户信息的函数
         this.submitUserInfo(cosUrl);
       });
     } else {
       // 如果头像已经是COS URL或没有更改头像，直接提交用户信息
-      this.submitUserInfo(tempAvatarUrl);
+      this.submitUserInfo(saveAvatarUrl);
     }
   },
   
@@ -246,7 +250,7 @@ Page({
     if (avatarUrl) {
       updatedUserInfo.avatarUrl = avatarUrl;
     }
-    
+
     // 构造请求数据，符合接口要求
     const requestData = {
       userid: userInfo.userid || wx.getStorageSync('userid') || '',
@@ -270,7 +274,8 @@ Page({
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
           // 接口调用成功，更新全局数据和本地存储
           app.globalData.userInfo = updatedUserInfo;
-          wx.setStorageSync('userInfo', updatedUserInfo);
+          // wx.setStorageSync('userInfo', updatedUserInfo);
+          app.saveUserInfo(updatedUserInfo)
           
           // 返回到个人资料页面并刷新
           wx.navigateBack({

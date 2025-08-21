@@ -72,24 +72,40 @@ Page({
             // 从响应中提取用户信息
             const userInfo = {
               nickName: res.data.result.nickname,
+              gender: res.data.result.gender,
+              city: res.data.result.city,
+              province: res.data.result.province,
+              country: res.data.result.country,
+              birthday: res.data.result.birthday,
+              phone: res.data.result.phone,
             }
 
             const avatarUrl = res.data.result.avatar_url
             if (avatarUrl) {
               cosCredentialsManager.getSignedCosUrl(avatarUrl, (signedUrl) => {
                 userInfo.avatarUrl = signedUrl;
-            })
-          }
-
-
-            // 将用户信息存储到StorageSync
-            wx.setStorageSync('userInfo', userInfo)
-            // 更新全局数据
-            app.globalData.userInfo = userInfo
-            // 更新页面数据
-            this.setData({
-              userInfo: userInfo
-            })
+                
+                // 将用户信息存储到StorageSync
+                // wx.setStorageSync('userInfo', userInfo)
+                // 更新全局数据
+                // app.globalData.userInfo = userInfo
+                app.saveUserInfo(userInfo)
+                // 更新页面数据
+                this.setData({
+                  userInfo: userInfo
+                })
+              })
+            } else {
+              // 将用户信息存储到StorageSync
+              // wx.setStorageSync('userInfo', userInfo)
+              // // 更新全局数据
+              // app.globalData.userInfo = userInfo
+              app.saveUserInfo(userInfo)
+              // 更新页面数据
+              this.setData({
+                userInfo: userInfo
+              })
+            }
           } else {
             console.error('获取用户信息失败', res)
             // 如果接口获取失败，使用本地存储的信息
@@ -113,9 +129,10 @@ Page({
       success: (profileRes) => {
         // 保存用户信息到全局和本地存储
         const app = getApp()
-        app.globalData.userInfo = profileRes.userInfo
+        // app.globalData.userInfo = profileRes.userInfo
         app.globalData.hasLoggedIn = true
-        wx.setStorageSync('userInfo', profileRes.userInfo)
+        // wx.setStorageSync('userInfo', profileRes.userInfo)
+        app.saveUserInfo(userInfo)
         wx.setStorageSync('hasLoggedIn', true)
         
         // 更新页面数据

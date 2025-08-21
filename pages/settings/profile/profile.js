@@ -15,8 +15,7 @@ Page({
 
   getUserInfo() {
     const app = getApp()
-    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
-    
+    const userInfo = wx.getStorageSync('userInfo') || app.globalData.userInfo
     if (userInfo) {
       this.setData({
         userInfo: userInfo

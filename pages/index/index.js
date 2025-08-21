@@ -264,7 +264,8 @@ Page({
           }
 
           wx.setStorageSync('hasLoggedIn', true); // 保存登录状态到本地存储
-          wx.setStorageSync('userInfo', userInfo); // 保存用户信息到本地存储
+          // wx.setStorageSync('userInfo', userInfo); // 保存用户信息到本地存储
+          app.saveUserInfo(userInfo)
           wx.setStorageSync('userid', userData.userid); // 保存openid为userid到本地存储
           wx.setStorageSync('familyid', userData.familyid);
           wx.setStorageSync('memberid', userData.memberid);
