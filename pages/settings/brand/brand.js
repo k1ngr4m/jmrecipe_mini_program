@@ -1,4 +1,5 @@
 const config = require('../../../config/api.js');
+const { request } = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -18,7 +19,7 @@ Page({
   // 获取品牌列表
   getBrandList() {
     const familyid = wx.getStorageSync('familyid');
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/brands/list',
       method: 'POST',
       data: {
@@ -84,7 +85,7 @@ Page({
     }
     
     // 调用搜索API
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/brands/search',
       method: 'POST',
       data: {
@@ -130,7 +131,7 @@ Page({
 
   // 获取品牌详情
   getBrandDetail(brandId, callback) {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/brands/detail',
       method: 'POST',
       data: {
@@ -225,7 +226,7 @@ Page({
         logo_url: ''
       };
 
-      wx.request({
+      request({
         url: config.getFullURL('clothing') + '/brands/create',
         method: 'POST',
         data: requestData,
@@ -287,7 +288,7 @@ Page({
         familyid: wx.getStorageSync('familyid') || '',
       };
 
-      wx.request({
+      request({
         url: config.getFullURL('clothing') + '/brands/update',
         method: 'POST',
         data: requestData,
@@ -342,7 +343,7 @@ Page({
       confirmColor: '#F44336',
       success: (res) => {
         if (res.confirm) {
-          wx.request({
+          request({
             url: config.getFullURL('clothing') + '/brands/delete',
             method: 'POST',
             data: {

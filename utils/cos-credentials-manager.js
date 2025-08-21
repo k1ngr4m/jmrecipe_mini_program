@@ -1,5 +1,6 @@
 const config = require('../config/api.js');
 const imageCacheManager = require('./image-cache-manager.js');
+const {request} = require("./request");
 
 class COSCredentialsManager {
   constructor() {
@@ -37,7 +38,7 @@ class COSCredentialsManager {
   // 从服务器获取新的凭证
   async fetchNewCredentials() {
     return new Promise((resolve, reject) => {
-      wx.request({
+      request({
         url: config.getFullURL('cosCredentials'),
         method: 'GET',
         success: (res) => {

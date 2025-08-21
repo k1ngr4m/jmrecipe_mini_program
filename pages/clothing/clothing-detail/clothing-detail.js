@@ -1,5 +1,6 @@
 const config = require('../../../config/api.js');
 const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
+const { request } = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -87,7 +88,7 @@ Page({
       gender: genderParam
     });
 
-    wx.request({
+    request({
       url: config.getFullURL('categories') + '/list',
       method: 'POST',
       data: {
@@ -143,7 +144,7 @@ Page({
 
   // 执行删除操作
   performDelete: function(clothingId) {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + `/delete`,
       method: 'POST',
       data: {
@@ -191,7 +192,7 @@ Page({
   
   // 获取服装详情
   getClothingDetail: function (clothingId) {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/detail',
       method: 'POST',
       data: {

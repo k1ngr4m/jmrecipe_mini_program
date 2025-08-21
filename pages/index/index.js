@@ -1,4 +1,5 @@
 const config = require('../../config/api.js');
+const { request } = require('../../utils/request.js');
 
 Page({
   data: {
@@ -41,7 +42,7 @@ Page({
     const location = 'hangzhou'; // 默认城市
     const url = config.getFullURL('weather');
     
-    wx.request({
+    request({
       url: url,
       method: 'POST',
       data: {
@@ -227,7 +228,7 @@ Page({
 
   // 请求后端登录接口
   loginRequest(code) {
-    wx.request({
+    request({
       url: config.getFullURL('login'), // 后端接口地址
       method: 'POST',
       data: {

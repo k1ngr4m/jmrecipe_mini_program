@@ -1,6 +1,7 @@
 const COS = require('../../../utils/cos-wx-sdk-v5.js');
 const config = require('../../../config/api.js');
 const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
+const { request } = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -209,7 +210,7 @@ Page({
   
   // 获取品牌列表
   getBrandList: function() {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/brands/list',
       method: 'POST',
       data: {
@@ -566,7 +567,7 @@ Page({
       ...data
     };
 
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/create',
       method: 'POST',
       data: requestData,
@@ -658,7 +659,7 @@ Page({
     // 添加时间戳防止缓存
     requestData._t = Date.now();
     
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/list',
       method: 'POST',
       data: requestData,
@@ -1094,7 +1095,7 @@ Page({
   
   // 批量删除衣物的API调用
   deleteClothingBatch: function(clothingIds) {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/batch_delete',
       method: 'POST',
       data: {
@@ -1159,7 +1160,7 @@ Page({
   
   // 批量移动衣物分类的API调用
   moveClothingBatch: function(clothingIds, category) {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/batch_move',
       method: 'POST',
       data: {
@@ -1227,7 +1228,7 @@ Page({
       gender: genderParam
     });
 
-    wx.request({
+    request({
       url: config.getFullURL('categories') + '/list',
       method: 'POST',
       data: {
