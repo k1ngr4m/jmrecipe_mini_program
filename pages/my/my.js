@@ -1,5 +1,7 @@
 const app = getApp();
 const config = require('../../config/api.js');
+const {request} = require("../../utils/request");
+const cosCredentialsManager = require("../../utils/cos-credentials-manager");
 
 Page({
   data: {
@@ -9,14 +11,14 @@ Page({
   },
 
   onLoad() {
-    this.loadStoredUserInfo()
+    this.fetchUserInfo()
     this.loadFamilyInfo()
   },
 
   onShow() {
     // 页面显示时重新加载用户信息
-    this.loadStoredUserInfo()
-    this.loadFamilyInfo()
+    // this.fetchUserInfo()
+    // this.loadFamilyInfo()
   },
 
   // 加载family信息
@@ -45,6 +47,61 @@ Page({
           userInfo: userInfo
         })
       }
+    }
+  },
+
+  // 从接口获取用户信息
+  fetchUserInfo() {
+    const app = getApp()
+    const hasLoggedIn = wx.getStorageSync('hasLoggedIn')
+    
+    if (hasLoggedIn) {
+
+      // 发起请求获取用户详细信息
+      request({
+        url: app.globalData.getFullURL('user') + '/detail',
+        method: 'POST',
+        header: {
+          'content-type': 'application/json'
+        },
+        data: {
+          userid: wx.getStorageSync('userid'),
+        },
+        success: (res) => {
+          if (res.statusCode === 200 && res.data) {
+            // 从响应中提取用户信息
+            const userInfo = {
+              nickName: res.data.result.nickname,
+            }
+
+            const avatarUrl = res.data.result.avatar_url
+            if (avatarUrl) {
+              cosCredentialsManager.getSignedCosUrl(avatarUrl, (signedUrl) => {
+                userInfo.avatarUrl = signedUrl;
+            })
+          }
+
+
+            // 将用户信息存储到StorageSync
+            wx.setStorageSync('userInfo', userInfo)
+            // 更新全局数据
+            app.globalData.userInfo = userInfo
+            // 更新页面数据
+            this.setData({
+              userInfo: userInfo
+            })
+          } else {
+            console.error('获取用户信息失败', res)
+            // 如果接口获取失败，使用本地存储的信息
+            this.loadStoredUserInfo()
+          }
+        },
+        fail: (err) => {
+          console.error('请求用户信息失败', err)
+          // 如果请求失败，使用本地存储的信息
+          this.loadStoredUserInfo()
+        }
+      })
     }
   },
   

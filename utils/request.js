@@ -10,10 +10,8 @@ function generateSiHeader() {
 
   // 计算md5(timestamp+appid)
   const innerMd5 = md5(timestamp + appid);
-  console.log(`${innerMd5}`);
   // 计算md5(md5(timestamp+appid)+timestamp)
   const si = md5(innerMd5 + timestamp);
-  console.log(`${si}`);
   return {
     si,
     timestamp

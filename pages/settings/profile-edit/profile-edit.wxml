@@ -6,7 +6,7 @@
       <!-- 头像区域 -->
       <view class="avatar-section">
         <view class="avatar-container" bindtap="chooseAvatar">
-          <image class="avatar" src="{{tempAvatarUrl || userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+          <image class="avatar" src="{{tempAvatarUrl || userInfo.avatarUrl}}" mode="aspectFill"></image>
           <view class="camera-icon">📷</view>
         </view>
         <text class="change-avatar-text">点击更换头像</text>
