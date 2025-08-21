@@ -29,7 +29,7 @@
       <!-- 空状态 -->
       <view class="empty-state" wx:if="{{members.length === 0}}">
         <view class="empty-content">
-          <image class="empty-illustration" src="/images/empty-members.png" mode="aspectFit"></image>
+<!--          <image class="empty-illustration" src="/images/empty-members.png" mode="aspectFit"></image>-->
           <text class="empty-text">还没有添加家庭成员</text>
         </view>
       </view>

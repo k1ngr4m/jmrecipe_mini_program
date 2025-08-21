@@ -34,7 +34,7 @@
 
     <!-- 空状态 -->
     <view class="empty-state" wx:else>
-      <image class="empty-img" src="/images/empty-brands.png" mode="aspectFit"></image>
+<!--      <image class="empty-img" src="/images/empty-brands.png" mode="aspectFit"></image>-->
       <text class="empty-text">
         {{brands.length > 0 ? '没有找到相关品牌' : '还没有添加品牌'}}
       </text>
