@@ -2,6 +2,7 @@ const app = getApp();
 const COS = require('../../../utils/cos-wx-sdk-v5.js');
 const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
 const config = require('../../../config/api.js');
+const { request } = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -261,7 +262,7 @@ Page({
     };
     
     // 调用后端接口更新用户信息
-    wx.request({
+    request({
       url: config.getFullURL('user') + '/update',
       method: 'POST',
       data: requestData,

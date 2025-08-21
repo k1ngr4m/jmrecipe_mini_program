@@ -1,5 +1,6 @@
 const COS = require('../../../utils/cos-wx-sdk-v5.js');
 const config = require('../../../config/api.js');
+const { request } = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -120,7 +121,7 @@ Page({
 
   // 获取品牌列表
   getBrandList: function() {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/brands/list',
       method: 'POST',
       data: {
@@ -488,7 +489,7 @@ Page({
       ...data
     };
 
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/create',
       method: 'POST',
       data: requestData,
@@ -655,7 +656,7 @@ Page({
       gender: genderParam
     });
 
-    wx.request({
+    request({
       url: config.getFullURL('categories') + '/list',
       method: 'POST',
       data: {

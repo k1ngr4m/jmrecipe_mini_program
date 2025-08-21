@@ -1,6 +1,7 @@
 const config = require('../../../config/api.js');
 const COS = require('../../../utils/cos-wx-sdk-v5.js');
 const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
+const { request } = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -89,7 +90,7 @@ Page({
 
   // 获取衣物详情
   getClothingDetail: function (clothingId) {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/detail',
       method: 'POST',
       data: {
@@ -451,7 +452,7 @@ Page({
   
   // 获取品牌列表
   getBrandList: function() {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/brands/list',
       method: 'POST',
       data: {
@@ -513,7 +514,7 @@ Page({
       gender: genderParam
     });
 
-    wx.request({
+    request({
       url: config.getFullURL('categories') + '/list',
       method: 'POST',
       data: {
@@ -578,7 +579,7 @@ Page({
     };
     
     // 发送更新请求
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/update',
       method: 'POST',
       data: requestData,

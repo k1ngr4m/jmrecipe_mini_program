@@ -1,5 +1,6 @@
 // pages/member/member-list.js
 const config = require('../../../../config/api.js');
+const { request } = require('../../../../utils/request.js');
 
 Page({
   data: {
@@ -193,7 +194,7 @@ Page({
     
     console.log('创建默认成员请求数据:', requestData);
 
-    wx.request({
+    request({
       url: config.getFullURL('family') + '/members/create',
       method: 'POST',
       data: requestData,
@@ -239,7 +240,7 @@ Page({
       return;
     }
 
-    wx.request({
+    request({
       url: config.getFullURL('family') + '/members/list',
       method: 'POST',
       data: {
@@ -348,7 +349,7 @@ Page({
       content: `确定要删除成员"${member.name}"吗？`,
       success: (res) => {
         if (res.confirm) {
-          wx.request({
+          request({
             url: config.getFullURL('family') + '/members/delete',
             method: 'POST',
             data: {
@@ -483,7 +484,7 @@ Page({
     
     console.log('发送的数据:', JSON.stringify(requestData, null, 2));
 
-    wx.request({
+    request({
       url: config.getFullURL('family') + '/members/create',
       method: 'POST',
       data: requestData,
@@ -559,7 +560,7 @@ Page({
     
     console.log('发送的数据:', JSON.stringify(requestData, null, 2));
 
-    wx.request({
+    request({
       url: config.getFullURL('family') + '/members/create',
       method: 'POST',
       data: requestData,

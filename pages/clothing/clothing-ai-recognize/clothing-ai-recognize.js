@@ -1,6 +1,7 @@
 const COS = require('../../../utils/cos-wx-sdk-v5.js');
 const config = require('../../../config/api.js');
 const cosCredentialsManager = require('../../../utils/cos-credentials-manager.js');
+const { request } = require('../../../utils/request.js');
 
 Page({
   data: {
@@ -105,7 +106,7 @@ Page({
 
   // 获取品牌列表
   getBrandList: function() {
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/brands/list',
       method: 'POST',
       data: {
@@ -216,7 +217,7 @@ Page({
     console.log('callAIRecognizeAPI function called', imageUrl);
     // 获取带签名的COS图片URL
     cosCredentialsManager.getSignedCosUrl(imageUrl, (signedImageUrl) => {
-      wx.request({
+      request({
         url: config.getFullURL('clothing') + '/analyze',
         method: 'POST',
         data: {
@@ -334,7 +335,7 @@ Page({
   
   // 获取分类数据
   getCategories() {
-    wx.request({
+    request({
       url: config.getFullURL('categories') + '/list',
       method: 'POST',
       data: {
@@ -633,7 +634,7 @@ Page({
       ...data
     };
 
-    wx.request({
+    request({
       url: config.getFullURL('clothing') + '/create',
       method: 'POST',
       data: requestData,

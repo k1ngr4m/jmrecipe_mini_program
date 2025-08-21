@@ -1,5 +1,6 @@
 // pages/settings/member/member-add/member-add.js
 const config = require('../../../../config/api.js');
+const { request } = require('../../../../utils/request.js');
 
 Page({
   data: {
@@ -109,7 +110,7 @@ Page({
     
     console.log('发送的数据:', JSON.stringify(requestData, null, 2));
 
-    wx.request({
+    request({
       url: config.getFullURL('family') + '/members/create',
       method: 'POST',
       data: requestData,
