@@ -26,7 +26,7 @@
       <view class="clothing-list-container">
         <block wx:for="{{filteredClothingList}}" wx:key="id">
           <view class="clothing-item" bindtap="selectClothing" data-item="{{item}}">
-            <image class="clothing-img" src="{{item.image_url}}" mode="aspectFill"></image>
+            <image class="clothing-img" src="{{item.signed_image_url || item.image_url}}" mode="aspectFill"></image>
             <view class="clothing-name">{{item.name}}</view>
           </view>
         </block>

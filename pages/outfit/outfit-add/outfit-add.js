@@ -16,13 +16,105 @@ Page({
     selectedClothingId: null, // 当前选中的服装ID
     // 页面状态
     isLoading: false, // 加载状态
-    signedUrl: '',
   },
 
   onLoad() {
     // 页面加载时获取分类数据和服装列表
     this.getCategories();
     this.getClothingList();
+    // 验证签名URL是否正确生成
+    this.verifySignedUrls();
+  },
+
+  // 验证签名URL是否正确生成
+  verifySignedUrls() {
+    // 延迟一段时间后检查签名URL是否已生成
+    setTimeout(() => {
+      const clothingList = this.data.clothingList;
+      console.log('验证签名URL时的服装列表:', clothingList);
+      
+      const signedCount = clothingList.filter(item => item.signed_image_url && item.signed_image_url.includes('q-sign-algorithm')).length;
+      const totalCount = clothingList.length;
+      
+      console.log(`签名URL统计: ${signedCount}/${totalCount} 个服装有签名URL`);
+      
+      if (signedCount > 0) {
+        console.log('签名URL生成成功');
+      } else {
+        console.log('签名URL未生成或生成失败');
+      }
+    }, 2000); // 延迟2秒检查，确保异步操作完成
+  },
+
+  // 获取单个服装的签名URL
+  getSignedImageUrl(clothing, callback) {
+    if (clothing.signed_image_url) {
+      // 如果已经有签名URL，直接返回
+      callback(clothing.signed_image_url);
+    } else if (clothing.image_url) {
+      // 如果没有签名URL但有原始URL，则获取签名URL
+      cosCredentialsManager.getSignedCosUrl(clothing.image_url, (signedUrl) => {
+        // 更新服装列表中的签名URL
+        const updatedClothingList = this.data.clothingList.map(item => {
+          if (item.id === clothing.id) {
+            return {
+              ...item,
+              signed_image_url: signedUrl
+            };
+          }
+          return item;
+        });
+        
+        // 更新页面数据
+        this.setData({
+          clothingList: updatedClothingList,
+          filteredClothingList: updatedClothingList
+        });
+        
+        callback(signedUrl);
+      });
+    } else {
+      // 如果都没有，返回空字符串
+      callback('');
+    }
+  },
+
+  // 处理COS签名URL
+  processSignedUrls(clothingList) {
+    // 收集所有需要签名的URL
+    const urlsToSign = clothingList
+      .filter(item => item.image_url && !item.image_url.includes('q-sign-algorithm'))
+      .map(item => item.image_url);
+    
+    // 如果没有需要签名的URL，直接返回
+    if (urlsToSign.length === 0) {
+      return;
+    }
+    
+    // 使用COSCredentialsManager批量获取签名URL
+    console.log('需要签名的URL数量:', urlsToSign.length);
+    cosCredentialsManager.getBatchSignedCosUrls(urlsToSign, (signedUrlsMap) => {
+      console.log('获取到的签名URL映射:', signedUrlsMap);
+      // 更新服装列表中的签名URL
+      const updatedClothingList = clothingList.map(item => {
+        if (item.image_url && signedUrlsMap[item.image_url]) {
+          console.log('更新签名URL:', item.image_url, '->', signedUrlsMap[item.image_url]);
+          return {
+            ...item,
+            signed_image_url: signedUrlsMap[item.image_url]
+          };
+        }
+        return item;
+      });
+      
+      // 更新页面数据
+      this.setData({
+        clothingList: updatedClothingList,
+        filteredClothingList: updatedClothingList
+      });
+      
+      console.log('更新后的服装列表数量:', updatedClothingList.length);
+    });
   },
 
   // 获取分类数据
@@ -81,9 +173,24 @@ Page({
       success: (res) => {
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
           const clothingList = res.data.result || [];
+          
+          console.log('获取到的服装列表数量:', clothingList.length);
+          // 对服装列表中的每个服装图片URL进行COS签名处理
+          const signedClothingList = clothingList.map(clothing => {
+            // 为每个服装项添加签名后的图片URL
+            return {
+              ...clothing,
+              signed_image_url: clothing.signed_image_url || clothing.image_url // 如果已经有签名URL则保留，否则使用原始URL
+            };
+          });
+          
+          console.log('处理后的服装列表:', signedClothingList);
+          // 异步获取签名URL并更新数据
+          this.processSignedUrls(signedClothingList);
+          
           this.setData({
-            clothingList: clothingList,
-            filteredClothingList: clothingList,
+            clothingList: signedClothingList,
+            filteredClothingList: signedClothingList,
             isLoading: false
           });
         } else {
@@ -150,7 +257,7 @@ Page({
     const canvasItem = {
       id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9), // 唯一ID
       clothingId: clothing.id,
-      imageUrl: signedUrl,
+      imageUrl: clothing.signed_image_url || clothing.image_url, // 先使用已有URL
       name: clothing.name,
       x: 50 + Math.random() * 100, // 随机位置
       y: 50 + Math.random() * 100,
@@ -164,6 +271,24 @@ Page({
     
     this.setData({
       canvasItems: canvasItems
+    });
+    
+    // 获取签名URL并更新Canvas项
+    this.getSignedImageUrl(clothing, (signedUrl) => {
+      // 更新canvasItems中的对应项
+      const updatedCanvasItems = this.data.canvasItems.map(item => {
+        if (item.clothingId === clothing.id) {
+          return {
+            ...item,
+            imageUrl: signedUrl
+          };
+        }
+        return item;
+      });
+      
+      this.setData({
+        canvasItems: updatedCanvasItems
+      });
     });
   },
 
