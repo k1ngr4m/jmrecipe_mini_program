@@ -113,9 +113,11 @@ Page({
       .filter(item => item.image_url && !this.isSignedUrlValid(item.signed_image_url))
       .map(item => item.image_url);
     
-    // 如果没有需要签名的URL，直接返回并设置加载状态为完成
+    // 如果没有需要签名的URL，直接设置数据并完成加载状态
     if (urlsToSign.length === 0) {
       this.setData({
+        clothingList: clothingList,
+        filteredClothingList: clothingList,
         isLoading: false
       });
       return;
@@ -218,11 +220,6 @@ Page({
           console.log('处理后的服装列表:', signedClothingList);
           // 异步获取签名URL并更新数据
           this.processSignedUrls(signedClothingList);
-          
-          this.setData({
-            clothingList: signedClothingList,
-            filteredClothingList: signedClothingList
-          });
         } else {
           console.error('获取服装列表失败', res);
           this.setData({
