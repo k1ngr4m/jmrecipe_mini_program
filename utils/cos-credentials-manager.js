@@ -14,8 +14,8 @@ class COSCredentialsManager {
       return false;
     }
     
-    // 提前5分钟过期，避免边界问题
-    const bufferTime = 5 * 60 * 1000;
+    // 提前10分钟过期，避免边界问题
+    const bufferTime = 10 * 60 * 1000;
     const now = Date.now();
     
     return now < (this.expiredTime * 1000 - bufferTime);

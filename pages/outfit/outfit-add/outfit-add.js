@@ -43,13 +43,41 @@ Page({
       } else {
         console.log('签名URL未生成或生成失败');
       }
-    }, 2000); // 延迟2秒检查，确保异步操作完成
+    }, 3000); // 延迟3秒检查，确保异步操作完成
+  },
+
+  // 检查签名URL是否有效
+  isSignedUrlValid(signedUrl) {
+    if (!signedUrl || !signedUrl.includes('q-sign-algorithm')) {
+      return false;
+    }
+    
+    // 检查URL是否过期
+    const urlParams = new URLSearchParams(signedUrl.split('?')[1]);
+    const signTime = urlParams.get('q-sign-time');
+    
+    if (!signTime) {
+      return false;
+    }
+    
+    // 获取过期时间（第二个时间戳）
+    const timeParts = signTime.split(';');
+    if (timeParts.length !== 2) {
+      return false;
+    }
+    
+    const expireTime = parseInt(timeParts[1]);
+    const now = Math.floor(Date.now() / 1000);
+    
+    // 如果当前时间已经超过了过期时间，则URL无效
+    return now < expireTime;
   },
 
   // 获取单个服装的签名URL
   getSignedImageUrl(clothing, callback) {
-    if (clothing.signed_image_url) {
-      // 如果已经有签名URL，直接返回
+    // 检查现有的签名URL是否有效
+    if (clothing.signed_image_url && this.isSignedUrlValid(clothing.signed_image_url)) {
+      // 如果已经有有效的签名URL，直接返回
       callback(clothing.signed_image_url);
     } else if (clothing.image_url) {
       // 如果没有签名URL但有原始URL，则获取签名URL
@@ -70,7 +98,6 @@ Page({
           clothingList: updatedClothingList,
           filteredClothingList: updatedClothingList
         });
-        
         callback(signedUrl);
       });
     } else {
@@ -83,11 +110,14 @@ Page({
   processSignedUrls(clothingList) {
     // 收集所有需要签名的URL
     const urlsToSign = clothingList
-      .filter(item => item.image_url && !item.image_url.includes('q-sign-algorithm'))
+      .filter(item => item.image_url && !this.isSignedUrlValid(item.signed_image_url))
       .map(item => item.image_url);
     
-    // 如果没有需要签名的URL，直接返回
+    // 如果没有需要签名的URL，直接返回并设置加载状态为完成
     if (urlsToSign.length === 0) {
+      this.setData({
+        isLoading: false
+      });
       return;
     }
     
@@ -110,7 +140,8 @@ Page({
       // 更新页面数据
       this.setData({
         clothingList: updatedClothingList,
-        filteredClothingList: updatedClothingList
+        filteredClothingList: updatedClothingList,
+        isLoading: false // 设置加载状态为完成
       });
       
       console.log('更新后的服装列表数量:', updatedClothingList.length);
@@ -190,8 +221,7 @@ Page({
           
           this.setData({
             clothingList: signedClothingList,
-            filteredClothingList: signedClothingList,
-            isLoading: false
+            filteredClothingList: signedClothingList
           });
         } else {
           console.error('获取服装列表失败', res);
