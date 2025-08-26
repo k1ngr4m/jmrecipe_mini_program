@@ -135,7 +135,8 @@
   
   <!-- 衣物列表 -->
   <scroll-view class="clothing-list" scroll-y>
-    <view wx:if="{{filteredClothingList.length > 0}}" class="clothing-list-container">
+    <!-- 橱柜标签页内容 -->
+    <view wx:if="{{currentTab === 'wardrobe' && filteredClothingList.length > 0}}" class="clothing-list-container">
       <block wx:for="{{filteredClothingList}}" wx:key="id">
         <view class="clothing-card {{isBatchMode && clothingSelectionMap[item.id || item._id] ? 'selected' : ''}}" bindtap="goToDetail" data-id="{{item.id || item._id}}" data-item="{{item}}" bindlongpress="onLongPressClothing">
           <image class="clothing-img" src="{{item.image_url}}" mode="aspectFit"></image>
@@ -155,6 +156,19 @@
             <view class="select-circle {{clothingSelectionMap[item.id || item._id] ? 'selected' : ''}}">
               <text class="select-check" wx:if="{{clothingSelectionMap[item.id || item._id]}}">✓</text>
             </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 穿搭标签页内容 -->
+    <view wx:elif="{{currentTab === 'outfit' && filteredClothingList.length > 0}}" class="outfit-list-container">
+      <block wx:for="{{filteredClothingList}}" wx:key="id">
+        <view class="outfit-card" bindtap="goToOutfitDetail" data-id="{{item.id}}" data-item="{{item}}">
+          <image class="outfit-img" src="{{item.image_url || '../../images/default-outfit.png'}}" mode="aspectFill"></image>
+          <view class="outfit-info">
+            <view class="outfit-name">{{item.name}}</view>
+            <view class="outfit-description">{{item.description}}</view>
           </view>
         </view>
       </block>

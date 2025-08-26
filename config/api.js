@@ -19,9 +19,10 @@ const config = {
   prod: {
     baseURL: 'https://www.jmrecipe.top', // 请替换为实际的生产环境域名
     api: {
-      user: 'api/users',
+      user: '/api/users',
       userDetail: '/api/users/detail',
       clothing: '/api/wardrobe/clothing',
+      outfit: '/api/wardrobe/outfit',
       cosCredentials: '/api/cos/credentials',
       login: '/api/wechat/getopenid', // 微信登录接口
       family: '/api/family',

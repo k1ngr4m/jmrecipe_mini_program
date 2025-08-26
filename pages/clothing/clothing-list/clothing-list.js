@@ -167,11 +167,56 @@ Page({
   getOutfitList: function() {
     // TODO: 实现获取穿搭列表的逻辑
     console.log('获取穿搭列表');
-    // 暂时使用空数据
+    // 使用默认的穿搭集合数据
+    const defaultOutfits = [
+      {
+        id: 0,
+        name: '默认穿搭',
+        description: '系统推荐的基础穿搭组合',
+        image_url: '', // 可以设置默认图片
+        type: 'default'
+      },
+      {
+        id: 1,
+        name: '日常穿搭',
+        description: '适合日常生活的基本搭配',
+        image_url: '',
+        type: 'daily'
+      },
+      {
+        id: 2,
+        name: '职业穿搭',
+        description: '适合工作场合的专业装扮',
+        image_url: '',
+        type: 'work'
+      },
+      {
+        id: 3,
+        name: '排队穿搭',
+        description: '逛街购物时的时尚搭配',
+        image_url: '',
+        type: 'shopping'
+      },
+      {
+        id: 4,
+        name: '运动穿搭',
+        description: '健身运动时的舒适装备',
+        image_url: '',
+        type: 'sport'
+      },
+      {
+        id: 5,
+        name: '季节穿搭',
+        description: '根据季节变化的应季搭配',
+        image_url: '',
+        type: 'seasonal'
+      }
+    ];
+    
     this.setData({
-      clothingList: [],
-      filteredClothingList: [],
-      totalCount: 0
+      clothingList: defaultOutfits,
+      filteredClothingList: defaultOutfits,
+      totalCount: defaultOutfits.length
     });
   },
 
@@ -292,6 +337,16 @@ Page({
     console.log('点击了添加按钮');
     this.setData({
       showAddOptionsModal: true
+    });
+  },
+  
+  // 显示添加穿搭选项弹窗
+  showOutfitAddModal() {
+    console.log('点击了添加穿搭按钮');
+    // TODO: 实现添加穿搭的逻辑
+    wx.showToast({
+      title: '功能开发中',
+      icon: 'none'
     });
   },
 
@@ -1160,6 +1215,39 @@ Page({
     
     wx.navigateTo({
       url: `/pages/clothing/clothing-detail/clothing-detail?id=${validClothingId}`,
+      fail: (err) => {
+        console.error('跳转失败:', err);
+        wx.showToast({
+          title: '跳转失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+  
+  // 跳转到穿搭列表页
+  goToOutfitDetail: function(e) {
+    const outfitId = e.currentTarget.dataset.id;
+    const outfitItem = e.currentTarget.dataset.item;
+    
+    console.log('跳转到穿搭列表页，outfitId:', outfitId);
+    console.log('跳转到穿搭列表页，outfitItem:', outfitItem);
+    
+    // 检查穿搭类型是否存在
+    const outfitType = outfitItem.type;
+    const outfitName = outfitItem.name;
+    
+    if (!outfitType) {
+      wx.showToast({
+        title: '参数错误',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 跳转到穿搭列表页面，传递类型参数
+    wx.navigateTo({
+      url: `/pages/outfit/outfit-list/outfit-list?type=${outfitType}&name=${outfitName}`,
       fail: (err) => {
         console.error('跳转失败:', err);
         wx.showToast({
