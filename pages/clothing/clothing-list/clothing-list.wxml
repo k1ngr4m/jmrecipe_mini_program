@@ -35,8 +35,26 @@
     </view>
   </view>
   
+  <!-- Tab导航栏 -->
+  <view class="tab-bar">
+    <view 
+      class="tab-item {{currentTab === 'wardrobe' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="wardrobe"
+    >
+      橱柜
+    </view>
+    <view 
+      class="tab-item {{currentTab === 'outfit' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="outfit"
+    >
+      穿搭
+    </view>
+  </view>
+  
   <!-- 一级分类导航 -->
-  <scroll-view class="primary-categories" scroll-x>
+  <scroll-view class="primary-categories" scroll-x wx:if="{{currentTab === 'wardrobe'}}">
     <view 
       class="category-item {{currentPrimaryCategory === '总览' ? 'active' : ''}}" 
       bindtap="switchPrimaryCategory" 
@@ -56,7 +74,7 @@
   </scroll-view>
   
   <!-- 二级分类导航 -->
-  <scroll-view class="secondary-categories" scroll-x>
+  <scroll-view class="secondary-categories" scroll-x wx:if="{{currentTab === 'wardrobe'}}">
     <view 
       class="subcategory-item {{currentSecondaryCategory === 'all' ? 'active' : ''}}" 
       bindtap="switchSecondaryCategory" 
@@ -76,7 +94,7 @@
   </scroll-view>
   
   <!-- 颜色筛选 -->
-<!--  <scroll-view class="color-filter" scroll-x>-->
+<!--  <scroll-view class="color-filter" scroll-x wx:if="{{currentTab === 'wardrobe'}}">-->
 <!--    <view -->
 <!--      class="color-item {{selectedColor === '' ? 'active' : ''}}" -->
 <!--      bindtap="selectColor" -->
@@ -96,7 +114,7 @@
 <!--  </scroll-view>-->
   
   <!-- 季节筛选 -->
-  <scroll-view class="season-filter" scroll-x>
+  <scroll-view class="season-filter" scroll-x wx:if="{{currentTab === 'wardrobe'}}">
     <view 
       class="season-item {{selectedSeason === '' ? 'active' : ''}}" 
       bindtap="selectSeason" 
@@ -138,7 +156,8 @@
     
     <!-- 空状态 -->
     <view class="empty-state" wx:else>
-      <text class="empty-text">暂无衣物数据</text>
+      <text class="empty-text" wx:if="{{currentTab === 'wardrobe'}}">暂无衣物数据</text>
+      <text class="empty-text" wx:else>暂无穿搭数据</text>
     </view>
   </scroll-view>
   
@@ -152,8 +171,82 @@
     </view>
   </view>
   
+  <!-- 分类选择模态框 -->
+  <view class="modal {{showCategoryModal ? 'modal-visible' : ''}}">
+    <view class="modal-content category-modal">
+      <view class="modal-header">
+        <text class="modal-title">选择分类</text>
+        <text class="close-btn" bindtap="hideCategoryModal">×</text>
+      </view>
+      <view class="modal-body-container">
+        <scroll-view class="modal-body-scroll" scroll-y>
+          <view class="modal-body">
+            <!-- 一级分类选择 -->
+            <view class="form-group" wx:if="{{!selectedPrimaryCategory}}">
+              <view class="label">请选择一级分类</view>
+              <view class="category-list">
+                <view 
+                  class="category-option {{item.id === selectedPrimaryCategory ? 'active' : ''}}" 
+                  wx:for="{{primaryCategories}}" 
+                  wx:key="id"
+                  bindtap="selectPrimaryCategory"
+                  data-id="{{item.id}}"
+                  data-name="{{item.name}}"
+                >
+                  {{item.name}}
+                </view>
+              </view>
+            </view>
+            
+            <!-- 二级分类选择 -->
+            <view class="form-group" wx:if="{{selectedPrimaryCategory && currentSecondaryCategories.length > 0}}">
+              <view class="label">请选择二级分类</view>
+              <view class="back-to-primary">
+                <text class="back-text" bindtap="backToPrimaryCategory">← 返回</text>
+              </view>
+              <view class="category-list">
+                <view 
+                  class="category-option {{item.id === selectedSecondaryCategory ? 'active' : ''}}" 
+                  wx:for="{{currentSecondaryCategories}}" 
+                  wx:key="id"
+                  bindtap="selectSecondaryCategory"
+                  data-id="{{item.id}}"
+                  data-name="{{item.name}}"
+                >
+                  {{item.name}}
+                </view>
+              </view>
+            </view>
+            
+            <!-- 无二级分类提示 -->
+            <view class="form-group" wx:if="{{selectedPrimaryCategory && currentSecondaryCategories.length === 0}}">
+              <view class="no-secondary-category">该一级分类下无二级分类</view>
+            </view>
+          </view>
+        </scroll-view>
+        
+        <!-- 操作按钮 -->
+        <view class="modal-actions">
+          <button class="btn cancel" bindtap="hideCategoryModal">取消</button>
+          <button 
+            class="btn confirm" 
+            bindtap="confirmCategorySelection"
+            wx:if="{{selectedPrimaryCategory && (!currentSecondaryCategories.length || selectedSecondaryCategory)}}"
+          >
+            确定
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+  
   <!-- 悬浮添加按钮 -->
-  <view class="fab" bindtap="showAddModal">
+  <view class="fab" bindtap="showAddModal" wx:if="{{currentTab === 'wardrobe'}}">
+    <text>＋</text>
+  </view>
+  
+  <!-- 穿搭添加按钮 -->
+  <view class="fab" bindtap="showOutfitAddModal" wx:if="{{currentTab === 'outfit'}}">
     <text>＋</text>
   </view>
   

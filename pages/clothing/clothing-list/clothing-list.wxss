@@ -9,6 +9,7 @@ page {
   height: 100%;
   justify-content: flex-start;
   padding: 10px;
+  box-sizing: border-box;
 }
 
 .top-nav {
@@ -22,6 +23,51 @@ page {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   margin-bottom: 10px;
   border-radius: 8px;
+}
+
+/* Tab导航栏样式 */
+.tab-bar {
+  display: flex;
+  background-color: #fff;
+  border-radius: 12px;
+  margin: 10px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+  width: 100%;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #8b6e41;
+  background-color: #fcfaf5;
+  transition: all 0.3s;
+  border-right: 1px solid #f0e8d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  box-sizing: border-box;
+}
+
+.tab-item:last-child {
+  border-right: none;
+}
+
+.tab-item.active {
+  background-color: #d8b95f;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(216, 185, 95, 0.3);
+}
+
+.tab-item:hover {
+  background-color: #f9f5e6;
 }
 
 /* 悬浮成员按钮样式 */
@@ -446,12 +492,29 @@ page {
   background-color: rgba(139, 110, 65, 0.1);
 }
 
-/* 新增服装选择弹窗样式 */
+/* 分类选择模态框样式 */
+.modal-body-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.modal-body-scroll {
+  flex: 1;
+  min-height: 0;
+}
+
 .modal-body {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
 }
 
 .option-btn {
@@ -756,40 +819,104 @@ page {
   margin-bottom: 0;
 }
 
-/* 批量操作工具栏 */
-.batch-toolbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  padding: 12px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  z-index: 999;
+/* 分类选择模态框样式 */
+.category-modal {
+  width: 90%;
+  max-width: 400px;
+  border-radius: 18px;
+  overflow: hidden;
 }
 
-.batch-info {
+
+.category-option {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0e8d6;
+  font-size: 16px;
+  color: #333;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.category-option:last-child {
+  border-bottom: none;
+}
+
+.category-option.active {
+  background-color: #fdfcf9;
+  color: #d8b95f;
+  font-weight: 600;
+}
+
+.category-option:hover {
+  background-color: #fcfaf5;
+}
+
+.no-secondary-category {
   text-align: center;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-.batch-actions {
-  display: flex;
-  justify-content: space-around;
-}
-
-.batch-btn {
-  padding: 8px 16px;
-  background-color: #d8b95f;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  padding: 20px;
+  color: #999;
   font-size: 14px;
 }
 
-.batch-btn.cancel {
-  background-color: #999;
+.back-to-primary {
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.back-text {
+  color: #d8b95f;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.back-text:hover {
+  background-color: #fcfaf5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn.cancel {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.btn.cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.btn.confirm {
+  background-color: #d8b95f;
+  color: white;
+  box-shadow: 0 4px 15px rgba(216, 185, 95, 0.3);
+}
+
+.btn.confirm:hover {
+  background-color: #c7a84a;
+  box-shadow: 0 6px 20px rgba(216, 185, 95, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 /* 衣物价格样式 - 红色显示 */

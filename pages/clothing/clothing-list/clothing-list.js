@@ -8,6 +8,7 @@ Page({
     title: '衣橱列表页',
     showSearchModal: false,
     showAddOptionsModal: false, // 显示添加选项弹窗
+    currentTab: 'wardrobe', // 当前选中的tab ('wardrobe' 或 'outfit')
     clothingList: [],
     filteredClothingList: [],
     currentPrimaryCategory: '总览', // 当前选中的一级分类
@@ -33,7 +34,13 @@ Page({
     // 成员相关数据
     members: [], // 成员列表
     selectedMemberId: null, // 选中的成员ID
-    showMemberDropdown: false // 是否显示成员下拉菜单
+    showMemberDropdown: false, // 是否显示成员下拉菜单
+    // 分类选择模态框相关数据
+    showCategoryModal: false, // 是否显示分类选择模态框
+    selectedPrimaryCategory: null, // 选中的一级分类ID
+    selectedPrimaryCategoryName: '', // 选中的一级分类名称
+    selectedSecondaryCategory: null, // 选中的二级分类ID
+    selectedSecondaryCategoryName: '' // 选中的二级分类名称
   },
   
   onLoad() {
@@ -59,7 +66,7 @@ Page({
       // this.initCategories();
       this.getCategories(); // 获取分类数据
       this.getBrandList(); // 获取品牌列表
-            this.getClothingList();
+      // 注意：getClothingList将在getCategories成功后调用
     }
   },
 
@@ -74,7 +81,7 @@ Page({
     if (this.data.primaryCategories.length > 0) {
       this.getCategories();
       this.getBrandList();
-      this.getClothingList();
+      // 注意：getClothingList将在getCategories成功后调用
     }
   },
 
@@ -92,7 +99,7 @@ Page({
     // 重新加载数据
     this.getCategories();
     this.getBrandList();
-    this.getClothingList();
+    // 注意：getClothingList将在getCategories成功后调用
     this.loadMembers();
   },
 
@@ -126,8 +133,44 @@ Page({
       // 重新加载数据
       this.getCategories();
       this.getBrandList();
-      this.getClothingList();
+      // 注意：getClothingList将在getCategories成功后调用
     }
+  },
+
+  // 切换tab
+  switchTab: function(e) {
+    const tab = e.currentTarget.dataset.tab;
+    
+    // 如果点击的是已经选中的tab，则不重复操作
+    if (this.data.currentTab === tab) {
+      return;
+    }
+    
+    this.setData({
+      currentTab: tab
+    });
+    
+    // 根据选中的tab加载相应数据
+    if (tab === 'wardrobe') {
+      // 加载橱柜数据
+      this.getCategories();
+      this.getBrandList();
+    } else if (tab === 'outfit') {
+      // 加载穿搭数据（这里可以添加加载穿搭数据的逻辑）
+      this.getOutfitList();
+    }
+  },
+
+  // 获取穿搭列表（占位方法，后续可以实现具体逻辑）
+  getOutfitList: function() {
+    // TODO: 实现获取穿搭列表的逻辑
+    console.log('获取穿搭列表');
+    // 暂时使用空数据
+    this.setData({
+      clothingList: [],
+      filteredClothingList: [],
+      totalCount: 0
+    });
   },
 
   // 显示/隐藏成员下拉菜单
@@ -248,6 +291,102 @@ Page({
     this.setData({
       showAddOptionsModal: true
     });
+  },
+
+  // 显示分类选择模态框
+  showCategoryModal: function() {
+    this.setData({
+      showCategoryModal: true,
+      selectedPrimaryCategory: null,
+      selectedPrimaryCategoryName: '',
+      selectedSecondaryCategory: null,
+      selectedSecondaryCategoryName: ''
+    });
+  },
+
+  // 隐藏分类选择模态框
+  hideCategoryModal: function() {
+    this.setData({
+      showCategoryModal: false,
+      selectedPrimaryCategory: null,
+      selectedPrimaryCategoryName: '',
+      selectedSecondaryCategory: null,
+      selectedSecondaryCategoryName: ''
+    });
+  },
+
+  // 选择一级分类
+  selectPrimaryCategory: function(e) {
+    const categoryId = e.currentTarget.dataset.id;
+    const categoryName = e.currentTarget.dataset.name;
+    
+    // 获取当前一级分类下的二级分类
+    const currentSecondaryCategories = this.getCurrentSecondaryCategories(categoryId);
+    
+    this.setData({
+      selectedPrimaryCategory: categoryId,
+      selectedPrimaryCategoryName: categoryName,
+      selectedSecondaryCategory: null,
+      selectedSecondaryCategoryName: '',
+      currentSecondaryCategories: currentSecondaryCategories
+    });
+  },
+
+  // 选择二级分类
+  selectSecondaryCategory: function(e) {
+    const categoryId = e.currentTarget.dataset.id;
+    const categoryName = e.currentTarget.dataset.name;
+    
+    this.setData({
+      selectedSecondaryCategory: categoryId,
+      selectedSecondaryCategoryName: categoryName
+    });
+  },
+
+  // 返回重新选择一级分类
+  backToPrimaryCategory: function() {
+    this.setData({
+      selectedPrimaryCategory: null,
+      selectedPrimaryCategoryName: '',
+      selectedSecondaryCategory: null,
+      selectedSecondaryCategoryName: '',
+      currentSecondaryCategories: []
+    });
+  },
+
+  // 确认分类选择
+  confirmCategorySelection: function() {
+    // 先保存选中的分类值
+    const selectedPrimary = this.data.selectedPrimaryCategory;
+    const selectedSecondary = this.data.selectedSecondaryCategory;
+    
+    // 检查是否已选择一级分类
+    if (!selectedPrimary) {
+      wx.showToast({
+        title: '请选择一级分类',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 如果一级分类下有二级分类，但未选择二级分类
+    if (this.data.currentSecondaryCategories.length > 0 && !selectedSecondary) {
+      wx.showToast({
+        title: '请选择二级分类',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 隐藏模态框
+    this.hideCategoryModal();
+    console.log(this.data)
+    // 执行移动分类操作，使用保存的值而不是data中的值
+    this.moveClothingBatch(
+      this.data.selectedClothingIds, 
+      selectedPrimary,
+      selectedSecondary,
+    );
   },
 
   // 隐藏添加选项弹窗
@@ -713,13 +852,15 @@ Page({
       clothing.primary_category_id = clothing.primary_category;
       clothing.secondary_category_id = clothing.secondary_category;
       
-      // 获取分类名称
-      const primaryCategoryName = this.getCategoryNameById(clothing.primary_category, this.data.primaryCategories);
-      const secondaryCategoryName = this.getCategoryNameById(clothing.secondary_category, this.data.secondaryCategories);
-      
-      // 设置分类名称显示
-      clothing.primary_category = primaryCategoryName || clothing.primary_category;
-      clothing.secondary_category = secondaryCategoryName || clothing.secondary_category;
+      // 获取分类名称（如果分类数据已加载）
+      if (this.data.primaryCategories && this.data.secondaryCategories) {
+        const primaryCategoryName = this.getCategoryNameById(clothing.primary_category, this.data.primaryCategories);
+        const secondaryCategoryName = this.getCategoryNameById(clothing.secondary_category, this.data.secondaryCategories);
+        
+        // 设置分类名称显示
+        clothing.primary_category = primaryCategoryName || clothing.primary_category;
+        clothing.secondary_category = secondaryCategoryName || clothing.secondary_category;
+      }
     });
 
     // 更新总数
@@ -729,7 +870,6 @@ Page({
     let filteredList = clothingList;
     
     // 为列表中的每个服装项获取带签名的图片URL
-    let processedCount = 0;
     const totalItems = clothingList.length;
     
     if (totalItems === 0) {
@@ -741,56 +881,56 @@ Page({
       return;
     }
     
-    // 分离需要处理签名URL的项目和需要使用缺省图片的项目
+    // 收集所有需要签名的图片URL
+    const imageUrls = [];
     const itemsWithImages = [];
     const itemsWithoutImages = [];
     
     clothingList.forEach((clothing, index) => {
       if (clothing.image_url) {
+        imageUrls.push(clothing.image_url);
         itemsWithImages.push({clothing, index});
       } else {
         itemsWithoutImages.push({clothing, index});
       }
     });
     
-    // 处理有图片的项目
-    itemsWithImages.forEach(({clothing, index}) => {
-      cosCredentialsManager.getSignedCosUrl(clothing.image_url, (signedUrl) => {
-        clothingList[index].image_url = signedUrl;
-        processedCount++;
-        
-        // 当所有项都处理完后更新数据
-        if (processedCount === totalItems) {
+    // 批量获取签名URL
+    cosCredentialsManager.getBatchSignedCosUrls(imageUrls, (signedUrls) => {
+      // 处理有图片的项目
+      itemsWithImages.forEach(({clothing, index}) => {
+        const signedUrl = signedUrls[clothing.image_url];
+        if (signedUrl) {
+          clothingList[index].image_url = signedUrl;
+        }
+      });
+      
+      // 处理没有图片的项目
+      if (itemsWithoutImages.length > 0) {
+        // 只获取一次缺省图片签名URL，然后应用到所有没有图片的项目
+        this.getDefaultImageSignedUrl((defaultImageUrl) => {
+          itemsWithoutImages.forEach(({clothing, index}) => {
+            if (defaultImageUrl) {
+              clothingList[index].image_url = defaultImageUrl;
+            }
+          });
+          
+          // 更新数据
           this.setData({
             clothingList: clothingList,
             filteredClothingList: filteredList,
             totalCount: totalCount
           });
-        }
-      });
-    });
-    
-    // 处理没有图片的项目
-    if (itemsWithoutImages.length > 0) {
-      // 只获取一次缺省图片签名URL，然后应用到所有没有图片的项目
-      this.getDefaultImageSignedUrl((defaultImageUrl) => {
-        itemsWithoutImages.forEach(({clothing, index}) => {
-          if (defaultImageUrl) {
-            clothingList[index].image_url = defaultImageUrl;
-          }
-          processedCount++;
-          
-          // 当所有项都处理完后更新数据
-          if (processedCount === totalItems) {
-            this.setData({
-              clothingList: clothingList,
-              filteredClothingList: filteredList,
-              totalCount: totalCount
-            });
-          }
         });
-      });
-    }
+      } else {
+        // 更新数据
+        this.setData({
+          clothingList: clothingList,
+          filteredClothingList: filteredList,
+          totalCount: totalCount
+        });
+      }
+    });
   },
   
   // 获取当前一级分类下的二级分类
@@ -1140,36 +1280,46 @@ Page({
       return;
     }
     
-    // 显示选择分类的弹窗
-    this.showCategorySelectionModal();
-  },
-  
-  // 显示分类选择弹窗
-  showCategorySelectionModal: function() {
-    const categories = ['上衣', '裤装', '外套', '鞋履'];
-    wx.showActionSheet({
-      itemList: categories,
-      success: (res) => {
-        if (!res.cancel) {
-          const selectedCategory = categories[res.tapIndex];
-          this.moveClothingBatch(this.data.selectedClothingIds, selectedCategory);
-        }
-      }
-    });
+    // 显示新的分类选择模态框
+    this.showCategoryModal();
   },
   
   // 批量移动衣物分类的API调用
-  moveClothingBatch: function(clothingIds, category) {
+  moveClothingBatch: function(clothingIds, primaryCategoryId, secondaryCategoryId) {
+    // 构造请求数据，确保传入正确的值而不是null
+    const updateData = {};
+    
+    // 只有当一级分类ID有效时才添加到更新数据中
+    if (primaryCategoryId !== null && primaryCategoryId !== undefined) {
+      updateData.primary_category = primaryCategoryId;
+    }
+    
+    // 只有当二级分类ID有效时才添加到更新数据中
+    if (secondaryCategoryId !== null && secondaryCategoryId !== undefined) {
+      updateData.secondary_category = secondaryCategoryId;
+    }
+    
+    // 如果没有有效的更新数据，则不执行更新
+    if (Object.keys(updateData).length === 0) {
+      wx.showToast({
+        title: '请选择有效分类',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    const requestData = {
+      userid: wx.getStorageSync('userid'),
+      clothing_ids: clothingIds,
+      update: updateData
+    };
+
     request({
-      url: config.getFullURL('clothing') + '/batch_move',
+      url: config.getFullURL('clothing') + '/batchUpdate',
       method: 'POST',
-      data: {
-        userid: wx.getStorageSync('userid'),
-        clothing_ids: clothingIds,
-        category: category
-      },
+      data: requestData,
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
           wx.showToast({
             title: '移动成功',
             icon: 'success'
@@ -1248,8 +1398,13 @@ Page({
             secondaryCategories: secondary,
             currentSecondaryCategories: secondary // 默认显示所有二级分类
           });
+          
+          // 在分类数据获取成功后再获取服装列表
+          this.getClothingList();
         } else {
           console.error('获取分类数据失败', res);
+          // 即使分类数据获取失败，也尝试获取服装列表
+          this.getClothingList();
         }
         // 隐藏加载提示
         wx.hideLoading();
@@ -1258,6 +1413,8 @@ Page({
       },
       fail: (err) => {
         console.error('获取分类数据网络错误', err);
+        // 即使分类数据获取失败，也尝试获取服装列表
+        this.getClothingList();
         // 隐藏加载提示
         wx.hideLoading();
         // 停止下拉刷新

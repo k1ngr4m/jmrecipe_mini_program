@@ -575,7 +575,7 @@ Page({
     const requestData = {
       clothing_id: parseInt(clothingId),
       userid: wx.getStorageSync('userid') || '1',
-      clothing_update: formData
+      update: formData
     };
     
     // 发送更新请求

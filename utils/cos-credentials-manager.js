@@ -145,6 +145,119 @@ class COSCredentialsManager {
     });
   }
 
+  // 批量获取带签名的COS图片URL
+  getBatchSignedCosUrls(cosUrls, callback) {
+    // 过滤无效URL并检查缓存
+    const validUrls = cosUrls.filter(url => url);
+    const results = {};
+    let pendingCount = validUrls.length;
+    
+    // 如果没有有效的URL，直接返回
+    if (pendingCount === 0) {
+      callback(results);
+      return;
+    }
+    
+    // 先检查缓存
+    validUrls.forEach(cosUrl => {
+      // 如果URL已经包含签名信息，则直接使用
+      if (cosUrl.includes('q-sign-algorithm')) {
+        results[cosUrl] = cosUrl;
+        pendingCount--;
+        return;
+      }
+      
+      // 检查缓存中是否已有签名URL
+      const cachedUrl = imageCacheManager.getCachedImageUrl(cosUrl);
+      if (cachedUrl) {
+        results[cosUrl] = cachedUrl;
+        pendingCount--;
+      }
+    });
+    
+    // 如果所有URL都已经缓存，直接返回
+    if (pendingCount === 0) {
+      callback(results);
+      return;
+    }
+    
+    // 获取有效的凭证
+    this.getValidCredentials().then(credentials => {
+      // 引入COS SDK
+      const COS = require('./cos-wx-sdk-v5.js');
+      
+      // 初始化COS实例
+      const cos = new COS({
+        getAuthorization: function (options, callback) {
+          callback({
+            TmpSecretId: credentials.tmp_secret_id,
+            TmpSecretKey: credentials.tmp_secret_key,
+            SecurityToken: credentials.token,
+            StartTime: credentials.start_time,
+            ExpiredTime: credentials.expired_time
+          });
+        },
+        SimpleUploadMethod: 'putObject'
+      });
+      
+      // 处理未缓存的URL
+      validUrls.forEach(cosUrl => {
+        // 跳过已处理的URL
+        if (results[cosUrl]) return;
+        
+        // 从URL中提取Bucket、Region和Key信息
+        const urlPattern = /^https:\/\/([^\/]+)\.cos\.([^\/]+)\.myqcloud\.com\/(.+)$/;
+        const match = cosUrl.match(urlPattern);
+        
+        if (!match) {
+          console.error('无效的COS URL格式:', cosUrl);
+          results[cosUrl] = cosUrl;
+          pendingCount--;
+          if (pendingCount === 0) {
+            callback(results);
+          }
+          return;
+        }
+        
+        const bucketWithAppId = match[1]; // jmrecipe-1309147067
+        const region = match[2]; // ap-shanghai
+        const key = match[3]; // clothing-list/1754496891594_6800.png
+        const bucket = bucketWithAppId; // COS SDK可以处理带APPID的bucket名称
+        
+        // 获取带签名的URL
+        cos.getObjectUrl({
+          Bucket: bucket,
+          Region: region,
+          Key: key,
+          Sign: true
+        }, (err, data) => {
+          if (err) {
+            console.error('获取签名URL失败:', err);
+            results[cosUrl] = cosUrl; // 如果获取失败，返回原始URL
+          } else {
+            // 将签名URL存入缓存
+            imageCacheManager.setCachedImageUrl(cosUrl, data.Url);
+            results[cosUrl] = data.Url;
+          }
+          
+          pendingCount--;
+          if (pendingCount === 0) {
+            callback(results);
+          }
+        });
+      });
+    }).catch(error => {
+      console.error('获取COS凭证失败:', error);
+      // 如果获取凭证失败，返回原始URL
+      validUrls.forEach(cosUrl => {
+        if (!results[cosUrl]) {
+          results[cosUrl] = cosUrl;
+        }
+      });
+      callback(results);
+    });
+  }
+
   // 初始化COS实例
   initCosInstance(credentials) {
     // 引入COS SDK
