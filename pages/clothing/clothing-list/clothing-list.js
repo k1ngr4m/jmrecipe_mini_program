@@ -1236,7 +1236,7 @@ Page({
   // 批量删除衣物的API调用
   deleteClothingBatch: function(clothingIds) {
     request({
-      url: config.getFullURL('clothing') + '/batch_delete',
+      url: config.getFullURL('clothing') + '/batchDelete',
       method: 'POST',
       data: {
         userid: wx.getStorageSync('userid'),
