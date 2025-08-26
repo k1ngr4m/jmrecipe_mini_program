@@ -1,0 +1,225 @@
+page {
+  background-color: #f9f5e6; /* 米黄色背景 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* 一级分类导航 */
+.primary-categories {
+  display: flex;
+  padding: 10px 0;
+  background-color: #f9f5e6;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 20px;
+}
+
+.primary-categories::-webkit-scrollbar {
+  display: none;
+}
+
+.category-item {
+  display: inline-block;
+  padding: 8px 16px;
+  margin-right: 10px;
+  border-radius: 20px;
+  background-color: #fff3d4;
+  font-size: 14px;
+  color: #8b6e41;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 1px solid #f0e8d6;
+}
+
+.category-item:last-child {
+  margin-right: 0;
+}
+
+.category-item.active {
+  background-color: #d8b95f;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(216, 185, 95, 0.3);
+  border-color: #d8b95f;
+}
+
+.category-item:hover {
+  background-color: #ffe8b0;
+}
+
+/* 服装列表区域 */
+.clothing-list-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #6d5836;
+  margin-bottom: 10px;
+}
+
+.clothing-list {
+  white-space: nowrap;
+  overflow-x: auto;
+  padding: 5px 0;
+}
+
+.clothing-list::-webkit-scrollbar {
+  display: none;
+}
+
+.clothing-list-container {
+  display: inline-flex;
+}
+
+.clothing-item {
+  display: inline-block;
+  width: 100px;
+  margin-right: 15px;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.clothing-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.clothing-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.clothing-name {
+  padding: 8px;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Canvas画布区域 */
+.canvas-section {
+  width: 100%;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.outfit-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-items-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* 防止容器拦截点击事件 */
+}
+
+.canvas-item {
+  position: absolute;
+  pointer-events: auto; /* 恢复子元素的点击事件 */
+  cursor: move;
+}
+
+.canvas-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  pointer-events: auto;
+}
+
+.remove-btn:hover {
+  background-color: #c0392b;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.save-btn {
+  background-color: #d8b95f;
+  color: white;
+  box-shadow: 0 4px 15px rgba(216, 185, 95, 0.3);
+}
+
+.save-btn:hover {
+  background-color: #c7a84a;
+  box-shadow: 0 6px 20px rgba(216, 185, 95, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
