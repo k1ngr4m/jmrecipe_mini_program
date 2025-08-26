@@ -31,6 +31,8 @@ Page({
     currentCategories: {},
     isBatchMode: false, // 是否为批量选择模式
     selectedClothingIds: [], // 已选择的衣物ID数组
+    // 用于跟踪每个衣物选中状态的对象
+    clothingSelectionMap: {}, // 衣物选中状态映射
     // 成员相关数据
     members: [], // 成员列表
     selectedMemberId: null, // 选中的成员ID
@@ -380,7 +382,6 @@ Page({
     
     // 隐藏模态框
     this.hideCategoryModal();
-    console.log(this.data)
     // 执行移动分类操作，使用保存的值而不是data中的值
     this.moveClothingBatch(
       this.data.selectedClothingIds, 
@@ -1142,9 +1143,6 @@ Page({
     
     const clothingId = e.currentTarget.dataset.id;
     const clothingItem = e.currentTarget.dataset.item;
-    console.log('跳转到详情页，clothingId:', clothingId);
-    console.log('跳转到详情页，clothingItem:', clothingItem);
-    console.log('事件对象e:', e);
     
     // 检查ID是否存在，如果不存在则尝试从item中获取
     let validClothingId = clothingId;
@@ -1177,7 +1175,8 @@ Page({
     // 进入批量选择模式
     this.setData({
       isBatchMode: true,
-      selectedClothingIds: []
+      selectedClothingIds: [],
+      clothingSelectionMap: {}
     });
     
     // 选择当前长按的衣物
@@ -1187,27 +1186,36 @@ Page({
   
   // 切换衣物选择状态
   toggleClothingSelection: function(clothingId) {
-    const selectedIds = this.data.selectedClothingIds;
-    const index = selectedIds.indexOf(clothingId);
+    // 确保ID是字符串类型，以避免类型不匹配问题
+    const id = String(clothingId);
+    const selectedIds = this.data.selectedClothingIds.map(item => String(item));
+    const index = selectedIds.indexOf(id);
+    
+    // 更新选中状态映射
+    const selectionMap = this.data.clothingSelectionMap;
+    selectionMap[id] = index === -1; // 如果未选中则设为true，否则设为false
     
     if (index > -1) {
       // 如果已选择，则取消选择
       selectedIds.splice(index, 1);
     } else {
       // 如果未选择，则添加到选择列表
-      selectedIds.push(clothingId);
+      selectedIds.push(id);
     }
     
     this.setData({
-      selectedClothingIds: selectedIds
+      selectedClothingIds: selectedIds,
+      clothingSelectionMap: selectionMap
     });
   },
   
+    
   // 退出批量选择模式
   exitBatchMode: function() {
     this.setData({
       isBatchMode: false,
-      selectedClothingIds: []
+      selectedClothingIds: [],
+      clothingSelectionMap: {}
     });
   },
   

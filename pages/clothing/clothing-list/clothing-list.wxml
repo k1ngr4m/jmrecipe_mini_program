@@ -137,7 +137,7 @@
   <scroll-view class="clothing-list" scroll-y>
     <view wx:if="{{filteredClothingList.length > 0}}" class="clothing-list-container">
       <block wx:for="{{filteredClothingList}}" wx:key="id">
-        <view class="clothing-card" bindtap="goToDetail" data-id="{{item.id || item._id}}" data-item="{{item}}" bindlongpress="onLongPressClothing">
+        <view class="clothing-card {{isBatchMode && clothingSelectionMap[item.id || item._id] ? 'selected' : ''}}" bindtap="goToDetail" data-id="{{item.id || item._id}}" data-item="{{item}}" bindlongpress="onLongPressClothing">
           <image class="clothing-img" src="{{item.image_url}}" mode="aspectFit"></image>
           <view class="clothing-info">
             <view class="clothing-name">{{item.name}}</view>
@@ -149,6 +149,12 @@
               <text wx:if="{{item.size}}"> | {{item.size}}</text>
             </view>
             <view class="clothing-price" wx:if="{{item.price}}">¥{{item.price}}</view>
+          </view>
+          <!-- 批量选择模式下的选中标识 -->
+          <view class="batch-select-indicator" wx:if="{{isBatchMode}}">
+            <view class="select-circle {{clothingSelectionMap[item.id || item._id] ? 'selected' : ''}}">
+              <text class="select-check" wx:if="{{clothingSelectionMap[item.id || item._id]}}">✓</text>
+            </view>
           </view>
         </view>
       </block>
