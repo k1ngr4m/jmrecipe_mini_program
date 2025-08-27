@@ -22,6 +22,8 @@ Page({
     const hasLoggedIn = wx.getStorageSync('hasLoggedIn');
     if (hasLoggedIn) {
       console.log("hasLoggedIn+", hasLoggedIn);
+      this.getUserCode()
+
     }
     else {
       this.getUserCode()

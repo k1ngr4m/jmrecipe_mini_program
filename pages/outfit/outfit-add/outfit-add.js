@@ -44,26 +44,22 @@ Page({
 
   // 初始化canvas
   initCanvas() {
-    // 获取canvas上下文
-    const ctx = wx.createCanvasContext('outfitCanvas', this);
-    
-    // 设置背景色
-    ctx.setFillStyle('#f5f5f5');
-    ctx.fillRect(0, 0, this.data.canvasWidth, this.data.canvasHeight);
-    
-    // 绘制提示文字
-    ctx.setFontSize(16);
-    ctx.setFillStyle('#999');
-    ctx.setTextAlign('center');
-    ctx.fillText('请从上方选择服装添加到画布中', this.data.canvasWidth / 2, this.data.canvasHeight / 2);
-    
-    // 绘制到canvas
-    ctx.draw();
-    
-    // 确保canvas在初始化时也重绘一次
+    // 延迟一段时间确保页面渲染完成
     setTimeout(() => {
-      this.redrawCanvas();
-    }, 100);
+      // 获取canvas实际尺寸
+      const query = wx.createSelectorQuery();
+      query.select('#outfitCanvas').boundingClientRect((rect) => {
+        if (rect) {
+          this.setData({
+            canvasWidth: rect.width,
+            canvasHeight: rect.height
+          });
+        }
+        // 确保canvas在初始化时也重绘一次
+        this.redrawCanvas();
+      });
+      query.exec();
+    }, 300); // 延迟300ms确保DOM渲染完成
   },
 
   // 验证签名URL是否正确生成
@@ -369,7 +365,6 @@ Page({
   // 选择服装
   selectClothing(e) {
     const clothing = e.currentTarget.dataset.item;
-    console.log('选择服装:', clothing);
     
     // 将选中的服装添加到Canvas中
     this.addClothingToCanvas(clothing);
@@ -389,10 +384,12 @@ Page({
             y: 50,
             width: 100,
             height: 100,
+            rotation: 0,  // 添加旋转属性初始化
           };
 
           this.setData({
-            canvasItems: [...this.data.canvasItems, newItem]
+            canvasItems: [...this.data.canvasItems, newItem],
+            selectedClothingId: clothing.id  // 添加新服装后自动选中它
           }, () => {
             this.redrawCanvas();
           });
@@ -405,9 +402,13 @@ Page({
   },
 
   // 从Canvas中移除服装
-  removeClothingFromCanvas(e) {
-    const index = e.currentTarget.dataset.index;
+  removeClothingFromCanvas() {
+    const selectedId = this.data.selectedClothingId;
+    if (!selectedId) return;
+    
     const canvasItems = this.data.canvasItems;
+    const index = canvasItems.findIndex(item => item.clothingId === selectedId);
+    if (index === -1) return;
     
     canvasItems.splice(index, 1);
     
@@ -422,21 +423,55 @@ Page({
 
   // 开始拖拽
   startDrag(e) {
-    const index = e.currentTarget.dataset.index;
+    // 获取点击位置，计算点击的是哪个服装项
+    const touch = e.touches[0];
     const canvasItems = this.data.canvasItems;
     
-    // 记录拖拽起始位置
-    const startX = e.touches[0].clientX;
-    const startY = e.touches[0].clientY;
-    
-    canvasItems[index].isDragging = true;
-    canvasItems[index].startX = startX;
-    canvasItems[index].startY = startY;
-    
-    this.setData({
-      canvasItems: canvasItems,
-      selectedClothingId: canvasItems[index].id
+    // 获取canvas元素的位置信息
+    const query = wx.createSelectorQuery();
+    query.select('#outfitCanvas').boundingClientRect((rect) => {
+      if (!rect) return;
+      
+      // 计算相对于canvas的坐标
+      const canvasX = touch.clientX - rect.left;
+      const canvasY = touch.clientY - rect.top;
+      
+      // 查找点击的服装项（从后往前查找，确保点击的是最上层的项）
+      let selectedIndex = -1;
+      for (let i = canvasItems.length - 1; i >= 0; i--) {
+        const item = canvasItems[i];
+        if (canvasX >= item.x && canvasX <= item.x + item.width &&
+            canvasY >= item.y && canvasY <= item.y + item.height) {
+          selectedIndex = i;
+          break;
+        }
+      }
+      
+      if (selectedIndex === -1) {
+        // 如果没有点击到任何服装项，不处理（保持当前选中状态）
+        return;
+      }
+      
+      const index = selectedIndex;
+      const clickedClothingId = canvasItems[index].clothingId;
+      
+      // 如果点击的项已经是选中项，可以开始拖拽
+      // 如果点击的是其他项，则选中那个项
+      
+      // 记录拖拽起始位置（相对于canvas）
+      canvasItems[index].isDragging = true;
+      canvasItems[index].startX = canvasX;
+      canvasItems[index].startY = canvasY;
+      
+      this.setData({
+        canvasItems: canvasItems,
+        selectedClothingId: clickedClothingId
+      }, () => {
+        // 重新绘制canvas以确保选中状态正确显示
+        this.redrawCanvas();
+      });
     });
+    query.exec();
   },
 
   // 拖拽中
@@ -445,27 +480,43 @@ Page({
     if (!selectedId) return;
     
     const canvasItems = this.data.canvasItems;
-    const index = canvasItems.findIndex(item => item.id === selectedId);
+    const index = canvasItems.findIndex(item => item.clothingId === selectedId);
     if (index === -1) return;
     
-    // 计算移动距离
-    const moveX = e.touches[0].clientX - canvasItems[index].startX;
-    const moveY = e.touches[0].clientY - canvasItems[index].startY;
-    
-    // 更新位置
-    canvasItems[index].x += moveX;
-    canvasItems[index].y += moveY;
-    
-    // 更新起始位置
-    canvasItems[index].startX = e.touches[0].clientX;
-    canvasItems[index].startY = e.touches[0].clientY;
-    
-    this.setData({
-      canvasItems: canvasItems
+    // 获取canvas元素的位置信息
+    const query = wx.createSelectorQuery();
+    query.select('#outfitCanvas').boundingClientRect((rect) => {
+      if (!rect) return;
+      
+      // 计算相对于canvas的坐标
+      const touch = e.touches[0];
+      const canvasX = touch.clientX - rect.left;
+      const canvasY = touch.clientY - rect.top;
+      
+      // 计算移动距离
+      const moveX = canvasX - canvasItems[index].startX;
+      const moveY = canvasY - canvasItems[index].startY;
+      
+      // 更新位置
+      canvasItems[index].x += moveX;
+      canvasItems[index].y += moveY;
+      
+      // 限制在canvas范围内
+      canvasItems[index].x = Math.max(0, Math.min(this.data.canvasWidth - canvasItems[index].width, canvasItems[index].x));
+      canvasItems[index].y = Math.max(0, Math.min(this.data.canvasHeight - canvasItems[index].height, canvasItems[index].y));
+      
+      // 更新起始位置（相对于canvas）
+      canvasItems[index].startX = canvasX;
+      canvasItems[index].startY = canvasY;
+      
+      this.setData({
+        canvasItems: canvasItems
+      }, () => {
+        // 重新绘制canvas
+        this.redrawCanvas();
+      });
     });
-    
-    // 重新绘制canvas
-    this.redrawCanvas();
+    query.exec();
   },
 
   // 结束拖拽
@@ -474,13 +525,16 @@ Page({
     if (!selectedId) return;
     
     const canvasItems = this.data.canvasItems;
-    const index = canvasItems.findIndex(item => item.id === selectedId);
+    const index = canvasItems.findIndex(item => item.clothingId === selectedId);
     if (index === -1) return;
     
     canvasItems[index].isDragging = false;
     
     this.setData({
       canvasItems: canvasItems
+    }, () => {
+      // 重新绘制canvas
+      this.redrawCanvas();
     });
   },
 
@@ -496,7 +550,7 @@ Page({
     }
     
     const canvasItems = this.data.canvasItems;
-    const index = canvasItems.findIndex(item => item.id === selectedId);
+    const index = canvasItems.findIndex(item => item.clothingId === selectedId);
     if (index === -1) return;
     
     // 增大尺寸（10%）
@@ -505,10 +559,10 @@ Page({
     
     this.setData({
       canvasItems: canvasItems
+    }, () => {
+      // 重新绘制canvas
+      this.redrawCanvas();
     });
-    
-    // 重新绘制canvas
-    this.redrawCanvas();
   },
 
   // 缩小选中的服装项
@@ -523,7 +577,7 @@ Page({
     }
     
     const canvasItems = this.data.canvasItems;
-    const index = canvasItems.findIndex(item => item.id === selectedId);
+    const index = canvasItems.findIndex(item => item.clothingId === selectedId);
     if (index === -1) return;
     
     // 减小尺寸（10%）
@@ -532,10 +586,10 @@ Page({
     
     this.setData({
       canvasItems: canvasItems
+    }, () => {
+      // 重新绘制canvas
+      this.redrawCanvas();
     });
-    
-    // 重新绘制canvas
-    this.redrawCanvas();
   },
 
   // 旋转选中的服装项
@@ -550,21 +604,21 @@ Page({
     }
     
     const canvasItems = this.data.canvasItems;
-    const index = canvasItems.findIndex(item => item.id === selectedId);
+    const index = canvasItems.findIndex(item => item.clothingId === selectedId);
     if (index === -1) return;
     
     // 增加旋转角度（15度）
-    if (!canvasItems[index].rotation) {
+    if (typeof canvasItems[index].rotation !== 'number') {
       canvasItems[index].rotation = 0;
     }
     canvasItems[index].rotation += 15;
     
     this.setData({
       canvasItems: canvasItems
+    }, () => {
+      // 重新绘制canvas
+      this.redrawCanvas();
     });
-    
-    // 重新绘制canvas
-    this.redrawCanvas();
   },
 
   // 重新绘制canvas（最终修复版本）
@@ -575,26 +629,30 @@ Page({
     ctx.clearRect(0, 0, this.data.canvasWidth, this.data.canvasHeight);
 
     // 绘制背景
-    if (this.data.backgroundImagePath) {
-      ctx.drawImage(
-          this.data.backgroundImagePath,
-          0,
-          0,
-          this.data.canvasWidth,
-          this.data.canvasHeight
-      );
-    }
 
     // 绘制每个 clothing item
     this.data.canvasItems.forEach(item => {
       if (item.imageUrl) {
-        ctx.drawImage(item.imageUrl, item.x, item.y, item.width, item.height);
+        // 如果有旋转角度，先保存当前状态，然后旋转绘制
+        if (item.rotation && item.rotation !== 0) {
+          ctx.save();
+          // 移动到图片中心点
+          ctx.translate(item.x + item.width / 2, item.y + item.height / 2);
+          // 旋转（转换为弧度）
+          ctx.rotate(item.rotation * Math.PI / 180);
+          // 绘制图片（从中心点偏移）
+          ctx.drawImage(item.imageUrl, -item.width / 2, -item.height / 2, item.width, item.height);
+          ctx.restore();
+        } else {
+          // 没有旋转，直接绘制
+          ctx.drawImage(item.imageUrl, item.x, item.y, item.width, item.height);
+        }
       } else {
         console.warn('未找到本地图片路径:', item);
       }
     });
 
-    ctx.draw();
+    ctx.draw(true);
   },
 
   // 保存穿搭
@@ -734,8 +792,6 @@ Page({
     const ctx = wx.createCanvasContext('outfitCanvas', this);
     
     // 设置背景色
-    ctx.setFillStyle('#f5f5f5');
-    ctx.fillRect(0, 0, 300, 300);
     
     // 绘制所有服装项到canvas上
     let drawCount = 0;
@@ -743,7 +799,7 @@ Page({
     
     if (totalItems === 0) {
       // 保存并导出canvas
-      ctx.draw(false, () => {
+      ctx.draw(true, () => {
         wx.canvasToTempFilePath({
           canvasId: 'outfitCanvas',
           success: (res) => {
@@ -782,7 +838,7 @@ Page({
         
         // 当所有图片都绘制完成时，保存并导出canvas
         if (drawCount === totalItems) {
-          ctx.draw(false, () => {
+          ctx.draw(true, () => {
             // 等待绘制完成后再导出
             setTimeout(() => {
               wx.canvasToTempFilePath({
@@ -815,11 +871,12 @@ Page({
           });
         }
       } else {
+        console.warn('未找到本地图片路径:', item);
         drawCount++;
         
         // 当所有图片都处理完成时，保存并导出canvas
         if (drawCount === totalItems) {
-          ctx.draw(false, () => {
+          ctx.draw(true, () => {
             // 等待绘制完成后再导出
             setTimeout(() => {
               wx.canvasToTempFilePath({

@@ -18,11 +18,13 @@ page {
 
 /* 穿搭名称输入 */
 .outfit-name-section {
+  width: 100%;
   margin-bottom: 20px;
 }
 
 .outfit-name-input {
   width: 100%;
+  height: 40px;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -33,10 +35,12 @@ page {
 /* 穿搭类型选择 */
 .outfit-type-section {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .outfit-type-picker {
   width: 100%;
+  height: 40px;
 }
 
 .picker-content {
