@@ -11,6 +11,69 @@ page {
   box-sizing: border-box;
 }
 
+/* 穿搭名称输入 */
+.outfit-name-section {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #6d5836;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.outfit-name-input {
+  flex: 1;
+  height: 40px;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+/* 穿搭类型选择 */
+.outfit-type-section {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.outfit-type-picker {
+  flex: 1;
+  height: 40px;
+}
+
+.picker-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.picker-text {
+  flex: 1;
+  font-size: 16px;
+  color: #333;
+}
+
+.picker-arrow {
+  font-size: 12px;
+  color: #999;
+  margin-left: 10px;
+}
+
 /* 一级分类导航 */
 .primary-categories {
   display: flex;

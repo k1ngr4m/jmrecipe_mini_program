@@ -1,4 +1,32 @@
 <view class="container">
+  <!-- 穿搭名称输入 -->
+  <view class="outfit-name-section">
+    <view class="section-title">穿搭名称</view>
+    <input 
+      class="outfit-name-input" 
+      placeholder="请输入穿搭名称" 
+      value="{{outfitName}}" 
+      bindinput="onOutfitNameInput"
+    />
+  </view>
+  
+  <!-- 穿搭类型选择 -->
+  <view class="outfit-type-section">
+    <view class="section-title">穿搭类型</view>
+    <picker 
+      class="outfit-type-picker" 
+      mode="selector" 
+      range="{{outfitTypeOptions}}" 
+      range-key="name" 
+      bindchange="onOutfitTypeChange"
+    >
+      <view class="picker-content">
+        <view class="picker-text">{{outfitType || "请选择穿搭类型"}}</view>
+        <view class="picker-arrow">▼</view>
+      </view>
+    </picker>
+  </view>
+  
   <!-- 一级分类导航 -->
   <scroll-view class="primary-categories" scroll-x>
     <view 

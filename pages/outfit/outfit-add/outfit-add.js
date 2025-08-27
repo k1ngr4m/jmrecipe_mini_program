@@ -5,6 +5,16 @@ const cosCredentialsManager = require("../../../utils/cos-credentials-manager");
 Page({
   data: {
     title: '新建穿搭',
+    outfitName: '', // 穿搭名称
+    outfitType: '', // 穿搭类型
+    outfitTypeOptions: [ // 穿搭类型选项
+      { id: 0, name: '默认穿搭' },
+      { id: 1, name: '日常穿搭' },
+      { id: 2, name: '职业穿搭' },
+      { id: 3, name: '排队穿搭' },
+      { id: 4, name: '运动穿搭' },
+      { id: 5, name: '季节穿搭' }
+    ],
     // 分类数据
     primaryCategories: [], // 一级分类
     currentPrimaryCategory: 'all', // 当前选中的一级分类
@@ -47,6 +57,21 @@ Page({
     }, 3000); // 延迟3秒检查，确保异步操作完成
   },
 
+  // 自定义函数解析URL查询参数
+  parseQueryString(queryString) {
+    const params = {};
+    if (!queryString) return params;
+    
+    const pairs = queryString.split('&');
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i].split('=');
+      const key = decodeURIComponent(pair[0] || '');
+      const value = decodeURIComponent(pair[1] || '');
+      params[key] = value;
+    }
+    return params;
+  },
+
   // 检查签名URL是否有效
   isSignedUrlValid(signedUrl) {
     if (!signedUrl || !signedUrl.includes('q-sign-algorithm')) {
@@ -54,8 +79,13 @@ Page({
     }
     
     // 检查URL是否过期
-    const urlParams = new URLSearchParams(signedUrl.split('?')[1]);
-    const signTime = urlParams.get('q-sign-time');
+    const urlParts = signedUrl.split('?');
+    if (urlParts.length < 2) {
+      return false;
+    }
+    
+    const queryParams = this.parseQueryString(urlParts[1]);
+    const signTime = queryParams['q-sign-time'];
     
     if (!signTime) {
       return false;
@@ -429,10 +459,161 @@ Page({
       return;
     }
     
-    // TODO: 实现保存穿搭的逻辑
-    wx.showToast({
-      title: '功能开发中',
-      icon: 'none'
+    // 检查是否输入了穿搭名称
+    if (!this.data.outfitName || this.data.outfitName.trim() === '') {
+      wx.showToast({
+        title: '请输入穿搭名称',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 检查是否选择了穿搭类型
+    if (!this.data.outfitType) {
+      wx.showToast({
+        title: '请选择穿搭类型',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 显示加载提示
+    wx.showLoading({
+      title: '保存中...',
+      mask: true
+    });
+    
+    // 将canvas转换为base64图片
+    this.convertCanvasToBase64((base64Image) => {
+      // 准备请求数据
+      const requestData = {
+        userid: wx.getStorageSync('userid') || '1',
+        familyid: wx.getStorageSync('familyid') || '1',
+        memberid: wx.getStorageSync('selectedMemberId') || '1',
+        name: this.data.outfitName,
+        type: this.getOutfitTypeIdByName(this.data.outfitType),
+        clothing_ids: this.data.canvasItems.map(item => item.clothingId),
+        image_url: base64Image,
+        description: this.data.outfitName
+      };
+      
+      console.log('保存穿搭请求数据:', requestData);
+      
+      // 调用API接口保存穿搭
+      this.createOutfit(requestData);
+    });
+  },
+  
+  // 根据穿搭类型名称获取类型ID
+  getOutfitTypeIdByName(typeName) {
+    const typeMap = {
+      '默认穿搭': 0,
+      '日常穿搭': 1,
+      '职业穿搭': 2,
+      '排队穿搭': 3,
+      '运动穿搭': 4,
+      '季节穿搭': 5
+    };
+    return typeMap[typeName] !== undefined ? typeMap[typeName] : 0;
+  },
+  
+  // 调用API接口创建穿搭
+  createOutfit(data) {
+    // 根据API要求调整请求参数格式
+    const requestData = {
+      userid: data.userid,
+      familyid: data.familyid,
+      memberid: data.memberid,
+      name: data.name,
+      type: data.type,
+      clothing_ids: data.clothing_ids,
+      image_url: data.image_url,
+      description: data.description
+    };
+    
+    request({
+      url: config.getFullURL('outfit') + '/create',
+      method: 'POST',
+      data: requestData,
+      header: {
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        wx.hideLoading();
+        console.log('创建穿搭成功:', res);
+        
+        if (res.statusCode === 200 && res.data && res.data.code === 1) {
+          wx.showToast({
+            title: '保存成功',
+            icon: 'success'
+          });
+          
+          // 返回上一页
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
+        } else {
+          wx.showToast({
+            title: '保存失败',
+            icon: 'none'
+          });
+          console.error('创建穿搭失败:', res);
+        }
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+        console.error('创建穿搭网络错误:', err);
+      }
+    });
+  },
+  
+  // 将canvas转换为base64图片
+  convertCanvasToBase64(callback) {
+    wx.canvasToTempFilePath({
+      canvasId: 'outfitCanvas',
+      success: (res) => {
+        // 获取临时文件路径
+        const tempFilePath = res.tempFilePath;
+        
+        // 读取文件内容并转换为base64
+        wx.getFileSystemManager().readFile({
+          filePath: tempFilePath,
+          encoding: 'base64',
+          success: (res) => {
+            // 添加data URL前缀
+            const base64Image = 'data:image/png;base64,' + res.data;
+            callback(base64Image);
+          },
+          fail: (err) => {
+            console.error('读取文件失败:', err);
+            callback('');
+          }
+        });
+      },
+      fail: (err) => {
+        console.error('canvas转临时文件路径失败:', err);
+        callback('');
+      }
+    }, this);
+  },
+
+  // 更新穿搭名称
+  onOutfitNameInput(e) {
+    this.setData({
+      outfitName: e.detail.value
+    });
+  },
+
+  // 更新穿搭类型
+  onOutfitTypeChange(e) {
+    const selectedIndex = e.detail.value;
+    const selectedType = this.data.outfitTypeOptions[selectedIndex];
+    this.setData({
+      outfitType: selectedType.name
     });
   },
 

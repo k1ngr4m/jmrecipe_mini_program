@@ -1234,10 +1234,10 @@ Page({
     console.log('跳转到穿搭列表页，outfitItem:', outfitItem);
     
     // 检查穿搭类型是否存在
-    const outfitType = outfitItem.type;
+    const outfitType = outfitItem.id;  // 修改为传递id而不是type
     const outfitName = outfitItem.name;
     
-    if (!outfitType) {
+    if (outfitType === undefined || outfitType === null) {
       wx.showToast({
         title: '参数错误',
         icon: 'none'
