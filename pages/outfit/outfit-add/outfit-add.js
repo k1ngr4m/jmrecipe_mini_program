@@ -8,6 +8,7 @@ Page({
     // 分类数据
     primaryCategories: [], // 一级分类
     currentPrimaryCategory: 'all', // 当前选中的一级分类
+    gender: 'all', // 性别筛选
     // 服装列表数据
     clothingList: [], // 所有服装
     filteredClothingList: [], // 筛选后的服装列表
@@ -161,6 +162,7 @@ Page({
       data: {
         userid: userid,
         familyid: familyid,
+        gender: this.data.gender,
         // 添加时间戳防止缓存
         _t: Date.now()
       },
