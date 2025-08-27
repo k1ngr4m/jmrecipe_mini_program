@@ -4,85 +4,66 @@ page {
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 10px;
+  padding: 20px;
+  min-height: 100vh;
   box-sizing: border-box;
-}
-
-/* 穿搭名称输入 */
-.outfit-name-section {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
   color: #6d5836;
-  margin-right: 10px;
-  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+/* 穿搭名称输入 */
+.outfit-name-section {
+  margin-bottom: 20px;
 }
 
 .outfit-name-input {
-  flex: 1;
-  height: 40px;
-  padding: 12px 15px;
+  width: 100%;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 16px;
-  background-color: #fff;
+  font-size: 14px;
   box-sizing: border-box;
 }
 
 /* 穿搭类型选择 */
 .outfit-type-section {
-  width: 100%;
   margin-bottom: 20px;
-  display: flex;
-  align-items: center;
 }
 
 .outfit-type-picker {
-  flex: 1;
-  height: 40px;
+  width: 100%;
 }
 
 .picker-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100%;
-  padding: 0 15px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
 }
 
 .picker-text {
-  flex: 1;
-  font-size: 16px;
-  color: #333;
+  color: #666;
 }
 
 .picker-arrow {
-  font-size: 12px;
   color: #999;
-  margin-left: 10px;
+  font-size: 12px;
 }
 
 /* 一级分类导航 */
 .primary-categories {
-  display: flex;
-  padding: 10px 0;
-  background-color: #f9f5e6;
   white-space: nowrap;
   overflow-x: auto;
-  scrollbar-width: none;
   margin-bottom: 20px;
+  padding: 5px 0;
 }
 
 .primary-categories::-webkit-scrollbar {
@@ -93,10 +74,9 @@ page {
   display: inline-block;
   padding: 8px 16px;
   margin-right: 10px;
+  background-color: #f0e8d6;
   border-radius: 20px;
-  background-color: #fff3d4;
   font-size: 14px;
-  color: #8b6e41;
   transition: all 0.2s;
   cursor: pointer;
   border: 1px solid #f0e8d6;
@@ -120,13 +100,6 @@ page {
 /* 服装列表区域 */
 .clothing-list-section {
   margin-bottom: 20px;
-}
-
-.section-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #6d5836;
-  margin-bottom: 10px;
 }
 
 .clothing-list {
@@ -196,52 +169,31 @@ page {
 .outfit-canvas {
   width: 100%;
   height: 100%;
+  display: block;
 }
 
-.canvas-items-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* 防止容器拦截点击事件 */
-}
+/* 注意：canvas-items-container和相关样式已移除，因为服装项现在通过canvas绘制 */
 
-.canvas-item {
-  position: absolute;
-  pointer-events: auto; /* 恢复子元素的点击事件 */
-  cursor: move;
-}
-
-.canvas-item-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.remove-btn {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 20px;
-  height: 20px;
-  background-color: #e74c3c;
-  color: white;
-  border-radius: 50%;
+/* Canvas操作按钮 */
+.canvas-controls {
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  pointer-events: auto;
+  gap: 10px;
+  padding: 10px 0;
 }
 
-.remove-btn:hover {
-  background-color: #c0392b;
+.control-btn {
+  padding: 8px 12px;
+  background-color: #d8b95f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.control-btn:hover {
+  background-color: #c7a84a;
 }
 
 /* 操作按钮 */
@@ -261,6 +213,16 @@ page {
   cursor: pointer;
   transition: all 0.2s;
 }
+
+.test-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.test-btn:hover {
+  background-color: #2980b9;
+}
+
 
 .cancel-btn {
   background-color: #f0f0f0;

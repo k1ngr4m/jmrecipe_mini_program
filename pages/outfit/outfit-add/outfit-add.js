@@ -27,6 +27,9 @@ Page({
     selectedClothingId: null, // 当前选中的服装ID
     // 页面状态
     isLoading: false, // 加载状态
+    // Canvas操作相关
+    canvasWidth: 300,
+    canvasHeight: 300
   },
 
   onLoad() {
@@ -35,6 +38,32 @@ Page({
     this.getClothingList();
     // 验证签名URL是否正确生成
     this.verifySignedUrls();
+    // 初始化canvas
+    this.initCanvas();
+  },
+
+  // 初始化canvas
+  initCanvas() {
+    // 获取canvas上下文
+    const ctx = wx.createCanvasContext('outfitCanvas', this);
+    
+    // 设置背景色
+    ctx.setFillStyle('#f5f5f5');
+    ctx.fillRect(0, 0, this.data.canvasWidth, this.data.canvasHeight);
+    
+    // 绘制提示文字
+    ctx.setFontSize(16);
+    ctx.setFillStyle('#999');
+    ctx.setTextAlign('center');
+    ctx.fillText('请从上方选择服装添加到画布中', this.data.canvasWidth / 2, this.data.canvasHeight / 2);
+    
+    // 绘制到canvas
+    ctx.draw();
+    
+    // 确保canvas在初始化时也重绘一次
+    setTimeout(() => {
+      this.redrawCanvas();
+    }, 100);
   },
 
   // 验证签名URL是否正确生成
@@ -106,32 +135,45 @@ Page({
 
   // 获取单个服装的签名URL
   getSignedImageUrl(clothing, callback) {
+    console.log('获取签名URL，服装信息:', clothing);
+    
     // 检查现有的签名URL是否有效
     if (clothing.signed_image_url && this.isSignedUrlValid(clothing.signed_image_url)) {
+      console.log('使用现有的有效签名URL:', clothing.signed_image_url);
       // 如果已经有有效的签名URL，直接返回
       callback(clothing.signed_image_url);
     } else if (clothing.image_url) {
+      console.log('获取新的签名URL，原始URL:', clothing.image_url);
       // 如果没有签名URL但有原始URL，则获取签名URL
       cosCredentialsManager.getSignedCosUrl(clothing.image_url, (signedUrl) => {
-        // 更新服装列表中的签名URL
-        const updatedClothingList = this.data.clothingList.map(item => {
-          if (item.id === clothing.id) {
-            return {
-              ...item,
-              signed_image_url: signedUrl
-            };
-          }
-          return item;
-        });
+        console.log('获取到新的签名URL:', signedUrl);
         
-        // 更新页面数据
-        this.setData({
-          clothingList: updatedClothingList,
-          filteredClothingList: updatedClothingList
-        });
-        callback(signedUrl);
+        // 验证签名URL是否有效
+        if (signedUrl && typeof signedUrl === 'string' && signedUrl.length > 0) {
+          // 更新服装列表中的签名URL
+          const updatedClothingList = this.data.clothingList.map(item => {
+            if (item.id === clothing.id) {
+              return {
+                ...item,
+                signed_image_url: signedUrl
+              };
+            }
+            return item;
+          });
+          
+          // 更新页面数据
+          this.setData({
+            clothingList: updatedClothingList,
+            filteredClothingList: updatedClothingList
+          });
+          callback(signedUrl);
+        } else {
+          console.log('获取到的签名URL无效，使用原始URL:', clothing.image_url);
+          callback(clothing.image_url);
+        }
       });
     } else {
+      console.log('没有可用的图片URL');
       // 如果都没有，返回空字符串
       callback('');
     }
@@ -335,42 +377,29 @@ Page({
 
   // 将服装添加到Canvas中
   addClothingToCanvas(clothing) {
-    const canvasItems = this.data.canvasItems;
-    // 创建Canvas项
-    const canvasItem = {
-      id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9), // 唯一ID
-      clothingId: clothing.id,
-      imageUrl: clothing.signed_image_url || clothing.image_url, // 先使用已有URL
-      name: clothing.name,
-      x: 50 + Math.random() * 100, // 随机位置
-      y: 50 + Math.random() * 100,
-      width: 80,
-      height: 80,
-      zIndex: canvasItems.length,
-      isDragging: false
-    };
-    
-    canvasItems.push(canvasItem);
-    
-    this.setData({
-      canvasItems: canvasItems
-    });
-    
-    // 获取签名URL并更新Canvas项
     this.getSignedImageUrl(clothing, (signedUrl) => {
-      // 更新canvasItems中的对应项
-      const updatedCanvasItems = this.data.canvasItems.map(item => {
-        if (item.clothingId === clothing.id) {
-          return {
-            ...item,
-            imageUrl: signedUrl
+      wx.getImageInfo({
+        src: signedUrl,
+        success: (res) => {
+          // 新的 canvas item
+          const newItem = {
+            clothingId: clothing.id,
+            imageUrl: res.path,   // 直接存本地路径
+            x: 50,
+            y: 50,
+            width: 100,
+            height: 100,
           };
+
+          this.setData({
+            canvasItems: [...this.data.canvasItems, newItem]
+          }, () => {
+            this.redrawCanvas();
+          });
+        },
+        fail: (err) => {
+          console.error('获取图片信息失败:', err);
         }
-        return item;
-      });
-      
-      this.setData({
-        canvasItems: updatedCanvasItems
       });
     });
   },
@@ -383,8 +412,12 @@ Page({
     canvasItems.splice(index, 1);
     
     this.setData({
-      canvasItems: canvasItems
+      canvasItems: canvasItems,
+      selectedClothingId: null
     });
+    
+    // 重新绘制canvas
+    this.redrawCanvas();
   },
 
   // 开始拖拽
@@ -430,6 +463,9 @@ Page({
     this.setData({
       canvasItems: canvasItems
     });
+    
+    // 重新绘制canvas
+    this.redrawCanvas();
   },
 
   // 结束拖拽
@@ -444,9 +480,121 @@ Page({
     canvasItems[index].isDragging = false;
     
     this.setData({
-      canvasItems: canvasItems,
-      selectedClothingId: null
+      canvasItems: canvasItems
     });
+  },
+
+  // 放大选中的服装项
+  scaleUp() {
+    const selectedId = this.data.selectedClothingId;
+    if (!selectedId) {
+      wx.showToast({
+        title: '请先选择一个服装项',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    const canvasItems = this.data.canvasItems;
+    const index = canvasItems.findIndex(item => item.id === selectedId);
+    if (index === -1) return;
+    
+    // 增大尺寸（10%）
+    canvasItems[index].width *= 1.1;
+    canvasItems[index].height *= 1.1;
+    
+    this.setData({
+      canvasItems: canvasItems
+    });
+    
+    // 重新绘制canvas
+    this.redrawCanvas();
+  },
+
+  // 缩小选中的服装项
+  scaleDown() {
+    const selectedId = this.data.selectedClothingId;
+    if (!selectedId) {
+      wx.showToast({
+        title: '请先选择一个服装项',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    const canvasItems = this.data.canvasItems;
+    const index = canvasItems.findIndex(item => item.id === selectedId);
+    if (index === -1) return;
+    
+    // 减小尺寸（10%）
+    canvasItems[index].width *= 0.9;
+    canvasItems[index].height *= 0.9;
+    
+    this.setData({
+      canvasItems: canvasItems
+    });
+    
+    // 重新绘制canvas
+    this.redrawCanvas();
+  },
+
+  // 旋转选中的服装项
+  rotate() {
+    const selectedId = this.data.selectedClothingId;
+    if (!selectedId) {
+      wx.showToast({
+        title: '请先选择一个服装项',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    const canvasItems = this.data.canvasItems;
+    const index = canvasItems.findIndex(item => item.id === selectedId);
+    if (index === -1) return;
+    
+    // 增加旋转角度（15度）
+    if (!canvasItems[index].rotation) {
+      canvasItems[index].rotation = 0;
+    }
+    canvasItems[index].rotation += 15;
+    
+    this.setData({
+      canvasItems: canvasItems
+    });
+    
+    // 重新绘制canvas
+    this.redrawCanvas();
+  },
+
+  // 重新绘制canvas（最终修复版本）
+  redrawCanvas() {
+    const ctx = wx.createCanvasContext('myCanvas', this);
+
+    // 清空画布
+    ctx.clearRect(0, 0, this.data.canvasWidth, this.data.canvasHeight);
+
+    // 绘制背景
+    if (this.data.backgroundImagePath) {
+      ctx.drawImage(
+          this.data.backgroundImagePath,
+          0,
+          0,
+          this.data.canvasWidth,
+          this.data.canvasHeight
+      );
+    }
+
+    // 绘制每个 clothing item
+    this.data.canvasItems.forEach(item => {
+      if (item.imageUrl) {
+        ctx.drawImage(item.imageUrl, item.x, item.y, item.width, item.height);
+      } else {
+        console.warn('未找到本地图片路径:', item);
+      }
+    });
+
+    ctx.draw();
   },
 
   // 保存穿搭
@@ -503,7 +651,7 @@ Page({
       this.createOutfit(requestData);
     });
   },
-  
+
   // 根据穿搭类型名称获取类型ID
   getOutfitTypeIdByName(typeName) {
     const typeMap = {
@@ -573,32 +721,138 @@ Page({
   
   // 将canvas转换为base64图片
   convertCanvasToBase64(callback) {
-    wx.canvasToTempFilePath({
-      canvasId: 'outfitCanvas',
-      success: (res) => {
-        // 获取临时文件路径
-        const tempFilePath = res.tempFilePath;
-        
-        // 读取文件内容并转换为base64
-        wx.getFileSystemManager().readFile({
-          filePath: tempFilePath,
-          encoding: 'base64',
+    const canvasItems = this.data.canvasItems;
+    
+    // 如果没有服装项，直接返回空白图片
+    if (!canvasItems || canvasItems.length === 0) {
+      // 创建一个空白的base64图片
+      callback('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==');
+      return;
+    }
+    
+    // 获取canvas上下文
+    const ctx = wx.createCanvasContext('outfitCanvas', this);
+    
+    // 设置背景色
+    ctx.setFillStyle('#f5f5f5');
+    ctx.fillRect(0, 0, 300, 300);
+    
+    // 绘制所有服装项到canvas上
+    let drawCount = 0;
+    const totalItems = canvasItems.length;
+    
+    if (totalItems === 0) {
+      // 保存并导出canvas
+      ctx.draw(false, () => {
+        wx.canvasToTempFilePath({
+          canvasId: 'outfitCanvas',
           success: (res) => {
-            // 添加data URL前缀
-            const base64Image = 'data:image/png;base64,' + res.data;
-            callback(base64Image);
+            // 获取临时文件路径
+            const tempFilePath = res.tempFilePath;
+            
+            // 读取文件内容并转换为base64
+            wx.getFileSystemManager().readFile({
+              filePath: tempFilePath,
+              encoding: 'base64',
+              success: (res) => {
+                // 添加data URL前缀
+                const base64Image = 'data:image/png;base64,' + res.data;
+                callback(base64Image);
+              },
+              fail: (err) => {
+                console.error('读取文件失败:', err);
+                callback('');
+              }
+            });
           },
           fail: (err) => {
-            console.error('读取文件失败:', err);
+            console.error('canvas转临时文件路径失败:', err);
             callback('');
           }
-        });
-      },
-      fail: (err) => {
-        console.error('canvas转临时文件路径失败:', err);
-        callback('');
+        }, this);
+      });
+      return;
+    }
+    
+    // 绘制每个服装项
+    canvasItems.forEach((item, index) => {
+      if (item.imageUrl) {
+        ctx.drawImage(item.imageUrl, item.x, item.y, item.width, item.height);
+        drawCount++;
+        
+        // 当所有图片都绘制完成时，保存并导出canvas
+        if (drawCount === totalItems) {
+          ctx.draw(false, () => {
+            // 等待绘制完成后再导出
+            setTimeout(() => {
+              wx.canvasToTempFilePath({
+                canvasId: 'outfitCanvas',
+                success: (res) => {
+                  // 获取临时文件路径
+                  const tempFilePath = res.tempFilePath;
+                  
+                  // 读取文件内容并转换为base64
+                  wx.getFileSystemManager().readFile({
+                    filePath: tempFilePath,
+                    encoding: 'base64',
+                    success: (res) => {
+                      // 添加data URL前缀
+                      const base64Image = 'data:image/png;base64,' + res.data;
+                      callback(base64Image);
+                    },
+                    fail: (err) => {
+                      console.error('读取文件失败:', err);
+                      callback('');
+                    }
+                  });
+                },
+                fail: (err) => {
+                  console.error('canvas转临时文件路径失败:', err);
+                  callback('');
+                }
+              }, this);
+            }, 100);
+          });
+        }
+      } else {
+        drawCount++;
+        
+        // 当所有图片都处理完成时，保存并导出canvas
+        if (drawCount === totalItems) {
+          ctx.draw(false, () => {
+            // 等待绘制完成后再导出
+            setTimeout(() => {
+              wx.canvasToTempFilePath({
+                canvasId: 'outfitCanvas',
+                success: (res) => {
+                  // 获取临时文件路径
+                  const tempFilePath = res.tempFilePath;
+                  
+                  // 读取文件内容并转换为base64
+                  wx.getFileSystemManager().readFile({
+                    filePath: tempFilePath,
+                    encoding: 'base64',
+                    success: (res) => {
+                      // 添加data URL前缀
+                      const base64Image = 'data:image/png;base64,' + res.data;
+                      callback(base64Image);
+                    },
+                    fail: (err) => {
+                      console.error('读取文件失败:', err);
+                      callback('');
+                    }
+                  });
+                },
+                fail: (err) => {
+                  console.error('canvas转临时文件路径失败:', err);
+                  callback('');
+                }
+              }, this);
+            }, 100);
+          });
+        }
       }
-    }, this);
+    });
   },
 
   // 更新穿搭名称
