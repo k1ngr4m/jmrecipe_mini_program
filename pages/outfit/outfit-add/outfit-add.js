@@ -569,7 +569,7 @@ Page({
 
   // 重新绘制canvas（最终修复版本）
   redrawCanvas() {
-    const ctx = wx.createCanvasContext('myCanvas', this);
+    const ctx = wx.createCanvasContext('outfitCanvas', this);
 
     // 清空画布
     ctx.clearRect(0, 0, this.data.canvasWidth, this.data.canvasHeight);
