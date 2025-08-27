@@ -1,5 +1,6 @@
 const config = require('../../../config/api.js');
 const { request } = require('../../../utils/request.js');
+const { processBase64Images } = require('../../../utils/base64-image.js');
 
 Page({
   data: {
@@ -76,14 +77,18 @@ Page({
         
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
           const newList = res.data.result || [];
-          const outfitList = this.data.page === 1 ? newList : [...this.data.outfitList, ...newList];
           const hasMore = newList.length === this.data.pageSize;
           
-          this.setData({
-            outfitList: outfitList,
-            page: this.data.page + 1,
-            hasMore: hasMore,
-            isLoading: false
+          // 处理base64格式的图片
+          processBase64Images(newList, (processedList) => {
+            const outfitList = this.data.page === 1 ? processedList : [...this.data.outfitList, ...processedList];
+            
+            this.setData({
+              outfitList: outfitList,
+              page: this.data.page + 1,
+              hasMore: hasMore,
+              isLoading: false
+            });
           });
         } else {
           console.error('获取穿搭列表失败:', res);
@@ -150,5 +155,16 @@ Page({
     wx.navigateTo({
       url: '/pages/outfit/outfit-add/outfit-add'
     });
+  },
+
+  // 页面卸载时清理临时文件
+  onUnload() {
+    // 清理可能创建的临时文件
+    const fsm = wx.getFileSystemManager();
+    const tempPath = wx.env.USER_DATA_PATH;
+    
+    // 注意：这里不实际删除文件，因为可能会影响其他功能
+    // 如果需要清理临时文件，可以在适当的时候手动清理
+    console.log('页面卸载，临时文件路径:', tempPath);
   }
 });
