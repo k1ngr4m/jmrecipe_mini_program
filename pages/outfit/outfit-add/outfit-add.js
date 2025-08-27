@@ -8,7 +8,7 @@ Page({
     // 分类数据
     primaryCategories: [], // 一级分类
     currentPrimaryCategory: 'all', // 当前选中的一级分类
-    gender: 'all', // 性别筛选
+    gender: 1, // 性别筛选
     // 服装列表数据
     clothingList: [], // 所有服装
     filteredClothingList: [], // 筛选后的服装列表
@@ -125,13 +125,10 @@ Page({
     }
     
     // 使用COSCredentialsManager批量获取签名URL
-    console.log('需要签名的URL数量:', urlsToSign.length);
     cosCredentialsManager.getBatchSignedCosUrls(urlsToSign, (signedUrlsMap) => {
-      console.log('获取到的签名URL映射:', signedUrlsMap);
       // 更新服装列表中的签名URL
       const updatedClothingList = clothingList.map(item => {
         if (item.image_url && signedUrlsMap[item.image_url]) {
-          console.log('更新签名URL:', item.image_url, '->', signedUrlsMap[item.image_url]);
           return {
             ...item,
             signed_image_url: signedUrlsMap[item.image_url]
@@ -153,16 +150,42 @@ Page({
 
   // 获取分类数据
   getCategories() {
-    const userid = wx.getStorageSync('userid') || '';
-    const familyid = wx.getStorageSync('familyid') || '';
-    
+    const selectedMemberId = wx.getStorageSync('selectedMemberId');
+    const members = wx.getStorageSync('members') || [];
+    const selectedMember = members.find(m => m.memberid === selectedMemberId);
+
+    // 根据成员性别设置参数，1表示男，2表示女
+    let genderParam = 1; // 默认为男
+    if (selectedMember) {
+      // 注意：这里需要根据实际的性别字段进行调整
+      // 如果gender字段是数字类型（1男/2女）
+      if (selectedMember.gender === 2 || selectedMember.gender === '2') {
+        genderParam = 2;
+      } else if (selectedMember.gender === 1 || selectedMember.gender === '1') {
+        genderParam = 1;
+      }
+      // 如果gender字段是字符串类型（"男"/"女"）
+      else if (selectedMember.gender === '女') {
+        genderParam = 2;
+      } else if (selectedMember.gender === '男') {
+        genderParam = 1;
+      }
+    }
+
+    console.log('获取分类数据', {
+      selectedMemberId,
+      selectedMember,
+      members,
+      familyid: wx.getStorageSync('familyid') || '',
+      gender: genderParam
+    });
+
     request({
       url: config.getFullURL('categories') + '/list',
       method: 'POST',
       data: {
-        userid: userid,
-        familyid: familyid,
-        gender: this.data.gender,
+        familyid: wx.getStorageSync('familyid') || '',
+        gender: genderParam, // 传递性别参数，1男/2女
         // 添加时间戳防止缓存
         _t: Date.now()
       },
@@ -171,9 +194,10 @@ Page({
           // 根据新的数据结构处理分类数据
           const categories = res.data.result || [];
           const primary = categories.filter(c => c.level === 1);
-          
+          const secondary = categories.filter(c => c.level === 2);
           this.setData({
-            primaryCategories: primary
+            primaryCategories: primary,
+            secondaryCategories: secondary
           });
         } else {
           console.error('获取分类数据失败', res);
